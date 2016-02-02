@@ -1,0 +1,30 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Jan 4, 2016, 8:11:08 PM
+    Author     : Karl Lauret
+*/
+.sideBarBlock.first{
+    margin-top: 0;
+}
+.sideBarBlock {
+    margin-top: 15px;
+}
+
+.sideBarBlock h2{
+    font-size: 18px;
+    margin-bottom: 0;
+    margin-top: 0;
+    color:#337AB7;
+}
+.sideBarBlock p{
+    font-size: 14px;
+    padding-top: 5px;
+}
+
+.sideBarBlock .border-bot{
+    border-bottom: 1px gray solid;
+}

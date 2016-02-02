@@ -1,0 +1,49 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Dec 29, 2015, 4:42:37 PM
+    Author     : Karl Lauret
+*/
+
+.postHeader{
+    border: 1px solid lightgray;
+    background-color:#EEE; 
+}
+.postHeader h2{
+    font-size: 14px;
+    margin: 0;
+}
+.postHeader h3{
+    font-size: 12px;
+    margin: 0;
+}
+.img-postHeader{
+    padding:0;
+    margin:0;
+    height:52px;
+    width:52px
+}
+.postDateHeader{
+    font-size: 10px;
+    color: gray;
+}
+.body-post{
+    border: 1px solid lightgray;
+}
+.postComment h3{
+    font-size: 12px;
+    margin: 5px;
+    
+}
+.postComment{
+ background-color: #222;   
+ color: lightgray;
+}
+.postComments{
+    border-left: 1px gray solid;
+    padding-bottom: 1px;
+    
+}
