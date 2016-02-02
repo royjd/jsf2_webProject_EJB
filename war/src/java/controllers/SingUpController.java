@@ -34,13 +34,14 @@ public class SingUpController implements Serializable {
         user = new UserEntity();
     }
 
-    public String singUp() {
+    public void singUp() {
         userService.add(user);
         FacesMessage message = new FacesMessage("Success!");
         FacesContext.getCurrentInstance().addMessage(null, message);
-        return "page";
+        //return "page";
 
     }
+    
 
     public UserEntity getUser() {
         return user;

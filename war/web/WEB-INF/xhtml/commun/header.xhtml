@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+        <h:head>
+        <h:outputStylesheet library="library" name="bootstrap/css/bootstrap.css"/>
+        </h:head>
+    <h:body>
+    <ui:composition>
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <ul class="nav navbar-nav">
+                            <li class="active"><a href="/home.htm" class="glyphicon glyphicon-home"></a></li>
+                            <li><a href="/#{username}.htm" class="">#{username}</a></li>
+                            <li><a href="/message.htm" class="glyphicon glyphicon-envelope"></a></li>
+                            <li><a href="/notification.htm" class="glyphicon glyphicon-bell"></a></li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-6">
+                        <ul class="nav navbar-nav pull-right">
+                            <a class="navbar-brand pull-right" href="/home.htm">FanFare</a>
+                            <li class="dropdown pull-right">
+                                <a class="dropdown-toggle glyphicon glyphicon-user" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li> <a href="/#{username}.htm"> ${user.username} </a></li>
+                                    <li> <a href="/logout.htm"> Logout </a></li>
+                                </ul>
+                            </li>
+                            <h:form class="navbar-form pull-right">
+                                <h:inputText  value="#{searchBean.param}"  class="form-control" id="friendSearch"></h:inputText>
+
+                                <h:commandButton action="#{searchBean.search()}"
+                                                 value="Go" class="btn btn-success"></h:commandButton>
+                            </h:form>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </ui:composition>
+    </h:body>
+
+</html>

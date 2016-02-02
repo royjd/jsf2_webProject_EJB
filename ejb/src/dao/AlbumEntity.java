@@ -12,8 +12,6 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 /**
  *
@@ -28,7 +26,6 @@ public class AlbumEntity extends PostEntity {
     private MediaEntity cover;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "album")
-    @Fetch(FetchMode.SELECT)
     private List<MediaEntity> medias = new ArrayList<>();
 
     private String localisation;

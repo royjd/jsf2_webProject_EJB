@@ -26,8 +26,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 /**
  *
@@ -68,7 +66,6 @@ public class PostEntity implements Serializable {
     private String title;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "postParent")
-    @Fetch(FetchMode.SELECT)//Fix for BUG DE HIBERNATE maybe :D
     private List<CommentEntity> comments = new ArrayList<>();
 
     @ManyToOne
