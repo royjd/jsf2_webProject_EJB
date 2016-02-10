@@ -30,9 +30,6 @@ public class SearchBean {
     @EJB
     UserService userService;
 
-    @ManagedProperty(value = "#{sessionBean}")
-    private SessionBean sessionBean;
-
     /**
      * Creates a new instance of SearchBean
      */
@@ -45,7 +42,7 @@ public class SearchBean {
      * @return
      */
     public String search() {
-        this.results = userService.search(this.param, sessionBean.getUserId());
+        this.results = userService.search(this.param, SessionBean.getUserId());
         return "index"; // ??
     }
 
@@ -59,14 +56,6 @@ public class SearchBean {
 
     public HashMap<UserEntity, Boolean> getResults() {
         return results;
-    }
-
-    public SessionBean getSessionBean() {
-        return sessionBean;
-    }
-
-    public void setSessionBean(SessionBean sessionBean) {
-        this.sessionBean = sessionBean;
     }
 
 }

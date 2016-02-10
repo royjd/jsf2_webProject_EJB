@@ -25,7 +25,7 @@ public interface ProfileDAO {
      *
      * @param p
      */
-    public void update(ProfileEntity p);
+    public ProfileEntity update(ProfileEntity p);
 
     /**
      *
@@ -33,10 +33,4 @@ public interface ProfileDAO {
      */
     public void delete(ProfileEntity p);
 
-    /**
-     *
-     * @param userId
-     * @return
-     */
-    public ProfileEntity findByUserId(Long userId);
 }

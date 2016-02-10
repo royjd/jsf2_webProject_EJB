@@ -5,7 +5,9 @@
  */
 package servicesSecondaire;
 
+import dao.FriendDAO;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 /**
@@ -15,9 +17,12 @@ import javax.ejb.Stateless;
 @Stateless
 public class FriendServiceImpl implements FriendService {
 
+    @EJB
+    FriendDAO friendDAO;
+    
     @Override
     public List<Long> findUsersIdOfFriends(Long userID) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return friendDAO.findUsersIdOfFriends(userID);
     }
 
     // Add business logic below. (Right-click in editor and choose

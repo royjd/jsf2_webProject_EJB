@@ -36,12 +36,6 @@ public interface ProfileService {
      */
     public void delete(ProfileEntity p);
 
-    /**
-     * return the profile matching the given user'id 
-     * @param userID
-     * @return
-     */
-    public ProfileEntity findByUserId(Long userID);
 
     /**
      * get the last experience of a user

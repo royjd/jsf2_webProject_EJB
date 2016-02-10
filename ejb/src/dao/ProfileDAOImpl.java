@@ -53,8 +53,8 @@ public class ProfileDAOImpl implements ProfileDAO{
      * @param p
      */
     @Override
-    public void update(ProfileEntity p) {
-        this.em.merge(p);
+    public ProfileEntity update(ProfileEntity p) {
+        return this.em.merge(p);
     }
     
     /**
@@ -67,20 +67,6 @@ public class ProfileDAOImpl implements ProfileDAO{
         this.em.remove(p);
     }
 
-    /**
-     *
-     * @param userId
-     * @return
-     */
-    @Override
-    public ProfileEntity findByUserId(Long userId) {
-        try{
-            return (ProfileEntity) this.em.createQuery("SELECT p FROM ProfileEntity p where p.profileOwner.id = :userId")
-                 .setParameter("userId", userId).getSingleResult();
-        }catch(NoResultException e){
-             return null;
-        }
-    }
 
 
     

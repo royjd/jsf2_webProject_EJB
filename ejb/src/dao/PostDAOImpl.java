@@ -59,6 +59,9 @@ public class PostDAOImpl implements PostDAO {
             PostEntity pe = ((CommentEntity) p).getPostParent();
             pe.addComment((CommentEntity) p);
             this.em.merge(pe);
+        }else if(p instanceof NewsEntity && ((NewsEntity)p).getMedia()!=null){
+            ((NewsEntity)p).getMedia().setNews((NewsEntity)p);
+            this.em.merge(((NewsEntity)p).getMedia());
         }
         return p.getId();
     }
@@ -160,8 +163,8 @@ public class PostDAOImpl implements PostDAO {
         List<PostEntity> postEntities = this.em.createQuery("SELECT t FROM PostEntity t where "
                 + "TYPE(t) <> CommentEntity "
                 + "AND ("
-                + "((t.author.id IN (:inclList) OR t.target.id IN (:inclList)) AND ((TYPE(t) = MediaEntity) OR TYPE(t) = NewsEntity))"
-                + " OR (t.target.id IN (:inclList) AND TYPE(t) = RecomendationEntity)"
+                + "((t.author.id IN :inclList OR t.target.id IN :inclList) AND ((TYPE(t) = MediaEntity) OR TYPE(t) = NewsEntity))"
+                + " OR (t.target.id IN :inclList AND TYPE(t) = RecomendationEntity)"
                 + ")"
                 + " order by t.id desc")
                 .setMaxResults(5)

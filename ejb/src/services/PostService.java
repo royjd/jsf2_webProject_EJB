@@ -15,6 +15,7 @@ import dao.UserEntity;
 import java.io.File;
 import java.util.List;
 import javax.ejb.Local;
+import javax.servlet.http.Part;
 
 /**
  *
@@ -79,25 +80,6 @@ public interface PostService {
      */
     public PostEntity createRecommendation(RecomendationEntity recom, UserEntity author, UserEntity target);
 
-    /**
-     * create a photo
-     * 
-     * @param album
-     * @param author
-     * @param file
-     * @return PostEntity
-     */
-    public PostEntity createPhoto(AlbumEntity album, UserEntity author, File file);
-
-    /**
-     * create photo
-     * 
-     * @param album
-     * @param author
-     * @param files
-     * @return PostEntity
-     */
-    public PostEntity createPhoto(AlbumEntity album, UserEntity author, File[] files);
 
     /**
      * createVideo
@@ -186,5 +168,7 @@ public interface PostService {
      * @return PostEntity
      */
     public PostEntity createNews(NewsEntity news, UserEntity ue, UserEntity target, PostEntity mediaEntity);
+
+    public PostEntity createNews(String title, String message, Part file,String contextPath, Long authorID, Long targetID);
 
 }

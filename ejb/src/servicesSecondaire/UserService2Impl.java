@@ -63,6 +63,9 @@ public class UserService2Impl implements UserService2 {
         if (!existUser(u.getEmail(), u.getUsername())) {
             Long userId = userDao.save(u);
             u.setId(userId);
+            u = userDao.findByID(u.getId());
+            photoService.createDefaultProfilePhotos(u);
+            profileDao.update(u.getProfile());
             return u;
         }
         return null;

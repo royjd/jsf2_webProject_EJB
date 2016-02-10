@@ -91,12 +91,12 @@ public class ExperienceServiceImpl implements ExperienceService {
 
     @Override
     public ExperienceEntity findLastExperienceForUser(Long userID) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return experienceDao.findLastExperienceForUser(userID);
     }
 
     @Override
     public ExperienceEntity findLastExperienceForProfile(Long profileID) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return experienceDao.findLastExperienceForProfile(profileID);
     }
     
 }

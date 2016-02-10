@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:composition>
+
+        <div class='row postHeader'>
+            <div class="pull-left "><img class='img-postHeader' src="resources/img/#{post.author.profile.pictureProfile.mediaType.link}" /> </div>
+            <div class="col-md-7">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h2> #{post.title}  </h2>
+                    </div>
+                    <div class="col-md-12 ">
+                        <h3> #{post.author.username}  </h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="row">
+                    <div class="col-md-12  text-right postDateHeader"> #{post.createDateFormated}  </div>
+                    <div class="col-md-12  text-right postDateHeader">  #{post.createdTime}  </div>
+                </div>
+            </div>
+        </div>
+    </ui:composition>
+</html>
+

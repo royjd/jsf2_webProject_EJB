@@ -7,37 +7,55 @@ package controllers;
 
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 
 /**
  *
  * @author zdiawara
  */
-@ManagedBean(name="sessionBean")
-@RequestScoped
 public class SessionBean {
 
-       
-    public SessionBean(){
-        
+    public SessionBean() {
+
     }
-    
+
     /**
      *
      * @return
      */
-    public boolean isConnect() {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);
-        return session != null;
+    public static boolean isConnect() {
+        return getSession(false) != null;
     }
-    
-    public Long getUserId(){
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);
-        if(session==null)
+
+    public static HttpSession getSession(boolean etat) {
+        return (HttpSession) FacesContext.getCurrentInstance()
+                .getExternalContext().getSession(false);
+    }
+
+    /*public static HttpServletRequest getRequest() {
+     return (HttpServletRequest) FacesContext.getCurrentInstance()
+     .getExternalContext().getRequest();
+     }*/
+    public static String getUsername() {
+        return getSession(false).getAttribute("username").toString();
+    }
+
+    public static String getEmail() {
+        return getSession(false).getAttribute("email").toString();
+    }
+
+    public static Long getUserId() {
+        HttpSession session = getSession(false);
+        if (session == null) {
             return null;
-        return (Long)session.getAttribute("id");
+        }
+        return (Long) session.getAttribute("id");
     }
+
+    public static void setDataUser(Long id, String usename, String email) {
+        HttpSession session = getSession(true);
+        session.setAttribute("username", usename);
+        session.setAttribute("email", email);
+        session.setAttribute("id", id);
+    }
+
 }

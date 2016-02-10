@@ -44,10 +44,20 @@ public class NewsEntity extends PostEntity {
      */
     public NewsEntity(String title, String body, UserEntity author, UserEntity target, MediaEntity media) {
         super(title, body, author, target);
-        this.media = null;
+        this.media = media;
     }
 
-
+    /**
+     *
+     * @param title the title of the news
+     * @param body the body of the nows
+     * @param author the author of the news
+     * @param target the target of the news
+     */
+    public NewsEntity(String title, String body, UserEntity author, UserEntity target) {
+        super(title, body, author, target);
+        this.media = null;
+    }
     /**
      *
      * @return

@@ -8,7 +8,6 @@ package servicesSecondaire;
 import dao.PhysicalDAO;
 import dao.PhysicalEntity;
 import dao.ProfileEntity;
-import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 

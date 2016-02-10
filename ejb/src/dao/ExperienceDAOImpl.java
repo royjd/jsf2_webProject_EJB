@@ -136,8 +136,8 @@ public class ExperienceDAOImpl implements ExperienceDAO {
         try {
 
             Query q;
-            q = this.em.createQuery("SELECT e FROM ExperienceEntity e WHERE e.profile.id = ? order by e.id desc");
-            q.setParameter(1, profileID);
+            q = this.em.createQuery("SELECT e FROM ExperienceEntity e WHERE e.profile.id = :value1 order by e.id desc");
+            q.setParameter("value1", profileID);
             q.setMaxResults(1);
             return (ExperienceEntity) q.getSingleResult();
         } catch (NoResultException e) {

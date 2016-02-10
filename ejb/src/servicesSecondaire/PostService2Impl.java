@@ -77,7 +77,7 @@ public class PostService2Impl implements servicesSecondaire.PostService2 {
 
     @Override
     public List<PostEntity> getRecentPostFromUsersID(List<Long> l) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       return postDao.getRecentPostFromUsersID(l);
     }
 
     @Override
@@ -96,8 +96,12 @@ public class PostService2Impl implements servicesSecondaire.PostService2 {
     }
 
     @Override
-    public PostEntity findAlbum(Long id, String type) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public AlbumEntity findAlbum(Long id, String type) {
+            PostEntity post = postDao.findAlbum(id, type);
+            AlbumEntity album = new AlbumEntity();
+            album.setId(post.getId());
+            album.setTitle(type);
+            return album;
     }
 
     @Override
@@ -112,13 +116,16 @@ public class PostService2Impl implements servicesSecondaire.PostService2 {
 
     @Override
     public void createDefaultAlbums(UserEntity u) {
-        AlbumEntity album = new AlbumEntity("Default", "Default album", u);
+        AlbumEntity album = new AlbumEntity("DefaultAlbum", "Default album", u);
+        album.setCover(u.getProfile().getPictureProfile());
         postDao.save(album);
 
-        album = new AlbumEntity("News", "News album", u);
+        album = new AlbumEntity("NewsAlbum", "News album", u);
+        album.setCover(u.getProfile().getPictureProfile());
         postDao.save(album);
 
-        album = new AlbumEntity("Profile", "Profile album", u);
+        album = new AlbumEntity("ProfileAlbum", "Profile album", u);
+        album.setCover(u.getProfile().getPictureProfile());
         postDao.save(album);
     }
 

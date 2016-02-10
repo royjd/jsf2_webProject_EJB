@@ -8,6 +8,7 @@ package controllers;
 import dao.UserEntity;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 import services.UserService;
@@ -16,7 +17,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 
 /**
  *
- * @author Karl Lauret
+ * @author zdiawara
  */
 @ManagedBean(name = "userBean")
 @ViewScoped//needed for the ajax request Option that cost the least I think
@@ -28,9 +29,10 @@ public class UserBean {
     private String username;
     private String firstName;
     private String lastName;
-        
+
     @EJB
     UserService userService;
+
 
     /**
      * Creates a new instance of SessionBean
@@ -49,17 +51,13 @@ public class UserBean {
             FacesContext.getCurrentInstance().getExternalContext().getFlash().put("singin", "Invalid identifiant");
             return "index?faces-redirect=true";
         }
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(true);
-        session.setAttribute("username", user.getUsername());
-        session.setAttribute("email", user.getEmail());
-        session.setAttribute("id", user.getId());
+        SessionBean.setDataUser(user.getId(), username, email);
         return "page?faces-redirect=true";
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public String singUp() {
         Long id = userService.add(email, username, password, firstName, lastName);
@@ -69,23 +67,19 @@ public class UserBean {
         }
         FacesContext facesContext = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(true);
-        session.setAttribute("username", username);
-        session.setAttribute("email", email);
-        session.setAttribute("id",id);
+        SessionBean.setDataUser(id, username, email);
         return "page?faces-redirect=true";
 
     }
-    
-    
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
-    public String logout(){
+    public String logout() {
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         return "index.xhtml"; // ??? 
     }
-    
 
     public String getEmail() {
         return email;
@@ -99,8 +93,8 @@ public class UserBean {
         return password;
     }
 
-    public void setPassword(String password){
-        if(password==null){
+    public void setPassword(String password) {
+        if (password == null) {
             password = "";
         }
         this.password = DigestUtils.md5Hex(password); // Crypt password
@@ -129,6 +123,6 @@ public class UserBean {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-    
+   
 
 }

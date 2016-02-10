@@ -14,7 +14,9 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import servicesSecondaire.ExperienceService;
 import servicesSecondaire.LocalisationService;
+import servicesSecondaire.PhotoService;
 import servicesSecondaire.PhysicalService;
+import servicesSecondaire.PostService2;
 
 /**
  *
@@ -24,6 +26,9 @@ import servicesSecondaire.PhysicalService;
 public class ProfileServiceImpl implements ProfileService {
 
     @EJB
+    PhotoService photoService2;
+    
+    @EJB
     LocalisationService localisationService;
 
     @EJB
@@ -31,6 +36,10 @@ public class ProfileServiceImpl implements ProfileService {
 
     @EJB
     PhysicalService physicalService;
+   
+    
+    @EJB
+    PostService2 postService2;
 
     @EJB
     ProfileDAO profileDao;
@@ -66,15 +75,7 @@ public class ProfileServiceImpl implements ProfileService {
         profileDao.update(p);
     }
 
-    /**
-     *
-     * @param userId
-     * @return
-     */
-    @Override
-    public ProfileEntity findByUserId(Long userId) {
-        return profileDao.findByUserId(userId);
-    }
+
 
     /**
      *
