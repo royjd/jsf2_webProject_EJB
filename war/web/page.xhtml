@@ -10,42 +10,21 @@
         <h:outputStylesheet library="css" name="post/comment.css"/>
         <h:outputStylesheet library="css" name="post/post.css"/>
         <h:outputStylesheet library="css" name="general.css"/>
-        
+
         <h:outputScript library="js" name="jquery.js"/>
         <h:outputScript library="library" name="bootstrap/js/bootstrap.js"/>
         <h:outputScript library="library" name="jquery-ui/jquery-ui.js"/>
-        
+
 
         <meta charset="utf-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
-        
+
         <title>Fanfare</title>
     </h:head>
-    <h:body class="bg-primary">
-        <div id="header">
-            <ui:insert name="header" >
-                <ui:include src="WEB-INF/xhtml/index/header.xhtml" />
-            </ui:insert>
-        </div>
-        PAGE
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-6">
-                    <ui:insert name="informations" >
-                        <ui:include src="WEB-INF/xhtml/index/info.xhtml" />
-                    </ui:insert>
-                </div>
-                <div class="col-sm-6">
-                    
-                    <ui:insert name="singUp" >
-                        <ui:include src="WEB-INF/xhtml/index/signUp.xhtml" />
-                    </ui:insert>
-                </div>
+    <h:body class="bg-primary" style="padding-top: 70px">
+        <ui:include src="WEB-INF/xhtml/commun/header.xhtml" />
 
-            </div>
-
-        </div>
-
+        <ui:include src="home.xhtml" />
 
     </h:body>
 </html>

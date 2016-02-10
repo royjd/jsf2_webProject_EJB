@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets">
 
     <ui:composition>
@@ -11,6 +12,18 @@
                     <a class="navbar-brand" href="${pageContext.request.contextPath}/index.htm">FanFare</a>
                 </div>
                 <div class="col-sm-5">
+                    <h:form>
+                        <h:inputText id="username" value="#{logInBean.email}"></h:inputText>
+                        <h:message for="username"></h:message>
+
+                        <h:outputText value="Password" />
+                        <h:inputSecret id="password" value="#{logInBean.password}"></h:inputSecret>
+                        <h:message for="password"></h:message>
+
+                        <h:commandButton action="#{logInBean.login()}"
+                                         value="Login"></h:commandButton>
+                    </h:form>
+                    <h:outputText value="#{sessionScope.username}" /> 
                     <form method="post" class="navbar-form" role="form" action="${pageContext.request.contextPath}/login.htm">
 
                         <input type="email" name="email" class="form-control" id="email" placeholder="E-Mail"></input>
@@ -32,60 +45,60 @@
             </div>
         </nav>
 
-       <!-- <script type="text/javascript">
-        //TODO autocompletion redo into an js file
-            /* $(document).ready(function () {
-             $('#friendSearch')
-             // don't navigate away from the field on tab when selecting an item
-             .bind("keydown", function (event) {
-             if (event.keyCode === $.ui.keyCode.TAB &&
-             $(this).autocomplete("instance").menu.active) {
-             event.preventDefault();
-             }
-             })
-             .autocomplete({
-             minLength: 0,
-             source: function (request, response) {
-             // delegate back to autocomplete, but extract the last term
-             // get the form values
-             $.ajax({
-             type: "POST",
-             url: "${pageContext.request.contextPath}/messageajaxTest.htm",
-             data: "email=" + request.term,
-             success: function (resp) {
-             availableTags = [];
-             console.log(resp);
-             resp = JSON.parse(resp);
-             console.log(resp);
-             $.each(resp.user, function (i, item) {
-             availableTags.push(item);
-             });
-     
-             response(availableTags);
-             },
-             error: function (e) {
-             alert('Error: ' + e);
-             console.log(e);
-             }
-             });
-             },
-             focus: function (event, ui) {
-             // prevent value inserted on focus
-             //$("#name").val(ui.item.email);
-             return false;
-             },
-             select: function (event, ui) {
-             }
-             })
-             //to personalise the display in the list        
-             .autocomplete("instance")._renderItem = function (ul, item) {
-             //alert('OMG');
-             return $("<li>")
-             .append("<a href='${pageContext.request.contextPath}/" + item.username + ".htm'>" + item.email + "<br>" + item.username + "</a>")
-             .appendTo(ul);
-             };
-             });*/
-        </script>-->
+        <!-- <script type="text/javascript">
+         //TODO autocompletion redo into an js file
+             /* $(document).ready(function () {
+              $('#friendSearch')
+              // don't navigate away from the field on tab when selecting an item
+              .bind("keydown", function (event) {
+              if (event.keyCode === $.ui.keyCode.TAB &&
+              $(this).autocomplete("instance").menu.active) {
+              event.preventDefault();
+              }
+              })
+              .autocomplete({
+              minLength: 0,
+              source: function (request, response) {
+              // delegate back to autocomplete, but extract the last term
+              // get the form values
+              $.ajax({
+              type: "POST",
+              url: "${pageContext.request.contextPath}/messageajaxTest.htm",
+              data: "email=" + request.term,
+              success: function (resp) {
+              availableTags = [];
+              console.log(resp);
+              resp = JSON.parse(resp);
+              console.log(resp);
+              $.each(resp.user, function (i, item) {
+              availableTags.push(item);
+              });
+      
+              response(availableTags);
+              },
+              error: function (e) {
+              alert('Error: ' + e);
+              console.log(e);
+              }
+              });
+              },
+              focus: function (event, ui) {
+              // prevent value inserted on focus
+              //$("#name").val(ui.item.email);
+              return false;
+              },
+              select: function (event, ui) {
+              }
+              })
+              //to personalise the display in the list        
+              .autocomplete("instance")._renderItem = function (ul, item) {
+              //alert('OMG');
+              return $("<li>")
+              .append("<a href='${pageContext.request.contextPath}/" + item.username + ".htm'>" + item.email + "<br>" + item.username + "</a>")
+              .appendTo(ul);
+              };
+              });*/
+         </script>-->
     </ui:composition>
 </html>
 
