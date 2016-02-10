@@ -21,7 +21,7 @@ public interface PhysicalService {
      * @param p
      * @return Long id of the physicalEntity
      */
-    public Long save(PhysicalEntity p);
+    public Boolean save(PhysicalEntity p);
 
     /**
      * update the physical given

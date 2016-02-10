@@ -66,5 +66,5 @@ public interface UserDAO {
     public List<UserEntity> findBysearch(String param);
 
 
-
+    public UserEntity connect(String identifiant, String password);
 }

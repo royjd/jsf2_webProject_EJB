@@ -32,10 +32,6 @@ public class PhysicalEntity implements Serializable {
     
     private String gender;
     
-    @OneToOne
-    @JoinColumn(name="profile_fk")
-    private ProfileEntity profile;
-
     /**
      *
      */
@@ -99,22 +95,6 @@ public class PhysicalEntity implements Serializable {
      */
     public void setGender(String gender) {
         this.gender = gender;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public ProfileEntity getProfile() {
-        return profile;
-    }
-
-    /**
-     *
-     * @param profile
-     */
-    public void setProfile(ProfileEntity profile) {
-        this.profile = profile;
     }
     
     /**

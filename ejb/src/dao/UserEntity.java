@@ -17,6 +17,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -52,8 +53,9 @@ public class UserEntity implements Serializable {
     @NotNull
     @Size( min = 3, message = "Username must contain at least 3 letter" )
     private String username;
-
-    @OneToOne(mappedBy = "profileOwner")
+   
+    @OneToOne
+    @JoinColumn(name = "profile_id")
     private ProfileEntity profile;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")//was super heavy changed to lazy
@@ -86,6 +88,23 @@ public class UserEntity implements Serializable {
     }
 
     /**
+     * 
+     * @param email
+     * @param username
+     * @param password
+     * @param firstName
+     * @param lastName 
+     */
+    public UserEntity(String email, String username, String password, String firstName, String lastName){
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.profile = new ProfileEntity(lastName,firstName);
+        this.postsS.add(new AlbumEntity("Default", "Default album", this));
+        this.postsS.add(new AlbumEntity("News", "News album", this));
+        this.postsS.add(new AlbumEntity("Profile", "Profile album", this));
+    }
+    /**
      *
      * @param email
      * @param password
@@ -94,8 +113,7 @@ public class UserEntity implements Serializable {
      */
     public UserEntity(String email, String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
         this.email = email;
-
-        this.password = PasswordManager.createHash(password);
+        this.password = password;//PasswordManager.createHash(password);
     }
 
     /**

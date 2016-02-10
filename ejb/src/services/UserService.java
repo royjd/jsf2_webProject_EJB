@@ -8,6 +8,7 @@ package services;
 import dao.FriendEntity;
 import dao.ProfileEntity;
 import dao.UserEntity;
+import java.util.HashMap;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -18,12 +19,7 @@ import javax.ejb.Local;
 @Local
 public interface UserService {
 
-    /**
-     * create the given user
-     * @param u
-     * @return true if it was ok else fale
-     */
-    public boolean add(UserEntity u);
+    public Long add(String email, String username, String password,String firstName, String lastName);
 
     /**
      * delete the given user
@@ -33,12 +29,12 @@ public interface UserService {
     public boolean delete(UserEntity u);
 
     /**
-     * return the user if we find a user with the same email and password
-     * @param email
+     * return the user if we find a user with the same email or username and password 
+     * @param identifiant
      * @param password
      * @return UserEntity if found null otherwise
      */
-    public UserEntity isValidUser(String email, String password);
+    public UserEntity isValidUser(String identifiant, String password);
 
     /**
      * return the user matching the given userID
@@ -84,9 +80,10 @@ public interface UserService {
      * search  users by email or username 
      * 
      * @param param
+     * @param id 
      * @return  List
      */
-    public List<UserEntity> search(String param);
+    public HashMap<UserEntity, Boolean> search(String param,Long id);
 
     /**
      * return friends to accept

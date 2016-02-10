@@ -28,8 +28,21 @@ public class PhysicalServiceImpl implements PhysicalService {
      * @return
      */
     @Override
-    public Long save(PhysicalEntity p) {
-        return physicalDao.save(p);
+    public Boolean save(PhysicalEntity p) {
+
+        if (p == null) {
+            return false;
+        }
+
+        Long id = physicalDao.save(p);
+
+        if (id == null) {
+            return false;
+        }
+
+        p.setId(id);
+
+        return true;
     }
 
     /**
@@ -62,11 +75,11 @@ public class PhysicalServiceImpl implements PhysicalService {
 
     @Override
     public PhysicalEntity createProfilePhysical(ProfileEntity p) {
-        
+
         PhysicalEntity physic = new PhysicalEntity();
-        physic.setProfile(p);
+        //physic.setProfile(p);
         physicalDao.save(physic);
-        
+
         return physic;
     }
 

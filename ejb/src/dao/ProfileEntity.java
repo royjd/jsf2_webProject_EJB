@@ -50,10 +50,6 @@ public class ProfileEntity implements Serializable {
     private String city;
 
     @OneToOne
-    @JoinColumn(name = "user_id")
-    private UserEntity profileOwner;
-
-    @OneToOne
     @JoinColumn(name = "pictureProfile_id")
     private MediaEntity pictureProfile;
     
@@ -64,9 +60,27 @@ public class ProfileEntity implements Serializable {
     @OneToMany(mappedBy = "profile")
     private List<ExperienceEntity> experiences = new ArrayList<>();
 
-    @OneToOne(mappedBy = "profile")
+    @OneToOne
+    @JoinColumn(name="physical_id")
     private PhysicalEntity physical;
 
+    /**
+     * 
+     */
+    public ProfileEntity(){
+        
+    }
+    
+    /**
+     * 
+     * @param lastName
+     * @param firstName 
+     */
+    public ProfileEntity(String lastName, String firstName){
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.physical = new PhysicalEntity();
+    }
     /**
      *
      * @param p
@@ -127,22 +141,6 @@ public class ProfileEntity implements Serializable {
      */
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public UserEntity getProfileOwner() {
-        return profileOwner;
-    }
-
-    /**
-     *
-     * @param profileOwner
-     */
-    public void setProfileOwner(UserEntity profileOwner) {
-        this.profileOwner = profileOwner;
     }
 
     /**

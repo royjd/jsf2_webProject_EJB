@@ -6,28 +6,16 @@
 package services;
 
 import servicesSecondaire.PhotoService;
-import commun.PasswordManager;
-import dao.AlbumEntity;
 import dao.ExperienceDAO;
 import dao.FriendDAO;
 import dao.FriendEntity;
-import dao.MediaEntity;
-import dao.PhotoEntity;
 import dao.PhysicalDAO;
-import dao.PhysicalEntity;
 import dao.PostDAO;
-import dao.PostEntity;
-import dao.ProfileDAO;
-import dao.ProfileEntity;
 import dao.UserDAO;
 import dao.UserEntity;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import servicesSecondaire.PostService2;
@@ -48,10 +36,10 @@ public class UserServiceImpl implements UserService {
 
     @EJB
     PhotoService photoService;
-    
+
     @EJB
     PostService2 postService;
-    
+
     @EJB
     FriendDAO friendDao;
 
@@ -63,34 +51,27 @@ public class UserServiceImpl implements UserService {
 
     @EJB
     PhysicalDAO physicalDao;
-    
+
     @EJB
     UserService2 userService;
 
     /**
      *
-     * @param u
+     * @param email
+     * @param username
+     * @param password
+     * @param firstName
+     * @param lastName
      * @return
      */
     @Override
-    public boolean add(UserEntity u) {
-        if (this.userDao.findByEmail(u.getEmail()) == null && this.userDao.findByUsername(u.getUsername())==null) {
-            
-                //create used in database
-                u = userService.create(u);
-                
-                //set the profile picture
-                profileService.createUserProfile(u);
-                
-                //create default albums
-                postService.createDefaultAlbums(u);
-
-                return true;
-                
-            
-        } else {
-            return false;
+    public Long add(String email, String username, String password, String firstName, String lastName) {
+        UserEntity user = new UserEntity(email, username, password, firstName, lastName);
+        user = userService.create(user);
+        if (user == null) {
+            return null;
         }
+        return user.getId();
     }
 
     /**
@@ -140,29 +121,14 @@ public class UserServiceImpl implements UserService {
 
     /**
      *
-     * @param email
+     * @param identifiant
      * @param password
      * @return
      */
+    // Can be an elementary service ?
     @Override
-    public UserEntity isValidUser(String email, String password) {
-        UserEntity ue = this.userDao.findByEmail(email);
-        if (ue != null) {
-            try {
-                if (ue.isValidPassword(password)) {
-                    return ue;
-                }
-                return null;
-            } catch (NoSuchAlgorithmException ex) {
-                Logger.getLogger(UserServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
-                return null;
-            } catch (InvalidKeySpecException ex) {
-                Logger.getLogger(UserServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
-                return null;
-            }
-        } else {
-            return null;
-        }
+    public UserEntity isValidUser(String identifiant, String password) {
+        return this.userDao.connect(identifiant, password);
     }
 
     /**
@@ -241,11 +207,23 @@ public class UserServiceImpl implements UserService {
     /**
      *
      * @param param
+     * @param id
      * @return
      */
     @Override
-    public List<UserEntity> search(String param) {
-        return this.userDao.findBysearch(param);
+    public HashMap<UserEntity, Boolean> search(String param, Long id) {
+        List<UserEntity> users = userService.search(param);
+        HashMap<UserEntity, Boolean> results = new HashMap<>();
+        if (id != null) {
+            for (UserEntity user : users) {
+                results.put(user, userService.isFriend(id, user.getId()));
+            }
+        } else {
+            for (UserEntity user : users) {
+                results.put(user, false);
+            }
+        }
+        return results;
     }
 
     /**
@@ -359,6 +337,5 @@ public class UserServiceImpl implements UserService {
         }
         return null;
     }
-
 
 }

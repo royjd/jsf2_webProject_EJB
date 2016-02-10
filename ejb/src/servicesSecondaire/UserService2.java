@@ -163,5 +163,7 @@ public interface UserService2 {
      * @return true if they are else false
      */
     public boolean isFriend(String username1, String username2);
-
+    
+    public boolean existUser(String email, String username);
+       
 }

@@ -8,46 +8,84 @@ package controllers;
 import dao.UserEntity;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 import services.UserService;
+import javax.faces.bean.ViewScoped;
+import org.apache.commons.codec.digest.DigestUtils;
 
 /**
  *
  * @author Karl Lauret
  */
-@ManagedBean
-@RequestScoped
-public class LogInBean {
+@ManagedBean(name = "userBean")
+@ViewScoped//needed for the ajax request Option that cost the least I think
+public class UserBean {
 
+    // Add or Login a user
     private String email;
     private String password;
-
+    private String username;
+    private String firstName;
+    private String lastName;
+        
     @EJB
     UserService userService;
 
     /**
-     * Creates a new instance of LogInBean
+     * Creates a new instance of SessionBean
      */
-    public LogInBean() {
+    public UserBean() {
 
     }
 
-    public String login() {
+    /**
+     *
+     * @return
+     */
+    public String singIn() {
         UserEntity user = userService.isValidUser(email, password);
+        if (user == null) {
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().put("singin", "Invalid identifiant");
+            return "index?faces-redirect=true";
+        }
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        if (user != null) {
-            HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(true);
-            session.setAttribute("username", user.getUsername());
-            session.setAttribute("email", user.getEmail());
-            session.setAttribute("id", user.getId());
-            return "page";
-        }else{
-            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("username","NO NO");
+        HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(true);
+        session.setAttribute("username", user.getUsername());
+        session.setAttribute("email", user.getEmail());
+        session.setAttribute("id", user.getId());
+        return "page?faces-redirect=true";
+    }
+
+    /**
+     * 
+     * @return 
+     */
+    public String singUp() {
+        Long id = userService.add(email, username, password, firstName, lastName);
+        if (id == null) {
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().put("singup", "Fail !");
             return "index";
         }
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(true);
+        session.setAttribute("username", username);
+        session.setAttribute("email", email);
+        session.setAttribute("id",id);
+        return "page?faces-redirect=true";
+
     }
+    
+    
+    /**
+     * 
+     * @return 
+     */
+    public String logout(){
+        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+        return "index.xhtml"; // ??? 
+    }
+    
 
     public String getEmail() {
         return email;
@@ -61,8 +99,36 @@ public class LogInBean {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setPassword(String password){
+        if(password==null){
+            password = "";
+        }
+        this.password = DigestUtils.md5Hex(password); // Crypt password
     }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+    
 
 }

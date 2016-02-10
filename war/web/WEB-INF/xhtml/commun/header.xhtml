@@ -25,15 +25,14 @@
                             <li class="dropdown pull-right">
                                 <a class="dropdown-toggle glyphicon glyphicon-user" data-toggle="dropdown" href="#"><span class="caret"></span></a>
                                 <ul class="dropdown-menu">
-                                    <li> <a href="/#{username}.htm"> ${user.username} </a></li>
-                                    <li> <a href="/logout.htm"> Logout </a></li>
+                                    <li> <a href="/#{username}.htm"> #{username} </a></li>
+                                    <li> <a href="#{userBean.logout()}"> Logout </a></li>
                                 </ul>
                             </li>
                             <h:form class="navbar-form pull-right">
                                 <h:inputText  value="#{searchBean.param}"  class="form-control" id="friendSearch"></h:inputText>
 
-                                <h:commandButton action="#{searchBean.search()}"
-                                                 value="Go" class="btn btn-success"></h:commandButton>
+                                <h:commandButton action="#{searchBean.search()}" value="Go" class="btn btn-success"></h:commandButton>
                             </h:form>
                         </ul>
                     </div>

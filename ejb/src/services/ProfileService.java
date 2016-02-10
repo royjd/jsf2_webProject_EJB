@@ -22,7 +22,7 @@ public interface ProfileService {
      * @param p
      * @return the profile id created
      */
-    public Long save(ProfileEntity p);
+    public Boolean save(ProfileEntity p);
 
     /**
      * update the profile given
@@ -59,5 +59,6 @@ public interface ProfileService {
      */
     public ExperienceEntity getLastExperienceByProfile(Long profileID);
 
-    public void createUserProfile(UserEntity u);
+    public Boolean createProfile(ProfileEntity profile);
+    
 }

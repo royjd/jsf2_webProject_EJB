@@ -5,19 +5,12 @@
  */
 package servicesSecondaire;
 
-import commun.PasswordManager;
-import dao.AlbumEntity;
 import dao.ExperienceDAO;
 import dao.FriendDAO;
 import dao.FriendEntity;
-import dao.MediaEntity;
-import dao.PhotoEntity;
 import dao.PhysicalDAO;
-import dao.PhysicalEntity;
 import dao.PostDAO;
-import dao.PostEntity;
 import dao.ProfileDAO;
-import dao.ProfileEntity;
 import dao.UserDAO;
 import dao.UserEntity;
 import java.security.NoSuchAlgorithmException;
@@ -26,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
@@ -68,19 +60,10 @@ public class UserService2Impl implements UserService2 {
      */
     @Override
     public UserEntity create(UserEntity u) {
-        if (this.userDao.findByEmail(u.getEmail()) == null && this.userDao.findByUsername(u.getUsername()) == null) {
-
-            try {
-                u.setPassword(PasswordManager.createHash(u.getPassword()));
-                Long userId = userDao.save(u);
-                u.setId(userId);
-                return u;
-            } catch (NoSuchAlgorithmException ex) {
-                Logger.getLogger(UserService2Impl.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (InvalidKeySpecException ex) {
-                Logger.getLogger(UserService2Impl.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
+        if (!existUser(u.getEmail(), u.getUsername())) {
+            Long userId = userDao.save(u);
+            u.setId(userId);
+            return u;
         }
         return null;
     }
@@ -145,10 +128,7 @@ public class UserService2Impl implements UserService2 {
                     return ue;
                 }
                 return null;
-            } catch (NoSuchAlgorithmException ex) {
-                Logger.getLogger(UserService2Impl.class.getName()).log(Level.SEVERE, null, ex);
-                return null;
-            } catch (InvalidKeySpecException ex) {
+            } catch (NoSuchAlgorithmException | InvalidKeySpecException ex) {
                 Logger.getLogger(UserService2Impl.class.getName()).log(Level.SEVERE, null, ex);
                 return null;
             }
@@ -350,6 +330,11 @@ public class UserService2Impl implements UserService2 {
             return friends;
         }
         return null;
+    }
+
+    @Override
+    public boolean existUser(String email, String username) {
+        return (this.userDao.findByEmail(email) != null) || (this.userDao.findByUsername(username) != null);
     }
 
 }

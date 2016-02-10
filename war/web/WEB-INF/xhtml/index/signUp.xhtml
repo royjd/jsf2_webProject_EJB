@@ -3,6 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
       xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
@@ -18,12 +19,18 @@
 
                     <h:form id="createUserForm" class="form-horizontal">
                         <fieldset>
-
+                            <c:if test="${not empty flash['singup']}">
+                                <div class="alert alert-danger fade in">
+                                    <a href="#" class="close" data-dismiss="alert">&times;</a>
+                                    <strong>Error </strong> ${flash['singup']}
+                                </div>
+                            </c:if>
                             <legend><h2>Sign Up</h2></legend>
                             <div class="form-group">
-                                <h:inputText id="email" value="#{singUpController.user.email}" required="true" class="form-control" pt:type="email" pt:placeholder="Enter email" requiredMessage="#{msg['singup.email']}">
+                                <h:inputText id="email" value="#{userBean.email}" required="true" class="form-control" pt:type="email" pt:placeholder="Enter email" requiredMessage="#{msg['singup.email']}" validatorMessage="#{msg['valideEmail']}">
                                     <f:ajax event="blur" render="emailMessage" />
                                     <f:validator binding="#{emailAlreadyUsed}" />
+                                    <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                                 </h:inputText>
 
                                 <h:message id="emailMessage" for="email" errorClass="erreur"  class="control-label text-danger"/>
@@ -31,7 +38,7 @@
 
 
                             <div class="form-group">
-                                <h:inputSecret id="password" value="#{singUpController.user.password}" required="true" class="form-control" pt:type="password" pt:placeholder="Password" requiredMessage="#{msg['singup.password']}">
+                                <h:inputSecret id="password" value="#{userBean.password}" required="true" class="form-control" pt:type="password" pt:placeholder="Password" requiredMessage="#{msg['singup.password']}">
                                     <f:ajax event="blur" render="passwordMessage" />
                                 </h:inputSecret>
 
@@ -41,7 +48,7 @@
 
 
                             <div class="form-group">
-                                <h:inputSecret id="confirmation" value="#{singUpController.user.password}" required="true" class="form-control"  pt:type="password" pt:placeholder="Password confirmation" requiredMessage="#{msg['singup.confirmation']}">
+                                <h:inputSecret id="confirmation" value="#{userBean.password}" required="true" class="form-control"  pt:type="password" pt:placeholder="Password confirmation" requiredMessage="#{msg['singup.confirmation']}">
                                     <f:ajax event="blur" render="confirmationMessage" />
                                 </h:inputSecret>
 
@@ -49,15 +56,16 @@
                             </div>
 
                             <div class="form-group">
-                                <h:inputText id="username" value="#{singUpController.user.username}" required="true" class="form-control" pt:type="text" pt:placeholder="Username" requiredMessage="#{msg['singup.username']}">
+                                <h:inputText id="username" value="#{userBean.username}" required="true" class="form-control" pt:type="text" pt:placeholder="Username" requiredMessage="#{msg['singup.username']}">
                                     <f:ajax event="blur" render="usernameMessage" />
+                                    <f:validator binding="#{verifyUsername}" />
                                 </h:inputText>
 
                                 <h:message id="usernameMessage" for="username" errorClass="erreur" class="control-label text-danger"/>
                             </div>
 
                             <div class="form-group">
-                                <h:inputText id="firstname" value="#{singUpController.user.profile.firstName}" required="true" class="form-control" pt:type="text" pt:placeholder="First Name" requiredMessage="#{msg['singup.firstname']}">
+                                <h:inputText id="firstname" value="#{userBean.firstName}" required="true" class="form-control" pt:type="text" pt:placeholder="First Name" requiredMessage="#{msg['singup.firstname']}">
                                     <f:ajax event="blur" render="firstnameMessage" />
                                 </h:inputText>
 
@@ -65,7 +73,7 @@
                             </div>
 
                             <div class="form-group">
-                                <h:inputText id="lastname" value="#{singUpController.user.profile.lastName}" required="true" class="form-control" pt:type="text" pt:placeholder="Last Name" requiredMessage="#{msg['singup.lastname']}">
+                                <h:inputText id="lastname" value="#{userBean.lastName}" required="true" class="form-control" pt:type="text" pt:placeholder="Last Name" requiredMessage="#{msg['singup.lastname']}">
                                     <f:ajax event="blur" render="lastnameMessage" />
                                 </h:inputText>
 
@@ -74,7 +82,7 @@
 
                             <h:messages globalOnly="true" infoClass="info" />
 
-                            <h:commandButton value="Sing Up" action="#{singUpController.singUp}" class="btn btn-success">
+                            <h:commandButton value="Sing Up" action="#{userBean.singUp}" class="btn btn-success">
                                 <f:ajax execute="@form" render="@form" />
                             </h:commandButton>
                         </fieldset>

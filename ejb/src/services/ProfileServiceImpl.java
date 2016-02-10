@@ -41,8 +41,20 @@ public class ProfileServiceImpl implements ProfileService {
      * @return
      */
     @Override
-    public Long save(ProfileEntity p) {
-        return profileDao.save(p);
+    public Boolean save(ProfileEntity p) {
+        if (p == null) {
+            return false;
+        }
+
+        Long id = profileDao.save(p);
+
+        if (id == null) {
+            return false;
+        }
+
+        p.setId(id);
+
+        return true;
     }
 
     /**
@@ -94,20 +106,8 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public void createUserProfile(UserEntity u) {
-        
-        
-        ProfileEntity p = u.getProfile();
-        
-        PhysicalEntity physic = physicalService.createProfilePhysical(p);
-        
-        //set the profile Physic
-        p.setPhysical(physic);
-        
-        //Set the profile owner
-        p.setProfileOwner(u);
-        
-        profileDao.update(p);
+    public Boolean createProfile(ProfileEntity profile) {
+        return physicalService.save(profile.getPhysical()) && this.save(profile);
     }
 
 }

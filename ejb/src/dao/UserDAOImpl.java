@@ -10,6 +10,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -110,20 +111,18 @@ public class UserDAOImpl implements UserDAO {
 
 
     /*@Transactional
-    @Override
-    public void addFriend(UserEntity friend, UserEntity owner, FriendEntity fe) {
-        friend.addFriendedBy(fe);
-        owner.addFriend(fe);
-        this.em.merge(friend);
-        this.em.merge(owner);
-    }*/
-
+     @Override
+     public void addFriend(UserEntity friend, UserEntity owner, FriendEntity fe) {
+     friend.addFriendedBy(fe);
+     owner.addFriend(fe);
+     this.em.merge(friend);
+     this.em.merge(owner);
+     }*/
     /**
      *
      * @param param
      * @return
      */
-
     @Override
     public List<UserEntity> findBysearch(String param) {
         try {
@@ -139,6 +138,16 @@ public class UserDAOImpl implements UserDAO {
 
     }
 
-   
+    @Override
+    public UserEntity connect(String identifiant, String password) {
+        try {
+            Query q = this.em.createQuery("SELECT t FROM UserEntity t where ( t.username = :identifiant or t.email = :identifiant ) and t.password = :password");
+            q.setParameter("identifiant", identifiant);
+            q.setParameter("password", password);
+            return (UserEntity)q.getSingleResult();        
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
 
 }

@@ -2,8 +2,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
+       xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
       xmlns:ui="http://java.sun.com/jsf/facelets">
-
+     
     <ui:composition>
 
         <nav class="navbar navbar-default">
@@ -12,35 +13,21 @@
                     <a class="navbar-brand" href="${pageContext.request.contextPath}/index.htm">FanFare</a>
                 </div>
                 <div class="col-sm-5">
-                    <h:form>
-                        <h:inputText id="username" value="#{logInBean.email}"></h:inputText>
-                        <h:message for="username"></h:message>
+                    <h:form class="navbar-form" role="form">
+                        <h:inputText class="form-control" id="email" value="#{userBean.email}" pt:placeholder="E-mail or Username"></h:inputText>
 
-                        <h:outputText value="Password" />
-                        <h:inputSecret id="password" value="#{logInBean.password}"></h:inputSecret>
-                        <h:message for="password"></h:message>
+                        <h:inputSecret class="form-control" id="password" value="#{userBean.password}" pt:placeholder="Password"></h:inputSecret>
 
-                        <h:commandButton action="#{logInBean.login()}"
-                                         value="Login"></h:commandButton>
+                        <h:commandButton action="#{userBean.singIn()}" value="Sign In" class="btn btn-success"></h:commandButton>
                     </h:form>
-                    <h:outputText value="#{sessionScope.username}" /> 
-                    <form method="post" class="navbar-form" role="form" action="${pageContext.request.contextPath}/login.htm">
-
-                        <input type="email" name="email" class="form-control" id="email" placeholder="E-Mail"></input>
-
-                        <input type="password" name="pwd" class="form-control" id="pwd" placeholder="password"></input>
-
-                        <button type="submit" class="btn btn-success">Sign In</button>
-                    </form>
                 </div>
                 <div class="col-sm-4">
-
-                    <form method="post" class="navbar-form pull-right" role="form" action="${pageContext.request.contextPath}/search.htm">
-
-                        <input type="text" name="searchParam" class="form-control" id="friendSearch" placeholder="Search..."></input>
-
-                        <button type="submit" class="btn btn-success">Go</button>
-                    </form>
+                    <h:form class="navbar-form pull-right" role="form">
+                        <h:inputText class="form-control" id="friendSearch" value="#{searchBean.param}" pt:placeholder="Search...">
+                        </h:inputText>
+                        
+                        <h:commandButton action="#{searchBean.search()}" value="Go" class="btn btn-success"></h:commandButton>
+                    </h:form>
                 </div>
             </div>
         </nav>

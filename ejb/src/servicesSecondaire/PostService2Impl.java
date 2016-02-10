@@ -7,23 +7,17 @@ package servicesSecondaire;
 
 import services.*;
 import dao.AlbumEntity;
-import dao.CommentEntity;
 import dao.FriendDAO;
 import dao.FriendEntity;
-import dao.MediaEntity;
-import dao.NewsEntity;
 import dao.NotificationEntity;
 import dao.PostDAO;
 import dao.PostEntity;
-import dao.RecomendationEntity;
 import dao.UserDAO;
 import dao.UserEntity;
 import java.sql.Date;
 import java.sql.Time;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 

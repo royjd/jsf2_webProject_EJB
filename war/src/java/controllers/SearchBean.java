@@ -5,27 +5,48 @@
  */
 package controllers;
 
+import dao.UserEntity;
+import java.util.List;
+import javax.ejb.EJB;
 import javax.inject.Named;
-import javax.enterprise.context.Dependent;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ManagedProperty;
+import services.UserService;
+import java.util.HashMap;
 
 /**
  *
  * @author Karl Lauret
  */
-@Named(value = "searchBean")
-@Dependent
+@ManagedBean(name = "searchBean")
+@RequestScoped
 public class SearchBean {
 
     private String param;
-    
+
+    private HashMap<UserEntity, Boolean> results;
+
+    @EJB
+    UserService userService;
+
+    @ManagedProperty(value = "#{sessionBean}")
+    private SessionBean sessionBean;
+
     /**
      * Creates a new instance of SearchBean
      */
     public SearchBean() {
+        this.results = new HashMap<>();
     }
-    
-    public String search(){
-        return "page";
+
+    /**
+     *
+     * @return
+     */
+    public String search() {
+        this.results = userService.search(this.param, sessionBean.getUserId());
+        return "index"; // ??
     }
 
     public String getParam() {
@@ -35,6 +56,17 @@ public class SearchBean {
     public void setParam(String param) {
         this.param = param;
     }
-    
-    
+
+    public HashMap<UserEntity, Boolean> getResults() {
+        return results;
+    }
+
+    public SessionBean getSessionBean() {
+        return sessionBean;
+    }
+
+    public void setSessionBean(SessionBean sessionBean) {
+        this.sessionBean = sessionBean;
+    }
+
 }
