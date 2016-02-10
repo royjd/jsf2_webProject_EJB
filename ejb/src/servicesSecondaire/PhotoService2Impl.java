@@ -9,9 +9,7 @@ import dao.AlbumEntity;
 import dao.MediaEntity;
 import dao.PhotoDAO;
 import dao.PhotoEntity;
-import dao.PostEntity;
 import dao.ProfileEntity;
-import dao.UserEntity;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -20,20 +18,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.servlet.ServletContext;
 import javax.servlet.http.Part;
-import services.PostServiceImpl;
 
 /**
  *
- * @author zakaridia
+ * @author Karl Lauret
  */
 @Stateless
-public class PhotoServiceImpl implements PhotoService {
+public class PhotoService2Impl implements PhotoService2 {
 
     @EJB
     PhotoDAO photoDao;
@@ -48,7 +43,7 @@ public class PhotoServiceImpl implements PhotoService {
     @Override
     public void add(PhotoEntity p) {
         Long id = photoDao.save(p);
-        p.setId(id);
+        //p.setId(id);
     }
 
     /**
@@ -78,9 +73,8 @@ public class PhotoServiceImpl implements PhotoService {
     public void delete(PhotoEntity photo) {
         photoDao.delete(photo);
     }
-
-    /*@EJB
-    ServletContext servletContext;*/
+   /*@EJB
+    ServletContext servletContext*/
 
     /**
      *
@@ -92,15 +86,15 @@ public class PhotoServiceImpl implements PhotoService {
      * @throws IOException
      */
     @Override
-    public PhotoEntity upload(Part file, String username, AlbumEntity album,String contextPath) throws FileNotFoundException, IOException {
+    public PhotoEntity upload(File file, String username, AlbumEntity album) throws FileNotFoundException, IOException {
 
-        String fileName = this.getFileName(file);
+       /*String fileName = file.getName();
 
         if (!isValidExtension(fileName)) {
             return null;
         }
 
-        String rootPath = contextPath;
+        String rootPath = servletContext.getRealPath("/resources/img");
         String albumName = album.getTitle();
         if (!"DefaulAlbum".equals(albumName) && !"NewsAlbum".equals(albumName) && !"ProfileAlbum".equals(albumName)) {
             albumName = "Album_" + album.getId();
@@ -115,7 +109,7 @@ public class PhotoServiceImpl implements PhotoService {
         if (dir.canWrite()) {
             OutputStream out = new FileOutputStream(path + File.separator + fileName);
 
-            InputStream filecontent = file.getInputStream();
+            InputStream filecontent = new FileInputStream(file);
             int read;
             final byte[] bytes = new byte[1024];
             while ((read = filecontent.read(bytes)) != -1) {
@@ -125,12 +119,13 @@ public class PhotoServiceImpl implements PhotoService {
             PhotoEntity photo = new PhotoEntity("/Medias/" + username + "/Albums/" + albumName + "/" + fileName);
             this.add(photo);
             return photo;
-        }
+        }*/
 
         return null;
     }
 
-    private String getFileName(final Part part) {
+   /* private String getFileName(final Part part) {
+        final String partHeader = part.getHeader("content-disposition");
         for (String content : part.getHeader("content-disposition").split(";")) {
             if (content.trim().startsWith("filename")) {
                 return content.substring(
@@ -158,9 +153,9 @@ public class PhotoServiceImpl implements PhotoService {
 
     private boolean isValidExtension(String filename) {
         return goodExtension(getFileExtension(filename));
-    }
+    }*/
 
-      @Override
+    @Override
     public void createDefaultProfilePhotos(ProfileEntity p) {
 
         //Profile picture
@@ -182,25 +177,8 @@ public class PhotoServiceImpl implements PhotoService {
 
     }
 
-
     @Override
-    public PostEntity createPhoto(AlbumEntity album, UserEntity author, Part file,String contextPath) {
-        PostEntity post = null;
-        try {
-            PhotoEntity photo = this.upload(file, author.getUsername(), album, contextPath);
-            if (photo != null) {
-                MediaEntity media = new MediaEntity();
-                if ("DefaulAlbum".equals(album.getTitle())) {
-                    media = new MediaEntity(album.getTitle(), album.getBody(), author);
-                }
-                media.setMediaType(photo);
-                media.setAlbum(album);
-                post = postService2.createPost(media, author, author);
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(PostServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return post;
+    public void lol() {
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
 }

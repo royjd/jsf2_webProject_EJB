@@ -14,7 +14,9 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import servicesSecondaire.ExperienceService;
 import servicesSecondaire.LocalisationService;
+import servicesSecondaire.PhotoService;
 import servicesSecondaire.PhysicalService;
+import servicesSecondaire.PostService2;
 
 /**
  *
@@ -24,6 +26,9 @@ import servicesSecondaire.PhysicalService;
 public class ProfileServiceImpl implements ProfileService {
 
     @EJB
+    PhotoService photoService2;
+    
+    @EJB
     LocalisationService localisationService;
 
     @EJB
@@ -31,6 +36,10 @@ public class ProfileServiceImpl implements ProfileService {
 
     @EJB
     PhysicalService physicalService;
+   
+    
+    @EJB
+    PostService2 postService2;
 
     @EJB
     ProfileDAO profileDao;
@@ -107,7 +116,15 @@ public class ProfileServiceImpl implements ProfileService {
         //Set the profile owner
         p.setProfileOwner(u);
         
+        //set profile default picture
+        photoService2.createDefaultProfilePhotos(p);
+
         profileDao.update(p);
+        
+        
+
+        
+
     }
 
 }

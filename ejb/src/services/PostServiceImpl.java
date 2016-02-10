@@ -19,12 +19,15 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.servlet.http.Part;
 import servicesSecondaire.FriendService;
 import servicesSecondaire.NotificationService;
+import servicesSecondaire.UserService2;
 
 /**
  *
@@ -47,6 +50,9 @@ public class PostServiceImpl implements PostService {
 
     @EJB
     UserDAO userDao;
+
+    @EJB
+    UserService2 userService2;
 
     /**
      *
@@ -111,6 +117,41 @@ public class PostServiceImpl implements PostService {
         return null;
     }
 
+    @Override
+    public PostEntity createNews(String title, String message, Part file,String contextPath, Long authorID, Long targetID) {
+        //if username go on wall of the use matching the username
+        //target is also the user matching the username        if (pathVariables.containsKey("username")) {
+        UserEntity author = userService2.findByID(authorID);
+        if (author == null) {
+            return null;
+        }
+        UserEntity target;
+        if (!Objects.equals(authorID, targetID)) {
+            target = userService2.findByID(targetID);
+            if (target == null) {
+                return null;
+            }
+        } else {
+            target = author;
+        }
+        NewsEntity news;
+        if (file != null && !file.getName().equals("") && contextPath!=null) {
+            AlbumEntity album = postService.findAlbum(author.getId(), "NewsAlbum");
+
+            PostEntity post = photoService.createPhoto(album, author, file,contextPath);
+            if (post != null && post.getId() != null) {
+                news = new NewsEntity(title, message, author, target, (MediaEntity) post);
+
+            } else {
+                news = new NewsEntity(title, message, author, target);
+            }
+        } else {
+            news = new NewsEntity(title, message, author, target);
+        }
+        return postService.createPost(news, author, target);
+
+    }
+
     /**
      *
      * @param recom
@@ -123,59 +164,8 @@ public class PostServiceImpl implements PostService {
         return postService.createPost(recom, author, target);
     }
 
-    /**
-     *
-     * @param album
-     * @param author
-     * @param file
-     * @return
-     */
-    @Override
-    public PostEntity createPhoto(AlbumEntity album, UserEntity author, File file) {
-        PostEntity post = null;
-        try {
-            PhotoEntity photo = photoService.upload(file, author.getUsername(), album);
-            if (photo != null) {
-                MediaEntity media = new MediaEntity();
-                if ("DefaulAlbum".equals(album.getTitle())) {
-                    media = new MediaEntity(album.getTitle(), album.getBody(), author);
-                }
-                media.setMediaType(photo);
-                media.setAlbum(album);
-                post = postService.createPost(media, author, author);
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(PostServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return post;
-    }
 
-    /**
-     *
-     * @param album
-     * @param author
-     * @param files
-     * @return
-     */
-    @Override
-    public PostEntity createPhoto(AlbumEntity album, UserEntity author, File[] files) {
-        PostEntity post = null;
-        int i = 0;
-        for (File file : files) {
-            post = createPhoto(album, author, file);
-            if (post != null) {
-                MediaEntity media = new MediaEntity();
-                media.setId(post.getId());
-                if (i == files.length - 1) {
-                    album = (AlbumEntity) postService.findAlbum(author.getId(), album.getId());
-                    album.setCover(media);
-                    postService.update((PostEntity) album);
-                }
-            }
-            i++;
-        }
-        return post;
-    }
+
 
     /**
      *
@@ -218,6 +208,9 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<PostEntity> getRecentPostFromFriendAndMe(Long userID) {
         List<Long> l = friendService.findUsersIdOfFriends(userID);
+        if(l==null){
+            l=new ArrayList<>();
+        }
         l.add(userID);//we add he friend owner into it
         return postService.getRecentPostFromUsersID(l);
     }

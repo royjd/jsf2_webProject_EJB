@@ -31,7 +31,6 @@ public class LogInBean {
      * Creates a new instance of LogInBean
      */
     public LogInBean() {
-
     }
 
     public String login() {

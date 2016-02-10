@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:composition>
+
+        <div class="row sideBarBlock first">
+            <div class="col-sm-12">
+                <div class="border-bot">
+
+                    <h2>Friend Request</h2>
+                    <div class="row">
+                        <ui:repeat value="#{friendsToAccept}" var="tier" >
+                            <div class="col-sm-12">
+                                <a href="#{tier.owner.username}.htm" class=""> @#{tier.owner.username} </a>
+                                <div class="pull-right">
+                                    <a href="acceptFriendship.htm?id=#{tier.owner.id}" class="btn btn-xs btn-success glyphicon glyphicon-ok"> </a>
+                                    <a href="deniedFriendship.htm?id=#{tier.owner.id}" class="btn btn-xs btn-danger glyphicon glyphicon-remove"> </a>
+                                </div>
+                            </div>
+                        </ui:repeat>  
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ui:composition>
+</html>
+

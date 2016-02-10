@@ -1,0 +1,135 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:composition>
+
+        <c:if test="#{posts.size() !=0}"> 
+            <c:forEach items="#{posts}" var="tier">
+                <c:if test="#{tier.getClass().simpleName != 'CommentEntity'}"> 
+                    <c:if test="#{tier.getClass().simpleName != 'MediaEntity' || (tier.getClass().simpleName == 'MediaEntity' &amp;&amp; tier.news == null )}">
+                        <div id="#{tier.id}" class="post">
+                            <div  class= "col-sm-12">
+                                <ui:include src="post.xhtml" >
+                                    <ui:param name="post" value="#{tier}" />
+                                </ui:include>
+
+                            </div>
+                            <div class="postComment col-sm-12">
+
+                                <c:forEach items="#{tier.comments}" var="commentPost">
+
+                                    <ui:include src="post.xhtml" >
+                                        <ui:param name="post" value="#{commentPost}" />
+                                    </ui:include>
+
+                                </c:forEach>
+                            </div>
+
+                            <c:if test="#{canComment}">
+                                <h:form id="createUserForm" class="form-horizontal">
+                                    <fieldset>
+
+                                        <legend><h2>Sign Up</h2></legend>
+                                        <div class="form-group">
+                                            <h:inputText id="email" value="#{singUpController.user.email}" required="true" class="form-control" pt:type="email" pt:placeholder="Enter email" requiredMessage="#{msg['singup.email']}">
+                                                <f:ajax event="blur" render="emailMessage" />
+                                                <f:validator binding="#{emailAlreadyUsed}" />
+                                            </h:inputText>
+
+                                            <h:message id="emailMessage" for="email" errorClass="erreur"  class="control-label text-danger"/>
+                                        </div>
+
+
+                                        <div class="form-group">
+                                            <h:inputSecret id="password" value="#{singUpController.user.password}" required="true" class="form-control" pt:type="password" pt:placeholder="Password" requiredMessage="#{msg['singup.password']}">
+                                                <f:ajax event="blur" render="passwordMessage" />
+                                            </h:inputSecret>
+
+                                            <h:message id="passwordMessage" for="password" errorClass="erreur" class="control-label text-danger" />
+                                        </div>
+
+
+
+                                        <div class="form-group">
+                                            <h:inputSecret id="confirmation" value="#{singUpController.user.password}" required="true" class="form-control"  pt:type="password" pt:placeholder="Password confirmation" requiredMessage="#{msg['singup.confirmation']}">
+                                                <f:ajax event="blur" render="confirmationMessage" />
+                                            </h:inputSecret>
+
+                                            <h:message id="confirmationMessage" for="confirmation" errorClass="erreur" class="control-label text-danger"/>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <h:inputText id="username" value="#{singUpController.user.username}" required="true" class="form-control" pt:type="text" pt:placeholder="Username" requiredMessage="#{msg['singup.username']}">
+                                                <f:ajax event="blur" render="usernameMessage" />
+                                            </h:inputText>
+
+                                            <h:message id="usernameMessage" for="username" errorClass="erreur" class="control-label text-danger"/>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <h:inputText id="firstname" value="#{singUpController.user.profile.firstName}" required="true" class="form-control" pt:type="text" pt:placeholder="First Name" requiredMessage="#{msg['singup.firstname']}">
+                                                <f:ajax event="blur" render="firstnameMessage" />
+                                            </h:inputText>
+
+                                            <h:message id="firstnameMessage" for="firstname" errorClass="erreur" class="control-label text-danger"/>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <h:inputText id="lastname" value="#{singUpController.user.profile.lastName}" required="true" class="form-control" pt:type="text" pt:placeholder="Last Name" requiredMessage="#{msg['singup.lastname']}">
+                                                <f:ajax event="blur" render="lastnameMessage" />
+                                            </h:inputText>
+
+                                            <h:message id="lastnameMessage" for="lastname" errorClass="erreur" class="control-label text-danger"/>
+                                        </div>
+
+                                        <h:messages globalOnly="true" infoClass="info" />
+
+                                        <h:commandButton value="Sing Up" action="#{singUpController.singUp}" class="btn btn-success">
+                                            <f:ajax execute="@form" render="@form" />
+                                        </h:commandButton>
+                                    </fieldset>
+                                </h:form>
+                                <form:form action="#{commentLinks}" method="POST" modelAttribute="newComment" class="form-horizontal">
+
+                                    <spring:bind path="postMain.id">
+                                        <form:hidden path="postMain.id" id="postMainId" value="#{tier.id}"/>
+                                    </spring:bind>
+
+                                    <spring:bind path="postParent.id">
+                                        <form:hidden path="postParent.id" id="postParentId" value="#{tier.id}"/>
+
+                                    </spring:bind>
+
+                                    <spring:bind path="body">
+                                        <div class="form-group #{status.error ? 'has-error' : ''}">
+                                            <div class="col-sm-12">
+                                                <form:input path="body" class="form-control" id="bodyCommet" placeholder="Type your comment here!" />
+                                                <form:errors path="body" class="control-label" />
+                                            </div>
+                                        </div>
+                                    </spring:bind>
+
+                                    <div class="form-group">
+                                        <div class="col-sm-offset-2 col-sm-10">
+                                            <button type="submit" class="btn btn-success pull-right">Send</button>
+                                        </div>
+                                    </div>
+                                </form:form>
+
+                            </c:if>
+                        </div>
+
+
+                    </c:if>
+                </c:if> 
+            </c:forEach>
+
+        </c:if>  
+    </ui:composition>
+</html>
+

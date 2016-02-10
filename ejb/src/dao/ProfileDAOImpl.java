@@ -53,8 +53,8 @@ public class ProfileDAOImpl implements ProfileDAO{
      * @param p
      */
     @Override
-    public void update(ProfileEntity p) {
-        this.em.merge(p);
+    public ProfileEntity update(ProfileEntity p) {
+        return this.em.merge(p);
     }
     
     /**

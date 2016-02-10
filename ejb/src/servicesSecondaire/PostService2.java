@@ -5,8 +5,10 @@
  */
 package servicesSecondaire;
 
+import dao.AlbumEntity;
 import dao.PostEntity;
 import dao.UserEntity;
+import java.io.File;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -38,12 +40,13 @@ public interface PostService2 {
 
     public Object getRecentRecommendationFromUsersID(List<Long> l);
 
-    public PostEntity findAlbum(Long id, String type);
+    public AlbumEntity findAlbum(Long id, String type);
 
     public PostEntity findAlbum(Long id, Long albumId);
 
     public List<PostEntity> findByUsernameAndType(String username, String type);
 
     public void createDefaultAlbums(UserEntity u);
+
     
 }

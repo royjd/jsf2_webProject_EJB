@@ -7,23 +7,19 @@ package servicesSecondaire;
 
 import dao.AlbumEntity;
 import dao.PhotoEntity;
-import dao.PostEntity;
 import dao.ProfileEntity;
-import dao.UserEntity;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import javax.ejb.Local;
-import javax.servlet.http.Part;
 
 /**
  *
- * @author zakaridia
+ * @author Karl Lauret
  */
 @Local
-public interface PhotoService{
-
-    /**
+public interface PhotoService2 {
+     /**
      * upload the file
      * @param file
      * @param username
@@ -32,7 +28,7 @@ public interface PhotoService{
      * @throws FileNotFoundException
      * @throws IOException
      */
-    public PhotoEntity upload(Part file ,String username , AlbumEntity album,String contextPath)throws FileNotFoundException, IOException;
+    public PhotoEntity upload(File file ,String username , AlbumEntity album)throws FileNotFoundException, IOException;
 
     /**
      * create a photo
@@ -63,7 +59,5 @@ public interface PhotoService{
     
     public void createDefaultProfilePhotos(ProfileEntity p);
 
-
-    public PostEntity createPhoto(AlbumEntity album, UserEntity author, Part file,String contextPath);
-    
+    public void lol();
 }

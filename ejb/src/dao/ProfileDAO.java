@@ -25,7 +25,7 @@ public interface ProfileDAO {
      *
      * @param p
      */
-    public void update(ProfileEntity p);
+    public ProfileEntity update(ProfileEntity p);
 
     /**
      *
