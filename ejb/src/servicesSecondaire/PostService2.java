@@ -24,9 +24,10 @@ public interface PostService2 {
      * @param p
      * @param ue
      * @param target
+     * @param display
      * @return 
      */
-    public PostEntity createPost(PostEntity p, UserEntity ue, UserEntity target);
+    public PostEntity createPost(PostEntity p, UserEntity ue, UserEntity target,Boolean display);
     
     public PostEntity findByID(Long postID);
 

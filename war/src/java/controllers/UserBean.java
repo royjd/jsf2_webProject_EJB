@@ -51,7 +51,7 @@ public class UserBean {
             FacesContext.getCurrentInstance().getExternalContext().getFlash().put("singin", "Invalid identifiant");
             return "index?faces-redirect=true";
         }
-        SessionBean.setDataUser(user.getId(), username, email);
+        SessionBean.setDataUser(user.getId(), user.getUsername(), user.getEmail());
         return "page?faces-redirect=true";
     }
 

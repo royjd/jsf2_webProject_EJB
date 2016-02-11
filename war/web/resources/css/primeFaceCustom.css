@@ -1,0 +1,29 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Feb 10, 2016, 10:49:22 PM
+    Author     : Karl Lauret
+*/
+
+.ui-widget-content{
+    border: none;
+    background: none;
+    color: white;
+}
+.ui-widget{
+    font-family: inherit;
+    font-size: inherit;
+}
+.ui-state-default{
+    box-shadow: none;
+}
+.ui-state-default{
+    border:none;
+    background: none;
+    font-weight: normal;
+    text-shadow : none;
+    
+}

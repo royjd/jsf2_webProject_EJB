@@ -226,7 +226,7 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public NotificationEntity addNotification(PostEntity p, String subject, UserEntity ue) {
 
-        if (ue.getId() != null && ue != null) {
+        if (ue != null && ue.getId() != null ) {
             MessageEntity me = new NotificationEntity(p, "notif", ue);
             me = mgDao.save(me);
             return (NotificationEntity) me;

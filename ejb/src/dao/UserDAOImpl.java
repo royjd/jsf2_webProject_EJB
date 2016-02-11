@@ -76,7 +76,8 @@ public class UserDAOImpl implements UserDAO {
      */
     @Override
     public UserEntity findByID(Long id) {
-        return (UserEntity) this.em.find(UserEntity.class, id);
+        return (UserEntity) this.em.createQuery("SELECT t FROM UserEntity t where t.id = :value1")
+                .setParameter("value1", id).getSingleResult();
     }
 
     /**
@@ -144,7 +145,7 @@ public class UserDAOImpl implements UserDAO {
             Query q = this.em.createQuery("SELECT t FROM UserEntity t where ( t.username = :identifiant or t.email = :identifiant ) and t.password = :password");
             q.setParameter("identifiant", identifiant);
             q.setParameter("password", password);
-            return (UserEntity)q.getSingleResult();        
+            return (UserEntity) q.getSingleResult();
         } catch (NoResultException e) {
             return null;
         }

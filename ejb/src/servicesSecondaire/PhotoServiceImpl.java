@@ -10,11 +10,8 @@ import dao.MediaEntity;
 import dao.PhotoDAO;
 import dao.PhotoEntity;
 import dao.PostEntity;
-import dao.ProfileDAO;
-import dao.ProfileEntity;
 import dao.UserEntity;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -25,7 +22,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.servlet.ServletContext;
 import javax.servlet.http.Part;
 import services.PostServiceImpl;
 
@@ -89,6 +85,7 @@ public class PhotoServiceImpl implements PhotoService {
      * @param file
      * @param username
      * @param album
+     * @param contextPath
      * @return
      * @throws FileNotFoundException
      * @throws IOException
@@ -124,7 +121,7 @@ public class PhotoServiceImpl implements PhotoService {
                 out.write(bytes, 0, read);
             }
             out.close();
-            PhotoEntity photo = new PhotoEntity("/Medias/" + username + "/Albums/" + albumName + "/" + fileName);
+            PhotoEntity photo = new PhotoEntity("Medias/" + username + "/Albums/" + albumName + "/" + fileName);
             this.add(photo);
             return photo;
         }
@@ -170,7 +167,7 @@ public class PhotoServiceImpl implements PhotoService {
         this.add(photo);
         MediaEntity m = new MediaEntity("Default Profile Picture", "", u);
         m.setMediaType(photo);
-        postService2.createPost(m, u, u);
+        postService2.createPost(m, u, u,false);
         u.getProfile().setPictureProfile(m);
 
 
@@ -179,7 +176,7 @@ public class PhotoServiceImpl implements PhotoService {
         this.add(photo2);
         MediaEntity m2 = new MediaEntity("Default Cover Picture", "", u);
         m2.setMediaType(photo2);
-        postService2.createPost(m2,u, u);
+        postService2.createPost(m2,u, u,false);
         u.getProfile().setPictureCover(m2);
         
 
@@ -187,7 +184,7 @@ public class PhotoServiceImpl implements PhotoService {
 
 
     @Override
-    public PostEntity createPhoto(AlbumEntity album, UserEntity author, Part file,String contextPath) {
+    public PostEntity createPhoto(AlbumEntity album, UserEntity author, Part file,String contextPath,Boolean display) {
         PostEntity post = null;
         try {
             PhotoEntity photo = this.upload(file, author.getUsername(), album, contextPath);
@@ -198,7 +195,7 @@ public class PhotoServiceImpl implements PhotoService {
                 }
                 media.setMediaType(photo);
                 media.setAlbum(album);
-                post = postService2.createPost(media, author, author);
+                post = postService2.createPost(media, author, author,display);
             }
         } catch (IOException ex) {
             Logger.getLogger(PostServiceImpl.class.getName()).log(Level.SEVERE, null, ex);

@@ -5,7 +5,7 @@
     <ui:composition>
 
         <div class='row postHeader'>
-            <div class="pull-left "><img class='img-postHeader' src="resources/img/#{post.author.profile.pictureProfile.mediaType.link}" /> </div>
+            <div class="pull-left "><img class='img-postHeader' src="#{request.contextPath}/images/#{post.author.profile.pictureProfile.mediaType.link}" /> </div>
             <div class="col-md-7">
                 <div class="row">
                     <div class="col-md-12">

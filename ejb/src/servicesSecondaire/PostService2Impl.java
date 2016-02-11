@@ -44,12 +44,12 @@ public class PostService2Impl implements servicesSecondaire.PostService2 {
     UserDAO userDao;
 
     @Override
-    public PostEntity createPost(PostEntity p, UserEntity ue, UserEntity target) {
+    public PostEntity createPost(PostEntity p, UserEntity ue, UserEntity target,Boolean display) {
         Calendar c = Calendar.getInstance();
         p.setCreatedDate(new Date(c.getTimeInMillis()));
         p.setCreatedTime(new Time(c.getTimeInMillis()));
         p.setAuthor(ue);
-
+        p.setDisplay(display);
         p.setTarget(target);
 
         Long id = postDao.save(p);

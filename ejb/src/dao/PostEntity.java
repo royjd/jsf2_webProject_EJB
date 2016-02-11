@@ -65,6 +65,9 @@ public class PostEntity implements Serializable {
     @Column
     private String title;
 
+    @Column
+    private Boolean display;
+
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "postParent")
     private List<CommentEntity> comments = new ArrayList<>();
 
@@ -371,6 +374,14 @@ public class PostEntity implements Serializable {
      */
     public void setComments(List<CommentEntity> comments) {
         this.comments = comments;
+    }
+
+    public Boolean getDisplay() {
+        return display;
+    }
+
+    public void setDisplay(Boolean display) {
+        this.display = display;
     }
 
 }

@@ -70,7 +70,7 @@ public class PostServiceImpl implements PostService {
         PostEntity main = postService.findByID(mainId);
         comment.setPostParent(parent);
         comment.setPostMain(main);
-        return postService.createPost(comment, ue, parent.getAuthor());
+        return postService.createPost(comment, ue, parent.getAuthor(), false);
     }
 
     /**
@@ -85,7 +85,20 @@ public class PostServiceImpl implements PostService {
         PostEntity main = postService.findByID(comment.getPostMain().getId());
         comment.setPostParent(parent);
         comment.setPostMain(main);
-        return postService.createPost(comment, ue, parent.getAuthor());
+        return postService.createPost(comment, ue, parent.getAuthor(), false);
+    }
+
+    @Override
+    public PostEntity createComment(String message, Long authorID, Long parentID, Long mainID) {
+        PostEntity parent = postService.findByID(parentID);
+        PostEntity main = postService.findByID(mainID);
+        UserEntity author = userService2.findByID(authorID);
+        CommentEntity comment = new CommentEntity();
+        comment.setBody(message);
+        comment.setPostParent(parent);
+        comment.setPostMain(main);
+        return postService.createPost(comment, author, parent.getAuthor(), false);
+
     }
 
     /**
@@ -97,7 +110,7 @@ public class PostServiceImpl implements PostService {
      */
     @Override
     public PostEntity createNews(NewsEntity news, UserEntity author, UserEntity target) {
-        return postService.createPost(news, author, target);
+        return postService.createPost(news, author, target, true);
     }
 
     /**
@@ -112,13 +125,13 @@ public class PostServiceImpl implements PostService {
     public PostEntity createNews(NewsEntity news, UserEntity author, UserEntity target, PostEntity mediaEntity) {
         if (mediaEntity.getId() != null) {
             news.setMedias((MediaEntity) mediaEntity);
-            return postService.createPost(news, author, target);
+            return postService.createPost(news, author, target, true);
         }
         return null;
     }
 
     @Override
-    public PostEntity createNews(String title, String message, Part file,String contextPath, Long authorID, Long targetID) {
+    public PostEntity createNews(String title, String message, Part file, String contextPath, Long authorID, Long targetID) {
         //if username go on wall of the use matching the username
         //target is also the user matching the username        if (pathVariables.containsKey("username")) {
         UserEntity author = userService2.findByID(authorID);
@@ -135,10 +148,10 @@ public class PostServiceImpl implements PostService {
             target = author;
         }
         NewsEntity news;
-        if (file != null && !file.getName().equals("") && contextPath!=null) {
+        if (file != null && !file.getName().equals("") && contextPath != null) {
             AlbumEntity album = postService.findAlbum(author.getId(), "NewsAlbum");
 
-            PostEntity post = photoService.createPhoto(album, author, file,contextPath);
+            PostEntity post = photoService.createPhoto(album, author, file, contextPath, false);
             if (post != null && post.getId() != null) {
                 news = new NewsEntity(title, message, author, target, (MediaEntity) post);
 
@@ -148,7 +161,7 @@ public class PostServiceImpl implements PostService {
         } else {
             news = new NewsEntity(title, message, author, target);
         }
-        return postService.createPost(news, author, target);
+        return postService.createPost(news, author, target, true);
 
     }
 
@@ -161,11 +174,8 @@ public class PostServiceImpl implements PostService {
      */
     @Override
     public PostEntity createRecommendation(RecomendationEntity recom, UserEntity author, UserEntity target) {
-        return postService.createPost(recom, author, target);
+        return postService.createPost(recom, author, target, true);
     }
-
-
-
 
     /**
      *
@@ -175,7 +185,7 @@ public class PostServiceImpl implements PostService {
      */
     @Override
     public PostEntity createVideao(MediaEntity media, UserEntity author) {
-        return postService.createPost(media, author, author);
+        return postService.createPost(media, author, author, true);
     }
 
     /**
@@ -186,7 +196,7 @@ public class PostServiceImpl implements PostService {
      */
     @Override
     public PostEntity createAlbum(AlbumEntity album, UserEntity author) {
-        return postService.createPost(album, author, author);
+        return postService.createPost(album, author, author, true);
     }
 
     /**
@@ -208,8 +218,8 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<PostEntity> getRecentPostFromFriendAndMe(Long userID) {
         List<Long> l = friendService.findUsersIdOfFriends(userID);
-        if(l==null){
-            l=new ArrayList<>();
+        if (l == null) {
+            l = new ArrayList<>();
         }
         l.add(userID);//we add he friend owner into it
         return postService.getRecentPostFromUsersID(l);
@@ -288,6 +298,7 @@ public class PostServiceImpl implements PostService {
      * @param type
      * @return
      */
+    @Override
     public PostEntity findAlbum(Long id, String type) {
         return postService.findAlbum(id, type);
     }
@@ -298,9 +309,12 @@ public class PostServiceImpl implements PostService {
      * @param albumId
      * @return
      */
+    @Override
     public PostEntity findAlbum(Long id, Long albumId) {
         return postService.findAlbum(id, albumId);
 
     }
+
+
 
 }

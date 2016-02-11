@@ -161,11 +161,9 @@ public class PostDAOImpl implements PostDAO {
     @Override
     public List<PostEntity> getRecentPostFromUsersID(List<Long> usersID) {
         List<PostEntity> postEntities = this.em.createQuery("SELECT t FROM PostEntity t where "
-                + "TYPE(t) <> CommentEntity "
-                + "AND ("
-                + "((t.author.id IN :inclList OR t.target.id IN :inclList) AND ((TYPE(t) = MediaEntity) OR TYPE(t) = NewsEntity))"
-                + " OR (t.target.id IN :inclList AND TYPE(t) = RecomendationEntity)"
-                + ")"
+                + "t.display = TRUE "
+                + "AND "
+                + "(t.author.id IN :inclList OR t.target.id IN :inclList)" 
                 + " order by t.id desc")
                 .setMaxResults(5)
                 .setParameter("inclList", usersID).getResultList();

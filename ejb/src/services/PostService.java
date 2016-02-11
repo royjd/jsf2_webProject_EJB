@@ -24,7 +24,6 @@ import javax.servlet.http.Part;
 @Local
 public interface PostService {
 
-
     /**
      * return the album matching the type and the given post id
      *
@@ -44,8 +43,8 @@ public interface PostService {
     public PostEntity findAlbum(Long userId, Long albumId);
 
     /**
-     * create the comment 
-     * 
+     * create the comment
+     *
      * @param body the comment body
      * @param author the comment's author
      * @param parentId the parent post
@@ -56,14 +55,18 @@ public interface PostService {
 
     /**
      * create a comment
+     *
      * @param comment
      * @param author
      * @return PostEntity
      */
     public PostEntity createComment(CommentEntity comment, UserEntity author);
 
+    public PostEntity createComment(String message, Long authorID, Long parentID, Long mainID);
+
     /**
-     * create a news 
+     * create a news
+     *
      * @param news
      * @param author
      * @param target
@@ -72,7 +75,8 @@ public interface PostService {
     public PostEntity createNews(NewsEntity news, UserEntity author, UserEntity target);
 
     /**
-     * create a recommendation 
+     * create a recommendation
+     *
      * @param recom
      * @param author
      * @param target
@@ -80,10 +84,9 @@ public interface PostService {
      */
     public PostEntity createRecommendation(RecomendationEntity recom, UserEntity author, UserEntity target);
 
-
     /**
      * createVideo
-     * 
+     *
      * @param media
      * @param author
      * @return PostEntity
@@ -91,7 +94,8 @@ public interface PostService {
     public PostEntity createVideao(MediaEntity media, UserEntity author);
 
     /**
-     * create album 
+     * create album
+     *
      * @param album
      * @param author
      * @return PostEntity
@@ -100,7 +104,7 @@ public interface PostService {
 
     /**
      * return the posts attached to the user and matching the type given
-     * 
+     *
      * @param username
      * @param type
      * @return List
@@ -109,15 +113,16 @@ public interface PostService {
 
     /**
      * return the most recent post from the given user id and his friends
-     * 
+     *
      * @param id
      * @return List
      */
     public List<PostEntity> getRecentPostFromFriendAndMe(Long id);
 
     /**
-     * return the next post from the friend and me matching my id and after the post id given
-     * 
+     * return the next post from the friend and me matching my id and after the
+     * post id given
+     *
      * @param id
      * @param postId
      * @return List
@@ -126,15 +131,16 @@ public interface PostService {
 
     /**
      * return recent posts from user matching the given user's username
-     * 
+     *
      * @param username
      * @return List
      */
     public List<PostEntity> getRecentPostFromMe(String username);
 
     /**
-     * return the next post from the user matching the username and after the given postid
-     * 
+     * return the next post from the user matching the username and after the
+     * given postid
+     *
      * @param username
      * @param postId
      * @return List
@@ -142,8 +148,9 @@ public interface PostService {
     public List<PostEntity> getNextPostFromUserID(String username, Long postId);
 
     /**
-     * return the next recommendation from the user matching the username and after the given postid
-     * 
+     * return the next recommendation from the user matching the username and
+     * after the given postid
+     *
      * @param username
      * @param postId
      * @return
@@ -152,7 +159,7 @@ public interface PostService {
 
     /**
      * return recent posts from user matching the given user's username
-     * 
+     *
      * @param username
      * @return
      */
@@ -160,7 +167,7 @@ public interface PostService {
 
     /**
      * create a news
-     * 
+     *
      * @param news
      * @param ue
      * @param target
@@ -169,6 +176,6 @@ public interface PostService {
      */
     public PostEntity createNews(NewsEntity news, UserEntity ue, UserEntity target, PostEntity mediaEntity);
 
-    public PostEntity createNews(String title, String message, Part file,String contextPath, Long authorID, Long targetID);
+    public PostEntity createNews(String title, String message, Part file, String contextPath, Long authorID, Long targetID);
 
 }
