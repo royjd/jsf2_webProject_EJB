@@ -20,7 +20,7 @@ import org.apache.commons.codec.digest.DigestUtils;
  * @author zdiawara
  */
 @ManagedBean(name = "userBean")
-@ViewScoped//needed for the ajax request Option that cost the least I think
+@ViewScoped //needed for the ajax request Option that cost the least I think
 public class UserBean {
 
     // Add or Login a user
@@ -33,6 +33,8 @@ public class UserBean {
     @EJB
     UserService userService;
 
+    @ManagedProperty(value = "#{navigationBean}")
+    private NavigationBean navigationBean;
 
     /**
      * Creates a new instance of SessionBean
@@ -52,7 +54,7 @@ public class UserBean {
             return "index?faces-redirect=true";
         }
         SessionBean.setDataUser(user.getId(), user.getUsername(), user.getEmail());
-        return "page?faces-redirect=true";
+        return navigationBean.home();
     }
 
     /**
@@ -68,8 +70,7 @@ public class UserBean {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(true);
         SessionBean.setDataUser(id, username, email);
-        return "page?faces-redirect=true";
-
+        return navigationBean.home();
     }
 
     /**
@@ -123,6 +124,15 @@ public class UserBean {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+
+    public NavigationBean getNavigationBean() {
+        return navigationBean;
+    }
+
+    public void setNavigationBean(NavigationBean navigationBean) {
+        this.navigationBean = navigationBean;
+    }
    
+    
 
 }

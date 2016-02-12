@@ -72,10 +72,10 @@ public class PostsBean {
             //NOT CONNECTED
         }
 
-       /* ServletContext ctx = (ServletContext) FacesContext.getCurrentInstance()
+        /*ServletContext ctx = (ServletContext) FacesContext.getCurrentInstance()
                 .getExternalContext().getContext();
         String realPath = ctx.getContextPath(); */ // CAUTION DO NOT USE REAL PATH 
-        String realPath = "C:\\Users\\Karl Lauret\\AppData\\Roaming\\NetBeans\\8.1\\config\\GF_4.1.1\\domain1\\applications\\images";
+        String realPath = "/home/SP2MI/zdiawara/Bureau/images";
         postService.createNews(this.title, this.message, file, realPath, authorID, authorID);
 
     }

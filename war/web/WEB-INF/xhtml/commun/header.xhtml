@@ -4,39 +4,45 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets">
     <h:body>
-    <ui:composition>
-        <nav class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-6">
-                        <ul class="nav navbar-nav">
-                            <li class="active"><a href="/home.htm" class="glyphicon glyphicon-home"></a></li>
-                            <li><a href="/#{username}.htm" class="">#{username}</a></li>
-                            <li><a href="/message.htm" class="glyphicon glyphicon-envelope"></a></li>
-                            <li><a href="/notification.htm" class="glyphicon glyphicon-bell"></a></li>
-                        </ul>
-                    </div>
-                    <div class="col-sm-6">
-                        <ul class="nav navbar-nav pull-right">
-                            <a class="navbar-brand pull-right" href="/home.htm">FanFare</a>
-                            <li class="dropdown pull-right">
-                                <a class="dropdown-toggle glyphicon glyphicon-user" data-toggle="dropdown" href="#"><span class="caret"></span></a>
-                                <ul class="dropdown-menu">
-                                    <li> <a href="/#{username}.htm"> #{username} </a></li>
-                                    <li> <h:link value="Logout"/> </li>
+        <ui:composition>
+            <h:form>
+                <nav class="navbar navbar-inverse navbar-fixed-top">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <ul class="nav navbar-nav">
+                                    <li class="active">
+                                        <h:commandLink class="glyphicon glyphicon-home" action="#{navigationBean.home()}"/> 
+                                    </li>
+                                    <li><a href="/#{username}.htm" class="">#{username}</a></li>
+                                    <li><a href="/message.htm" class="glyphicon glyphicon-envelope"></a></li>
+                                    <li><a href="/notification.htm" class="glyphicon glyphicon-bell"></a></li>
                                 </ul>
-                            </li>
-                            <h:form class="navbar-form pull-right">
-                                <h:inputText  value="#{searchBean.param}"  class="form-control" id="friendSearch"></h:inputText>
+                            </div>
+                            <div class="col-sm-6">
+                                <ul class="nav navbar-nav pull-right">
+                                    <a class="navbar-brand pull-right" href="/home.htm">FanFare</a>
+                                    <li class="dropdown pull-right">
+                                        <a class="dropdown-toggle glyphicon glyphicon-user" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+                                        <ul class="dropdown-menu">
+                                            <li> <a href="/#{username}.htm"> #{username} </a></li>
+                                            <li>
+                                                <h:commandLink value="Logout" action="#{userBean.logout()}"/> 
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <div class="navbar-form pull-right">
+                                        <h:inputText  value="#{searchBean.param}"  class="form-control" id="friendSearch"></h:inputText>
 
-                                <h:commandButton action="#{searchBean.search()}" value="Go" class="btn btn-success"></h:commandButton>
-                            </h:form>
-                        </ul>
+                                        <h:commandButton action="#{searchBean.search()}" value="Go" class="btn btn-success"></h:commandButton>
+                                    </div>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-        </nav>
-    </ui:composition>
+                </nav>
+            </h:form>
+        </ui:composition>
     </h:body>
 
 </html>

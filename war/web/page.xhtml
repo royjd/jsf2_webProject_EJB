@@ -24,8 +24,7 @@
     </h:head>
     <h:body style="padding-top: 70px">
         <ui:include src="WEB-INF/xhtml/commun/header.xhtml" />
-
-        <ui:include src="home.xhtml" />
+        <ui:include src="#{navigationBean.pageContent}.xhtml" />
     </h:body>
 </html>
 
