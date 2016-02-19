@@ -177,5 +177,6 @@ public interface PostService {
     public PostEntity createNews(NewsEntity news, UserEntity ue, UserEntity target, PostEntity mediaEntity);
 
     public PostEntity createNews(String title, String message, Part file, String contextPath, Long authorID, Long targetID);
+    public PostEntity findByID(Long postID);
 
 }

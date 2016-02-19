@@ -2,30 +2,36 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:c="http://java.sun.com/jsp/jstl/core"
-      xmlns:ui="http://java.sun.com/jsf/facelets">
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
     <ui:composition>
 
         <div class="row sideBarBlock">
             <div class="col-sm-12">
                 <div class="border-bot">
                     <h2><a href="friends.htm">Friend List</a></h2>
-                    <div class="row">
-                         <ui:repeat value="#{friends}" var="tier" >
-                            <c:if test="#{tier.accepted}">
-                                <div class="col-sm-12">
-                                    <c:choose> 
-                                        <c:when test="#{tier.friend.email == user.email}"> 
-                                            <a href="#{tier.owner.username}.htm" class=""> @#{tier.owner.username} </a>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <a href="#{tier.friend.username}.htm" class=""> @#{tier.friend.username} </a>
-                                        </c:otherwise>
-                                    </c:choose>
-                                    <a href="removeFriend.htm?id=#{tier.id}" class="btn btn-xs btn-danger glyphicon glyphicon-remove pull-right"></a>
-                                </div>
-                            </c:if>
+                    <div class="row"> 
+                        <ui:repeat value="#{friendBean.findFriends(id)}" var="friend_loop" >
+                            <h:form >     
+                                <div  id="friend_list_#{friend_loop.id}"  class="col-sm-12">
+                                    <h:panelGroup rendered="#{friend_loop.friend.id == id}">   
+                                        <a href="#{friend_loop.owner.username}.htm" class=""> @#{friend_loop.owner.username} </a>
+                                    </h:panelGroup>
+                                    <h:panelGroup rendered="#{friend_loop.owner.id == id}">    
+                                        <a href="#{friend_loop.friend.username}.htm" class=""> @#{friend_loop.friend.username} </a>
+                                    </h:panelGroup>
 
-                         </ui:repeat>
+                                    <p:commandLink action="#{friendBean.removeFriend(friend_loop.id)}"  
+                                                   onclick="$('#friend_list_#{friend_loop.id}').hide()"  
+                                                   class="btn btn-xs btn-danger glyphicon glyphicon-remove pull-right">
+
+                                    </p:commandLink>  
+
+                                </div>  
+                            </h:form> 
+
+                        </ui:repeat>
                     </div>
 
                 </div>

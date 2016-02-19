@@ -59,9 +59,9 @@ public class PostDAOImpl implements PostDAO {
             PostEntity pe = ((CommentEntity) p).getPostParent();
             pe.addComment((CommentEntity) p);
             this.em.merge(pe);
-        }else if(p instanceof NewsEntity && ((NewsEntity)p).getMedia()!=null){
-            ((NewsEntity)p).getMedia().setNews((NewsEntity)p);
-            this.em.merge(((NewsEntity)p).getMedia());
+        } else if (p instanceof NewsEntity && ((NewsEntity) p).getMedia() != null) {
+            ((NewsEntity) p).getMedia().setNews((NewsEntity) p);
+            this.em.merge(((NewsEntity) p).getMedia());
         }
         return p.getId();
     }
@@ -163,7 +163,7 @@ public class PostDAOImpl implements PostDAO {
         List<PostEntity> postEntities = this.em.createQuery("SELECT t FROM PostEntity t where "
                 + "t.display = TRUE "
                 + "AND "
-                + "(t.author.id IN :inclList OR t.target.id IN :inclList)" 
+                + "(t.author.id IN :inclList OR t.target.id IN :inclList)"
                 + " order by t.id desc")
                 .setMaxResults(5)
                 .setParameter("inclList", usersID).getResultList();
@@ -180,16 +180,15 @@ public class PostDAOImpl implements PostDAO {
     @Override
     public List<PostEntity> getNextPostFromUsersID(List<Long> usersID, Long postID) {
         List<PostEntity> postEntities = this.em.createQuery("SELECT t FROM PostEntity t where "
-                + "TYPE(t) <> CommentEntity "
-                + "AND (t.id < :postID ) AND ("
-                + "((t.author.id IN (:inclList) OR t.target.id IN (:inclList)) AND ((TYPE(t) = MediaEntity ) OR TYPE(t) = NewsEntity))"
-                + " OR (t.target.id IN (:inclList) AND TYPE(t) = RecomendationEntity)"
-                + ")"
+                + "t.display = TRUE "
+                + "AND (t.id < :postID ) AND "
+                + "(t.author.id IN :inclList OR t.target.id IN :inclList)"
                 + " order by t.id desc")
                 .setParameter("postID", postID)
                 .setParameter("inclList", usersID)
                 .setMaxResults(5)
                 .getResultList();
+        
 
         return postEntities;
     }

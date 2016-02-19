@@ -5,6 +5,7 @@
  */
 package services;
 
+import commun.FriendOrNot;
 import dao.FriendEntity;
 import dao.ProfileEntity;
 import dao.UserEntity;
@@ -19,17 +20,20 @@ import javax.ejb.Local;
 @Local
 public interface UserService {
 
-    public Long add(String email, String username, String password,String firstName, String lastName);
+    public Long add(String email, String username, String password, String firstName, String lastName);
 
     /**
      * delete the given user
+     *
      * @param u
      * @return
      */
     public boolean delete(UserEntity u);
 
     /**
-     * return the user if we find a user with the same email or username and password 
+     * return the user if we find a user with the same email or username and
+     * password
+     *
      * @param identifiant
      * @param password
      * @return UserEntity if found null otherwise
@@ -38,7 +42,7 @@ public interface UserService {
 
     /**
      * return the user matching the given userID
-     * 
+     *
      * @param userID
      * @return UserEntity
      */
@@ -46,7 +50,7 @@ public interface UserService {
 
     /**
      * return the user matching the given user's email
-     * 
+     *
      * @param email
      * @return UserEntity
      */
@@ -54,14 +58,15 @@ public interface UserService {
 
     /**
      * return the user matching the given user's username
-     * 
+     *
      * @param username
      * @return UserEntity
      */
     public UserEntity findByUsername(String username);
 
     /**
-     * add a friend 
+     * add a friend
+     *
      * @param ownerId
      * @param friendId
      * @return true if it was ok else false
@@ -69,25 +74,25 @@ public interface UserService {
     public boolean addFriend(Long ownerId, Long friendId);
 
     /**
-     * remove a friend 
-     * 
+     * remove a friend
+     *
      * @param friendId
      * @return true if it was ok else false
      */
     public boolean removeFriend(Long friendId);
 
     /**
-     * search  users by email or username 
-     * 
+     * search users by email or username
+     *
      * @param param
-     * @param id 
-     * @return  List
+     * @param id
+     * @return List
      */
-    public HashMap<UserEntity, Boolean> search(String param,Long id);
+    public List<FriendOrNot> search(String param, Long id);
 
     /**
      * return friends to accept
-     * 
+     *
      * @param id
      * @return List
      */
@@ -95,7 +100,7 @@ public interface UserService {
 
     /**
      * accept the friend request
-     * 
+     *
      * @param acceptedBy
      * @param acceptedFrom
      * @return
@@ -104,7 +109,7 @@ public interface UserService {
 
     /**
      * denied a friend request
-     * 
+     *
      * @param deniedBy
      * @param deniedFrom
      * @return
@@ -112,16 +117,16 @@ public interface UserService {
     public boolean deniedFriendship(Long deniedBy, Long deniedFrom);
 
     /**
-     * return the friends friended by the given user'id 
-     * 
+     * return the friends friended by the given user'id
+     *
      * @param id
-     * @return  List
+     * @return List
      */
     public List<FriendEntity> getFriendsListFriendByUserID(Long id);
 
     /**
      * return the list of user who are friend with the given userID
-     * 
+     *
      * @param userID
      * @return List
      */
@@ -129,7 +134,7 @@ public interface UserService {
 
     /**
      * return friends to accept attached to the given user
-     * 
+     *
      * @param ue
      * @return List
      */
@@ -137,25 +142,26 @@ public interface UserService {
 
     /**
      * return friends of a user
-     * 
+     *
      * @param ue
      * @return List
      */
     public List<FriendEntity> getFriends(UserEntity ue);
 
-
-    /**
+    public List<FriendEntity> getFriends(Long userID) ;
+            /**
      * test if two user are friend
-     * 
+     *
      * @param userID1
      * @param userID2
      * @return true if they are else false
      */
+
     public boolean isFriend(Long userID1, Long userID2);
-    
+
     /**
      * test if two user are friend
-     * 
+     *
      * @param username1
      * @param username2
      * @return true if they are else false

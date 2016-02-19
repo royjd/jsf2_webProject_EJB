@@ -97,7 +97,8 @@ public class FriendDAOImpl implements FriendDAO {
     @Override
     public List<FriendEntity> findFriendToAcceptFromUserID(Long userID) {
         try {
-
+             System.err.println(userID); 
+       
             List<FriendEntity> friendEntities = this.em.createQuery("SELECT t FROM FriendEntity t where t.friend.id = :value1 AND t.accepted = false")
                     .setParameter("value1", userID).getResultList();
 

@@ -5,14 +5,14 @@
  */
 package controllers;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ApplicationScoped ;
 import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 /**
  *
  * @author zdiawara
  */
 @ManagedBean(name = "navigationBean")
-@SessionScoped
+@SessionScoped   
 public class NavigationBean {
     
     private String pageContent;
@@ -27,7 +27,7 @@ public class NavigationBean {
     }
     
     public String wall(){
-        return "wall";
+        return "page";
     }
 
     public String getPageContent() {
@@ -41,3 +41,4 @@ public class NavigationBean {
     
     
 }
+  

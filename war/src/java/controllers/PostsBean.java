@@ -6,15 +6,16 @@
 package controllers;
 
 import dao.PostEntity;
+import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import services.PostService;
@@ -27,10 +28,11 @@ import services.UserService;
 @Named(value = "postsBean")
 @ManagedBean
 @ViewScoped
-public class PostsBean {
+public class PostsBean implements Serializable {
 
     private String title;
     private String message;
+    private String comment = "TOTO";
     private Part file;
     private Long targetID;
     private boolean canComment;
@@ -41,14 +43,15 @@ public class PostsBean {
     @EJB
     UserService userService;
 
+    @ManagedProperty(value = "#{navigationBean}")
+    private NavigationBean navigationBean;
+
+    private PostEntity postComment;
+
     /**
      * Creates a new instance of PostsBean
      */
     public PostsBean() {
-        this.title = null;
-        this.message = null;
-        this.file = null;
-        this.targetID = null;
 
     }
 
@@ -61,10 +64,10 @@ public class PostsBean {
             //TODO GO TO ERROR PAGE
             //NOT CONNECTED
         }
-        return postService.getRecentPostFromFriendAndMe((Long) session.getAttribute("id"));
+        return postService.getRecentPostFromFriendAndMe(SessionBean.getUserId());
     }
 
-    public void saveNews() {
+    public String saveNews() {
 
         Long authorID = SessionBean.getUserId();
         if (authorID == null) {
@@ -75,18 +78,29 @@ public class PostsBean {
         /*ServletContext ctx = (ServletContext) FacesContext.getCurrentInstance()
                 .getExternalContext().getContext();
         String realPath = ctx.getContextPath(); */ // CAUTION DO NOT USE REAL PATH 
-        String realPath = "/home/SP2MI/zdiawara/Bureau/images";
+        //String realPath = "/home/SP2MI/zdiawara/Bureau/images";
+        String realPath = "C:\\Users\\Karl Lauret\\AppData\\Roaming\\NetBeans\\8.1\\config\\GF_4.1.1\\domain1\\applications\\images";
         postService.createNews(this.title, this.message, file, realPath, authorID, authorID);
+        return navigationBean.home();
 
     }
 
-    public void saveComment(Long parentID, Long mainID) {
+    public void saveComment(Long parentID, Long mainID, boolean main) {
         Long authorID = SessionBean.getUserId();
+        System.err.println("SAVE COMMENT");
         if (authorID == null) {
-            //TODO GO TO ERROR PAGE
-            //NOT CONNECTED
+
+            System.err.println("AUTHOR NULL");
         }
-        postService.createComment(this.message, authorID, parentID, mainID);
+
+        if (main) {
+            postService.createComment(this.message, authorID, parentID, mainID);
+        } else {
+            postService.createComment(this.comment, authorID, parentID, mainID);
+
+        }
+        System.err.println("POST OK");
+
     }
 
     //TODO LATER WITH A REAL targetID
@@ -122,6 +136,7 @@ public class PostsBean {
     }
 
     public void setMessage(String message) {
+        System.err.println(message + " <= message");
         this.message = message;
     }
 
@@ -141,4 +156,36 @@ public class PostsBean {
         this.canComment = canComment;
     }
 
+    public NavigationBean getNavigationBean() {
+        return navigationBean;
+    }
+
+    public void setNavigationBean(NavigationBean navigationBean) {
+        this.navigationBean = navigationBean;
+    }
+
+
+    public PostEntity getPostComment() {
+        return postComment;
+    }
+
+    public void setPostComment(PostEntity postComment) {
+        this.postComment = postComment;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public void valOfComment() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        Map map = context.getExternalContext().getRequestParameterMap();
+        String name1 = (String) map.get("message");
+        this.comment = name1; 
+        System.err.println("valOf : "+ name1); 
+    }
 }

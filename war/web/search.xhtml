@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"  
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <h:outputStylesheet library="library" name="jquery-ui/jquery-ui.css"/>
+        <h:outputStylesheet library="css" name="primeFaceCustom.css"/>
+        <h:outputStylesheet library="library" name="bootstrap/css/bootstrap.css"/>
+        <h:outputStylesheet library="library" name="bootstrap/css/css.css"/>
+        <h:outputStylesheet library="css" name="post/comment.css"/>
+        <h:outputStylesheet library="css" name="post/post.css"/>
+        <h:outputStylesheet library="css" name="general.css"/>
+
+        <h:outputScript library="js" name="jquery.js"/>
+
+        <h:outputScript library="js" name="waypoint.js"/> 
+        <h:outputScript library="library" name="bootstrap/js/bootstrap.js"/>
+        <h:outputScript library="library" name="jquery-ui/jquery-ui.js"/>
+        <h:outputScript library="js" name="limitlessPostScroll.js"/> 
+
+        <h:outputScript library="js" name="post.js"/> 
+
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+        <title>Fanfare</title>
+    </h:head>
+    <h:body style="padding-top: 70px">
+
+        <ui:include src="WEB-INF/xhtml/commun/header.xhtml" />
+        #{copain}
+        <div class="container">
+            <div class="row">   
+                <div class="col-sm-12">
+                    <h1>SEARCH</h1>  
+                    <ui:repeat value="#{searchBean.searchPram(searchBean.param)}" var="var" >  
+                        <ui:param value="#{var.user}" name="user" />
+                        <ui:param value="#{var.friend}" name="isFriend" />
+
+                        <div class="col-sm-4">
+
+                            <div class="panel panel-default" id="friend">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-sm-4 btn-info">
+                                            <img class="img-responsive" src="#{request.contextPath}/images/${var.user.profile.pictureProfile.mediaType.link}"/>
+
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <h3> 
+                                                <a href="${pageContext.request.contextPath}/${var.user.username}.htm"  class="" >${var.user.profile.firstName} ${var.user.profile.lastName}</a><br/>
+                                                <a href="${pageContext.request.contextPath}/${var.user.username}.htm"  class="" ><small>@${var.user.username}</small></a>
+
+                                            </h3>
+                                            <a href="${pageContext.request.contextPath}/${var.user.username}.htm"  class="btn btn-info btn-sm pull-left" >See wall</a>
+                                            <h:form rendered="#{isFriend != true &amp;&amp; user.id != id}" >     
+                                                <p:commandLink value="Send Request" action="#{friendBean.addFriend(user.id)}" 
+                                                               onclick="$(this).hide()" 
+
+                                                               class="btn btn-success submitComment pull-right">
+
+                                                </p:commandLink>   
+  
+                                            </h:form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </ui:repeat>
+                </div>
+            </div>
+        </div>
+    </h:body>
+</html>
+

@@ -8,7 +8,6 @@
       xmlns:ui="http://java.sun.com/jsf/facelets">
     <ui:composition>
 
-        <h:outputScript library="js" name="limitlessPostScroll.js"/>
         <!-- load required message from the bundle messages -->
         <f:loadBundle basename="bundle.messages" var="msg"/>
 
@@ -54,10 +53,10 @@
                     </h:form>
                     
                 </div>
-                <c:set var="posts" value="#{postsBean.homePosts}" scope="request" />
+                <c:set var="posts" value="#{evNewsBlogsBean.philBlogs}" scope="request" />
 
                 <ui:include src="../commun/post/posts.xhtml" />
-                <div id="loadmore" path="/fanfare/ajax_home_post/" class="loadmore">LOADING OMG</div>
+                <div id="loadmore" class="loadmore">LOADING OMG</div>
                 <div class="nomoreloadmore" style="display: none;">No more Post</div>
 
             </div>

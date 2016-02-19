@@ -5,6 +5,7 @@
  */
 package services;
 
+import commun.FriendOrNot;
 import servicesSecondaire.PhotoService;
 import dao.ExperienceDAO;
 import dao.FriendDAO;
@@ -196,8 +197,11 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public boolean removeFriend(Long friendId) {
+        System.err.println("removeFriend 2");
+        System.err.println(friendId);  
         FriendEntity fe = this.friendDao.findByID(friendId);
         if (fe != null) {
+            System.err.println("removeFriend not null ");
             this.friendDao.delete(fe);
             return true;
         }
@@ -211,16 +215,16 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public HashMap<UserEntity, Boolean> search(String param, Long id) {
+    public List<FriendOrNot> search(String param, Long id) {
         List<UserEntity> users = userService.search(param);
-        HashMap<UserEntity, Boolean> results = new HashMap<>();
+        List<FriendOrNot> results = new ArrayList<>();
         if (id != null) {
             for (UserEntity user : users) {
-                results.put(user, userService.isFriend(id, user.getId()));
+                results.add(new FriendOrNot(user, userService.isFriend(id, user.getId())));
             }
         } else {
             for (UserEntity user : users) {
-                results.put(user, false);
+                results.add(new FriendOrNot(user, false));
             }
         }
         return results;
@@ -233,7 +237,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public List<FriendEntity> getFriendToAccept(Long userId) {
-
+        System.err.println("getFriendToAccept");
         return friendDao.findFriendToAcceptFromUserID(userId);
     }
 
@@ -329,6 +333,23 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public List<FriendEntity> getFriends(UserEntity ue) {
+        if (ue.getId() != null) {
+            List<FriendEntity> friends = new ArrayList<>();
+            friends.addAll(ue.getFriends());
+            friends.addAll(ue.getFriendedBy());
+            return friends;
+        }
+        return null;
+    }
+
+    /**
+     *
+     * @param ue
+     * @return
+     */
+    @Override
+    public List<FriendEntity> getFriends(Long userID) {
+        UserEntity ue = userDao.findByID(userID);
         if (ue.getId() != null) {
             List<FriendEntity> friends = new ArrayList<>();
             friends.addAll(ue.getFriends());

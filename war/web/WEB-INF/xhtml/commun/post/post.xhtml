@@ -3,111 +3,118 @@
 <html xmlns    ="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui ="http://java.sun.com/jsf/facelets"
+      xmlns:utils="http://xmlns.jcp.org/jsf/composite/utils"
       xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
-      xmlns:c  ="http://java.sun.com/jsp/jstl/core">
+      xmlns:p="http://primefaces.org/ui">
     <ui:composition>
-        <c:choose> 
-            <c:when test="#{post.getClass().simpleName  == 'AlbumEntity'}"> 
-                <div>
+        <h:panelGroup rendered="#{post.getClass().simpleName  == 'AlbumEntity'}"> 
+            <div>
 
-                    <ui:include src="header.xhtml" />
-                    <p>#{post.body}</p>
-                    <a href="#">
-                        <div class="img-overlay">
-                            <img src="#{request.contextPath}/images/#{post.cover.mediaType.link}" class="img-responsive"/>
-                        </div>
-                    </a>
-                </div>
-            </c:when>
-            <c:when test="#{post.getClass().simpleName == 'MediaEntity'}"> 
-                <div>
+                <ui:include src="header.xhtml" />
+                <p>#{post.body}</p>
+                <a href="#">
+                    <div class="img-overlay">
+                        <img src="#{request.contextPath}/images/#{post.cover.mediaType.link}" class="img-responsive"/>
+                    </div>
+                </a>
+            </div>
+        </h:panelGroup>
+        <h:panelGroup rendered="#{post.getClass().simpleName == 'MediaEntity'}"> 
+            <div>
 
-                    <ui:include src="header.xhtml" />
-                    <p>#{post.body}</p>
-                    <a href="#">
-                        <div class="img-overlay">
-                            <img src="#{request.contextPath}/images/#{post.mediaType.link}" class="img-responsive"/>
-                        </div>
-                    </a>
-                </div>
-            </c:when>
-            <c:when test="#{post.getClass().simpleName == 'RecomendationEntity'}"> 
-                <div>
+                <ui:include src="header.xhtml" />
+                <p>#{post.body}</p>
+                <a href="#">
+                    <div class="img-overlay">
+                        <img src="#{request.contextPath}/images/#{post.mediaType.link}" class="img-responsive"/>
+                    </div>
+                </a>
+            </div>
+        </h:panelGroup>
+        <h:panelGroup rendered="#{post.getClass().simpleName == 'RecomendationEntity'}"> 
+            <div>
 
-                    <ui:include src="header.xhtml" />
-                    <p>#{post.body}</p>
-                </div>
-            </c:when>
-            <c:when test="#{post.getClass().simpleName == 'NewsEntity'}"> 
-                <div>
+                <ui:include src="header.xhtml" />
+                <p>#{post.body}</p>
+            </div>
+        </h:panelGroup>
+        <h:panelGroup rendered="#{post.getClass().simpleName == 'NewsEntity'}"> 
+            <h:panelGroup>
 
-                    <ui:include src="header.xhtml" />
-                    <p>#{post.body}</p>
-                    <c:if test="#{not empty post.media.mediaType.link}">
-                        <img class="img-responsive" src="#{request.contextPath}/images/#{post.media.mediaType.link}"/>
-                    </c:if>
-                </div>
-            </c:when>
-            <c:when test="#{post.getClass().simpleName == 'CommentEntity'}"> 
-                <div id="post#{post.id}" class='col-xs-12 postComments'>
-                    <div class='row postComment'>
-                        <div class="col-xs-12">
-                             <div class="pull-left"><img class='img-postHeader' src='#{request.contextPath}/images/#{post.author.profile.pictureProfile.mediaType.link}' /> </div>
-                            <div class="col-xs-8">
-                                <div class="row">
-                                    <div class="col-xs-12 "><h3>
-                                            #{post.author.username}  : #{post.body}
-                                        </h3></div>
-                                    <h:panelGroup rendered="#{postsBean.canComment}">
-                                        <div class="col-xs-12">
-                                            <button class='pull-left btn btn-xs btn-primary repplyCommentBtn' onclick="$('#replyCom#{post.id}').toggle()">Reply</button>
-                                        </div>
-                                        <div class="col-xs-12" id="replyCom#{post.id}" style="display:none">
-                                            <h:form id="replyComForm#{post.id}" class="form-horizontal">
-                                                <fieldset>
-                                                    <div class="form-group">
-                                                        <div class="col-sm-12">
-                                                            <h:inputText value="#{postsBean.message}" class="form-control" id="bodyCommet#{post.id}" pt:placeholder="Type your comment here!"/>
-                                                        </div>
+                <ui:include src="header.xhtml" />
+                <p>#{post.body}</p>
+                <h:panelGroup rendered="#{not empty post.media.mediaType.link}">
+                    <img class="img-responsive" src="#{request.contextPath}/images/#{post.media.mediaType.link}"/>
+                </h:panelGroup> 
+            </h:panelGroup> 
+        </h:panelGroup>
+        <h:panelGroup rendered="#{post.getClass().simpleName == 'CommentEntity'}"> 
+            <div id="post#{post.id}" class='col-xs-12 postComments'>
+
+                <div class='row postComment'>
+                    <div class="col-xs-12">
+                        <div class="pull-left"><img class='img-postHeader' src='#{request.contextPath}/images/#{post.author.profile.pictureProfile.mediaType.link}' /> </div>
+                        <div class="col-xs-8">
+                            <div class="row">
+                                <div class="col-xs-12 "><h3>
+                                        #{post.author.username}  : #{post.body}
+                                    </h3></div>
+                                <h:panelGroup rendered="#{postsBean.canComment}">
+                                    <div class="col-xs-12">
+                                        <button class='pull-left btn btn-xs btn-primary repplyCommentBtn' onclick="$('#replyCom#{post.id}').toggle()">Reply</button>
+                                    </div>
+                                    <div class="col-xs-12" id="replyCom#{post.id}" style="display:none">
+                                        <h:form  class="form-horizontal">
+                                            <fieldset>
+                                                 <div class="form-group">
+                                                    <div class="col-sm-12">
+                                                        <p:inputText   value="#{postsBean.comment}" onchange="setComment#{post.postMain.id}([{name : 'message' , value : $(this).val()}])" class="form-control" id="bodyComment#{post.id}" pt:placeholder="Type your comment here!">
+                                                              
+                                                        </p:inputText> 
+                                                        <p:remoteCommand name="setComment#{post.postMain.id}"
+                                                                         actionListener="#{postsBean.valOfComment()}" />
+                                                    
                                                     </div>
-                                                    <div class="form-group">
-                                                        <div class="col-sm-offset-2 col-sm-10">
-                                                            <h:commandButton value="Send" action="#{postsBean.saveComment(post.id,post.postMain.id)}" class="btn btn-success pull-right">
-                                                            </h:commandButton>
-                                                        </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-sm-offset-2 col-sm-10">
+                                                        <p:commandButton value="Send" actionListener="#{postsBean.saveComment(post.id,post.postMain.id,false)}" 
+                                                                         oncomplete="update_current#{post.postMain.id}()"
+                                                                         class="btn btn-success submitComment pull-right">
+                                                            
+
+                                                        </p:commandButton>   
+                                                        <p:remoteCommand name="update_current#{post.postMain.id}"
+                                                                         update=":philblog" 
+                                                                         actionListener="#{evNewsBlogsBean.refresh(post.postMain.id)}" />
                                                     </div>
-                                                </fieldset>
-                                            </h:form>
+                                                </div>
+                                            </fieldset>
+                                        </h:form>
 
-                                        </div>
+                                    </div>
 
-                                    </h:panelGroup>
-
-                                </div>
+                                </h:panelGroup>
                             </div>
-                            <div class="col-xs-2 pull-right">
-                                <div class="row">
-                                    <div class="col-md-12  text-right postDateHeader"> #{post.createDateFormated}  </div>
-                                    <div class="col-md-12  text-right postDateHeader">  #{post.createdTime}  </div>
-                                </div>
+                        </div>
+                        <div class="col-xs-2 pull-right">
+                            <div class="row">
+                                <div class="col-md-12  text-right postDateHeader"> #{post.createDateFormated}  </div>
+                                <div class="col-md-12  text-right postDateHeader">  #{post.createdTime}  </div>
                             </div>
                         </div>
                     </div>
-
-
-                    <c:forEach items="#{post.comments}" var="comments">
-                        <c:set var="tier" value="#{comments}" scope="request"/>
-
-                        <ui:include src="post.xhtml" >
-                            <ui:param name="post" value="#{comments}" />
-                        </ui:include>
-                    </c:forEach>
                 </div>
-            </c:when>
-            <c:otherwise>
 
-            </c:otherwise>
-        </c:choose>
+                <ui:repeat value="#{post.comments}" var="commentPost">
+
+                    <utils:post post="#{commentPost}" />
+
+
+                </ui:repeat> 
+
+            </div>
+        </h:panelGroup>
     </ui:composition>
 </html>
 

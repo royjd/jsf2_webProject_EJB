@@ -315,6 +315,11 @@ public class PostServiceImpl implements PostService {
 
     }
 
+    @Override
+    public PostEntity findByID(Long postID) {
+        return postService.findByID(postID);
+    }
+
 
 
 }

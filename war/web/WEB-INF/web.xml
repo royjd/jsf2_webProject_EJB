@@ -3,7 +3,11 @@
     <context-param>
         <param-name>javax.faces.PROJECT_STAGE</param-name>
         <param-value>Development</param-value>
-    </context-param>
+    </context-param> 
+    <context-param>
+        <param-name>org.apache.myfaces.STRICT_JSF_2_FACELETS_COMPATIBILITY</param-name>
+        <param-value>true</param-value>
+    </context-param> 
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
