@@ -54,7 +54,7 @@ public class UserBean {
             return navigationBean.index();
         }
         SessionBean.setDataUser(user.getId(), user.getUsername(), user.getEmail());
-        return navigationBean.home();
+        return navigationBean.home();  
     }
 
     /**
@@ -67,8 +67,6 @@ public class UserBean {
             FacesContext.getCurrentInstance().getExternalContext().getFlash().put("singup", "Fail !");
             return navigationBean.index(true);
         }
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(true);
         SessionBean.setDataUser(id, username, email);
         return navigationBean.home();
     }

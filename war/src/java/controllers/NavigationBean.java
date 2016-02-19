@@ -9,15 +9,15 @@ import java.io.Serializable;
 import java.util.Map;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
-import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.inject.Named;
 
 /**
  *
  * @author zdiawara
  */
-
+@Named("navigationBean")
+@ManagedBean 
 @ApplicationScoped
 public class NavigationBean implements Serializable {
 
