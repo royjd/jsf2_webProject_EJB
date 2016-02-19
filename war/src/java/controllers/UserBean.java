@@ -33,13 +33,13 @@ public class UserBean {
     @EJB
     UserService userService;
 
-    @ManagedProperty(value = "#{navigationBean}")
+    @ManagedProperty( name = "navigationBean" , value = "#{navigationBean}")
     private NavigationBean navigationBean;
 
     /**
      * Creates a new instance of SessionBean
      */
-    public UserBean() {
+    public UserBean() { 
 
     }
 
@@ -51,7 +51,7 @@ public class UserBean {
         UserEntity user = userService.isValidUser(email, password);
         if (user == null) {
             FacesContext.getCurrentInstance().getExternalContext().getFlash().put("singin", "Invalid identifiant");
-            return "index?faces-redirect=true";
+            return navigationBean.index();
         }
         SessionBean.setDataUser(user.getId(), user.getUsername(), user.getEmail());
         return navigationBean.home();
@@ -65,7 +65,7 @@ public class UserBean {
         Long id = userService.add(email, username, password, firstName, lastName);
         if (id == null) {
             FacesContext.getCurrentInstance().getExternalContext().getFlash().put("singup", "Fail !");
-            return "index";
+            return navigationBean.index(true);
         }
         FacesContext facesContext = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(true);
@@ -76,10 +76,10 @@ public class UserBean {
     /**
      *
      * @return
-     */
+     */  
     public String logout() {
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
-        return "index.xhtml"; // ??? 
+        return navigationBean.index();
     }
 
     public String getEmail() {
