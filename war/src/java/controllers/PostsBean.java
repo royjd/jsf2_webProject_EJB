@@ -75,7 +75,7 @@ public class PostsBean {
         /*ServletContext ctx = (ServletContext) FacesContext.getCurrentInstance()
                 .getExternalContext().getContext();
         String realPath = ctx.getContextPath(); */ // CAUTION DO NOT USE REAL PATH 
-        String realPath = "/home/SP2MI/zdiawara/Bureau/images";
+        String realPath = "/home/zakaridia/Documents/Depot_Git/File/images";
         postService.createNews(this.title, this.message, file, realPath, authorID, authorID);
 
     }

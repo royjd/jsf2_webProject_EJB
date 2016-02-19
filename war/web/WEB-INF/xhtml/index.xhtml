@@ -6,7 +6,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets">
     <h:head>
         <ui:insert name="header" >
-            <ui:include src="./WEB-INF/xhtml/commun/importCss.xhtml" />
+            <ui:include src="./commun/importCss.xhtml" />
         </ui:insert>
         <title>
             Fanfare
@@ -15,7 +15,7 @@
     <h:body class="bg-primary">
         <div id="header">
             <ui:insert name="header" >
-                <ui:include src="WEB-INF/xhtml/index/header.xhtml" />
+                <ui:include src="index/header.xhtml" />
             </ui:insert>
         </div>
         <div class="container">
@@ -28,13 +28,13 @@
             <div class="row">
                 <div class="col-sm-6">
                     <ui:insert name="informations" >
-                        <ui:include src="WEB-INF/xhtml/index/info.xhtml" />
+                        <ui:include src="index/info.xhtml" />
                     </ui:insert>
                 </div>
                 <div class="col-sm-6">
 
                     <ui:insert name="singUp" >
-                        <ui:include src="WEB-INF/xhtml/index/signUp.xhtml" />
+                        <ui:include src="index/signUp.xhtml" />
                     </ui:insert>
                 </div>
 

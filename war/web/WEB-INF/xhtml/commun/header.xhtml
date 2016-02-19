@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets">
-    <h:body>
+
         <ui:composition>
             <h:form>
                 <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -14,7 +14,9 @@
                                     <li class="active">
                                         <h:commandLink class="glyphicon glyphicon-home" action="#{navigationBean.home()}"/> 
                                     </li>
-                                    <li><a href="/#{username}.htm" class="">#{username}</a></li>
+                                    <li>
+                                        <h:commandLink value="#{username}" action="#{navigationBean.wall()}"/>
+                                    </li>
                                     <li><a href="/message.htm" class="glyphicon glyphicon-envelope"></a></li>
                                     <li><a href="/notification.htm" class="glyphicon glyphicon-bell"></a></li>
                                 </ul>
@@ -43,6 +45,5 @@
                 </nav>
             </h:form>
         </ui:composition>
-    </h:body>
 
 </html>

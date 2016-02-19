@@ -2,12 +2,59 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
       xmlns:ui="http://java.sun.com/jsf/facelets">
+
     <h:head>
-        <title>Facelet Title</title>
+        <ui:insert name="header" >
+            <ui:include src="WEB-INF/xhtml/commun/importCss.xhtml" />
+        </ui:insert>
+        <title>Wall</title>
     </h:head>
-    <h:body>
-        Wall
+
+    <h:body style="padding-top: 70px">
+        <div id="header">
+            <ui:insert name="header" >
+                <ui:include src="WEB-INF/xhtml/commun/header.xhtml" />
+            </ui:insert>
+        </div>
+        <ui:insert name="header" >
+            <ui:include src="WEB-INF/xhtml/wall/header.xhtml" />
+            <ui:include src="WEB-INF/xhtml/wall/navBar.xhtml" />
+            <c:choose>
+                <c:when test="${not empty param['p']}">
+                    <ui:include src="WEB-INF/xhtml/wall/#{param['p']}/#{param['p']}.xhtml" />
+                </c:when>
+                <c:otherwise>
+                    Default content 
+                </c:otherwise>
+            </c:choose>
+        </ui:insert>
+
     </h:body>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#addPicture").click(function () {
+                $("#addPictureProfilDiv").toggle();
+                if ($(this).hasClass("glyphicon-plus")) {
+                    $(this).removeClass("glyphicon-plus btn-primary").addClass("btn-danger glyphicon-remove");
+                } else {
+                    $(this).removeClass("btn-danger glyphicon-remove").addClass("glyphicon-plus btn-primary");
+                }
+            });
+
+            $("#addCover").click(function () {
+                $("#addCoverDiv").toggle();
+                if ($(this).hasClass("glyphicon-plus")) {
+                    $(this).removeClass("glyphicon-plus btn-primary").addClass("btn-danger glyphicon-remove");
+                } else {
+                    $(this).removeClass("btn-danger glyphicon-remove").addClass("glyphicon-plus btn-primary");
+                }
+            });
+
+        });
+
+    </script>  
+
 </html>
 
