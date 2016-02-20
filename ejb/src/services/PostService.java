@@ -179,5 +179,7 @@ public interface PostService {
     public PostEntity createNews(String title, String message, Part file, String contextPath, Long authorID, Long targetID);
     public PostEntity findByID(Long postID);
 
+    public PostEntity createRecommendation(String title, String message, Long authorID, String targetUsername);
+
 
 }

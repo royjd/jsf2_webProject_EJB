@@ -33,4 +33,11 @@ public class RecomendationEntity extends PostEntity {
         super(title, body, author, author);
     }
 
+    public RecomendationEntity(String title, String message) {
+        super();
+        super.setTitle(title);
+        super.setBody(message);
+    }
+
+
 }

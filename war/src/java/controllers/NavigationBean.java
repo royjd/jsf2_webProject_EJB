@@ -17,7 +17,7 @@ import javax.inject.Named;
  * @author zdiawara
  */
 @Named("navigationBean")
-@ManagedBean 
+@ManagedBean
 @ApplicationScoped
 public class NavigationBean implements Serializable {
 
@@ -32,6 +32,7 @@ public class NavigationBean implements Serializable {
     }
 
     private String p = "friend";
+
     /*private String pageContent;
      private String wallContent;*/
     public NavigationBean() {
@@ -53,7 +54,7 @@ public class NavigationBean implements Serializable {
         return "page";
     }
 
-    public String home() { 
+    public String home() {
         System.err.println("HOME");
         //this.pageContent = "home";
         return "home?faces-redirect=true";
@@ -62,13 +63,21 @@ public class NavigationBean implements Serializable {
     public String wall() {
         String username = this.getUsername();
         System.err.println("Username = " + username);
-        if (username != null) { 
-            return "wall?faces-redirect=true&u=" + username +"&p=default";
+        if (username != null) {
+            return "wall?faces-redirect=true&u=" + username + "&p=default";
         }
         return "wall?faces-redirect=true";
     }
 
-    /** 
+    public String wall(String username) {
+        System.err.println("Username = " + username);
+        if (username != null) {
+            return "wall?faces-redirect=true&u=" + username + "&p=default";
+        }
+        return "wall?faces-redirect=true";
+    }
+
+    /**
      *
      * @param page
      * @return
@@ -81,10 +90,23 @@ public class NavigationBean implements Serializable {
         return "wall?faces-redirect=true&p=default";
     }
 
-    private String wallPage(String page, String souspage) {
+    /**
+     *
+     * @param page
+     * @return
+     */
+    private String wallPage(String page,String username) {
+        
+        if (username != null) {
+            return "wall?faces-redirect=true&p=" + page + "&u=" + username;
+        }
+        return "wall?faces-redirect=true&p=default";
+    }
+
+    private String wallPageSousPage(String page, String souspage) {
         String username = this.getUsername();
-        if (username != null) { 
-            return "wall?faces-redirect=true&p=" + page + "&sp="+souspage+"&u=" + username;
+        if (username != null) {
+            return "wall?faces-redirect=true&p=" + page + "&sp=" + souspage + "&u=" + username;
         }
         return "wall?faces-redirect=true";
     }
@@ -108,12 +130,21 @@ public class NavigationBean implements Serializable {
      *
      * @return
      */
+    public String recommendation(String username) {
+        //this.pageContent = "walgFolder + "/recommendation/display";
+        return this.wallPage("recommendation", username);
+    }
+
+    /**
+     *
+     * @return
+     */
     public String friend() {
         return this.wallPage("friend");
     }
 
     public String media() {
-        return this.wallPage("media" , "photo");
+        return this.wallPage("media", "photo");
     }
 
     public String profile() {
@@ -131,4 +162,3 @@ public class NavigationBean implements Serializable {
     }
 
 }
-  

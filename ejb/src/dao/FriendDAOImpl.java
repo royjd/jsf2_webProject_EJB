@@ -138,8 +138,8 @@ public class FriendDAOImpl implements FriendDAO {
     public FriendEntity findByFriendShip(Long acceptedBy, Long acceptedFrom) {
         try {
 
-            FriendEntity friendEntity = (FriendEntity) this.em.createQuery("SELECT t FROM FriendEntity t where (t.friend.id = :value1 AND t.owner.id = :value2) OR (t.friend.id = :value2 AND t.owner.id = :value1)")
-                    .setParameter("value1", acceptedBy).setParameter("value2", acceptedFrom).getSingleResult();
+            FriendEntity friendEntity = (FriendEntity) this.em.createQuery("SELECT t FROM FriendEntity t where t.accepted = true AND ((t.friend.id = :value1 AND t.owner.id = :value2) OR (t.friend.id = :value2 AND t.owner.id = :value1))")
+                    .setParameter("value1", acceptedBy).setParameter("value2", acceptedFrom).getSingleResult(); 
 
             return friendEntity;
 

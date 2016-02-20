@@ -12,8 +12,7 @@
         </ui:insert>
         <title>Wall</title>
         <f:metadata>
-
-            <f:event type="preRenderView" listener="#{buttonView.doSomething(param['p'])}"/>
+            <f:event type="preRenderView" listener="#{buttonView.doSomething(param['p'],param['u'])}"/>
         </f:metadata>
     </h:head>
 
@@ -28,14 +27,22 @@
             <ui:include src="WEB-INF/xhtml/wall/header.xhtml" />
             <ui:include src="WEB-INF/xhtml/wall/navBar.xhtml" />
 
-            <div class="container">
-                #{buttonView.page}  
- 
+            <div class="container"> 
                 <ui:fragment rendered="#{buttonView.page == 'default'}"> 
-                    <ui:include src="WEB-INF/xhtml/wall/post.xhtml" />
-                </ui:fragment>  
+                    <ui:include src="WEB-INF/xhtml/wall/post.xhtml" >
+                        <ui:param name="dataTableID" value="default"/>
+                    </ui:include>
+                </ui:fragment> 
+                <ui:fragment rendered="#{buttonView.page == 'recommendation'}"> 
+                    <ui:include src="WEB-INF/xhtml/wall/recommendation/recommendation.xhtml" >
+                            <ui:param name="dataTableID" value="recommendation"/>
+                    
+                    </ui:include>
+                </ui:fragment> 
                 <ui:fragment rendered="#{buttonView.page == 'friend'}"> 
-                    <ui:include src="WEB-INF/xhtml/wall/friend/friend.xhtml" /> 
+                    <ui:include src="WEB-INF/xhtml/wall/friend/friend.xhtml" >
+
+                    </ui:include> 
                 </ui:fragment>  
             </div>
         </ui:insert>
