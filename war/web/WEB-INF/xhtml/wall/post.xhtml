@@ -1,0 +1,87 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"      
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:composition>
+
+        <!-- load required message from the bundle messages -->
+        <f:loadBundle basename="bundle.messages" var="msg"/>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <h2>Add a news <button id="addAnews" class="btn btn-primary btn-sm glyphicon glyphicon-plus"></button></h2>
+                <div id="addAnewsDiv" style="display:none;">
+
+                    <h:form enctype="multipart/form-data" class="form-horizontal" role="form" id="newsForm">
+
+
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <h:inputText id="inputNewsTitle" value="#{postsBean.title}"  class="form-control" required="true" pt:type="TEXT" pt:placeholder="Enter title" requiredMessage="#{msg['news.title']}">
+                                    
+                                </h:inputText>
+
+                                <h:message id="newsTitle" for="inputNewsTitle" errorClass="erreur"  class="control-label text-danger" />
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12">    
+                                <h:inputTextarea value="#{postsBean.message}" class="form-control" pt:type="TEXT" pt:placeholder="Type your message here"/>
+                            </div>
+                        </div> 
+                        <div id="addPictureProfilDiv" style="">
+                            <span class="btn btn-default btn-file">
+                                Add a picture <h:inputFile id="file" value="#{postsBean.file}"  class="form-control">
+
+                                </h:inputFile>
+
+                                <h:message id="fileMessage" for="file" errorClass="erreur"  class="control-label text-danger"/>
+                            </span>
+                        </div>
+                        <div class="form-group">        
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <h:commandButton id="newsFormSubmit" value="Submit" class="btn btn-success pull-right"
+                                                 action="#{postsBean.saveNews()}" disabled="#{facesContext.validationFailed}">
+                                </h:commandButton>
+                            </div>
+                        </div>
+                    </h:form>
+                    
+                </div>
+                <c:set var="posts" value="#{evNewsBlogsBean.wall(param['u'])}" scope="request" />
+
+
+                <ui:include src="../commun/post/posts.xhtml" />
+                <div id="loadmore" class="loadmore">LOADING OMG</div>
+                <div class="nomoreloadmore" style="display: none;">No more Post</div>
+
+            </div>
+
+
+        </div>
+        <script type="text/javascript">
+
+            $(document).ready(function () {
+                $("#addAnews").click(function () {
+                    $("#addAnewsDiv").toggle();
+                    if ($(this).hasClass("glyphicon-plus")) {
+
+                        $(this).removeClass("glyphicon-plus btn-primary").addClass("btn-danger glyphicon-remove");
+                    } else {
+                        $(this).removeClass("btn-danger glyphicon-remove").addClass("glyphicon-plus btn-primary");
+                    }
+                });
+            });
+
+
+
+        </script>
+
+    </ui:composition>
+</html>
+

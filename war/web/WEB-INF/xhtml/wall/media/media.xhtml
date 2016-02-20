@@ -6,6 +6,12 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:composition>
+        <f:metadata>
+            <c:if test="${not empty param['sp']}">
+                
+            <f:event type="preRenderView" listener="#{buttonView.setSousPage(param['sp'])}"/>
+            </c:if>
+        </f:metadata>
         <div class = "panel panel-default">
             <div class ="panel-heading">
                 Medias
@@ -23,29 +29,24 @@
                         </div>
                     </div>
                     <div   class="col-sm-10 padding-25">
-
-                        #{navigationBean}
                         <div class="pull-right">
                             <h:form>
-                                <h:commandLink class="btn btn-primary" value="+ Create album" action="#{navigationBean.createAlbum()}">
+                                <h:commandLink  value="+ Create album" action="#{navigationBean.createAlbum()}">
                                     <f:param name="u" value="username"/>
-                                    a
                                 </h:commandLink>
                             </h:form>
 
-                            <h:commandLink class="btn btn-primary" value="Add photo" action="#"/>
-                           
+                            <h:form>
+                                <h:commandLink  value="+ Add photo" action="#">
+                                    <f:param name="u" value="username"/>
+                                </h:commandLink>
+                            </h:form>                           
                         </div>
 
                         <div>
-                            <c:choose>
-                                <c:when test="${not empty param['sp']}">
-                                    <ui:include src="#{param['sp']}.xhtml"  />
-                                </c:when>
-                                <c:otherwise>
-                                    <ui:include src="showsMedia.xhtml" />
-                                </c:otherwise>
-                            </c:choose>
+                            <ui:fragment rendered="#{buttonView.sousPage == 'createAlbum'}"> 
+                                <ui:include src="createAlbum.xhtml" /> 
+                            </ui:fragment>
                         </div>
 
                     </div>

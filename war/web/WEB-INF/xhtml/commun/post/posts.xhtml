@@ -23,7 +23,7 @@
                             <ui:include src="post.xhtml" >  
                                 <ui:param name="post" value="#{tier}" />    
                             </ui:include>   
- 
+
 
                         </div>
                         <div class="postComment col-sm-12">
@@ -60,7 +60,8 @@
                                 </p:commandButton>   
                                 <p:remoteCommand name="update_current#{tier.id}"
                                                  update=":philblog"
-                                                 actionListener="#{evNewsBlogsBean.refresh(tier.id)}" />
+                                                 actionListener="#{evNewsBlogsBean.refresh(tier.id)}" >
+                                </p:remoteCommand>
                             </div> 
                         </div>  
 
@@ -69,28 +70,29 @@
                 </p:column>
             </p:dataTable>
 
-            <h:panelGroup rendered="#{evNewsBlogsBean.moreData}">
-                      <script type="text/javascript">
+            <h:panelGroup rendered="#{evNewsBlogsBean.moreData}"> 
+                <script type="text/javascript">
 
-                        $(document).ready(function () {
-                            $('#loadmore').waypoint(function (direction) {
-                                if (direction === 'down') {
-                                    more_records();
+                    $(document).ready(function () {
+                        $('.loadmore').waypoint(function (direction) {
 
-                                }
-                            },
-                                    {offset: '100%'}
-                            );
-                        });
-                    </script>        
+                            if (direction === 'down') { 
+                                more_records([{name:'u', value: "#{param['u']}"}]);                             
+                            }
+                        },
+                                {offset: '100%'}
+                        );
+                    });
+                </script>        
+                <h:form>
  
-
-                    <h:form>
-
-                        <p:remoteCommand name="more_records"
-                                         update=":philblog"
-                                         actionListener="#{evNewsBlogsBean.loadMore}" />
-                    </h:form>
+                    <p:remoteCommand name="more_records"
+                                     update=":philblog" 
+                                     
+                                     actionListener="#{evNewsBlogsBean.loadMore()}" > 
+ 
+                    </p:remoteCommand>
+                </h:form>
             </h:panelGroup>
 
         </p:outputPanel>

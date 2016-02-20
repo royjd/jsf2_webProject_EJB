@@ -102,6 +102,8 @@ public interface PostService {
      */
     public PostEntity createAlbum(AlbumEntity album, UserEntity author);
 
+    public AlbumEntity createAlbum(String title, String description, String localisation, Long authorId);
+    
     /**
      * return the posts attached to the user and matching the type given
      *
@@ -178,5 +180,6 @@ public interface PostService {
 
     public PostEntity createNews(String title, String message, Part file, String contextPath, Long authorID, Long targetID);
     public PostEntity findByID(Long postID);
+
 
 }

@@ -23,8 +23,17 @@ public class NavigationBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private String sp;
+    public String getP() {
+        return p;
+    }
 
+    public void setP(String p) {
+        this.p = p;
+    }
+
+    private String p = "friend";
+    /*private String pageContent;
+     private String wallContent;*/
     public NavigationBean() {
     }
 
@@ -39,21 +48,26 @@ public class NavigationBean implements Serializable {
         return "index";
     }
 
-    public String home() {
+    private String page() {
+        return "page";
+    }
+
+    public String home() { 
+        System.err.println("HOME");
         //this.pageContent = "home";
         return "home?faces-redirect=true";
     }
 
     public String wall() {
         String username = this.getUsername();
-        System.err.println("Wall is call");
-        if (username != null) {
-            return "wall.xhtml?faces-redirect=true&u=" + username;
+        System.err.println("Username = " + username);
+        if (username != null) { 
+            return "wall?faces-redirect=true&u=" + username +"&p=default";
         }
         return "wall?faces-redirect=true";
     }
 
-    /**
+    /** 
      *
      * @param page
      * @return
@@ -61,15 +75,15 @@ public class NavigationBean implements Serializable {
     private String wallPage(String page) {
         String username = this.getUsername();
         if (username != null) {
-            return "wall.xhtml?faces-redirect=true&p=" + page + "&u=" + username;
+            return "wall?faces-redirect=true&p=" + page + "&u=" + username;
         }
-        return "wall?faces-redirect=true";
+        return "wall?faces-redirect=true&p=default";
     }
 
     private String wallSousPage(String page, String souspage) {
         String username = this.getUsername();
-        if (username != null) {
-            return "wall.xhtml?faces-redirect=true&p=" + page + "&sp=" + souspage + "&u=" + username;
+        if (username != null) { 
+            return "wall?faces-redirect=true&p=" + page + "&sp="+souspage+"&u=" + username;
         }
         //return "wall?faces-redirect=true";
         return "wall.xhtml?faces-redirect=true&p=" + page + "&sp=" + souspage + "&u=ooo";
@@ -108,7 +122,6 @@ public class NavigationBean implements Serializable {
 
     public String createAlbum() {
         System.err.println(" +++++");
-        this.sp = "createAlbum";
         return this.wallSousPage("media", "createAlbum");
 
     }
@@ -125,14 +138,6 @@ public class NavigationBean implements Serializable {
 
         //this.pageContent = "wall";
         return "";
-    }
-
-    public String getSp() {
-        return sp;
-    }
-
-    public void setP(String sp) {
-        this.sp = sp;
     }
 
 }

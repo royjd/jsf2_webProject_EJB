@@ -199,6 +199,23 @@ public class PostServiceImpl implements PostService {
         return postService.createPost(album, author, author, true);
     }
 
+    @Override
+    public AlbumEntity createAlbum(String title, String description, String localisation, Long authorId) {
+        
+        UserEntity author = userService2.findByID(authorId);
+        
+        if(author==null)
+            return null;
+        
+        AlbumEntity album = new AlbumEntity(title, description, localisation, author);
+        PostEntity p = postService.createPost(album, author, author, true);
+        if(p!=null){
+            album.setId(p.getId());
+            return album;
+        }
+        return null;
+    }
+
     /**
      *
      * @param username
@@ -319,7 +336,5 @@ public class PostServiceImpl implements PostService {
     public PostEntity findByID(Long postID) {
         return postService.findByID(postID);
     }
-
-
 
 }
