@@ -17,17 +17,15 @@ import javax.inject.Named;
  * @author zdiawara
  */
 @Named("navigationBean")
-@ManagedBean 
+@ManagedBean
 @ApplicationScoped
 public class NavigationBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    private String sp;
 
-    /*private String pageContent;
-     private String wallContent;*/
     public NavigationBean() {
-        //pageContent = "home";
     }
 
     public String index() {
@@ -41,10 +39,6 @@ public class NavigationBean implements Serializable {
         return "index";
     }
 
-    private String page() {
-        return "page";
-    }
-
     public String home() {
         //this.pageContent = "home";
         return "home?faces-redirect=true";
@@ -52,7 +46,7 @@ public class NavigationBean implements Serializable {
 
     public String wall() {
         String username = this.getUsername();
-        System.err.println("Username = " + username);
+        System.err.println("Wall is call");
         if (username != null) {
             return "wall.xhtml?faces-redirect=true&u=" + username;
         }
@@ -72,12 +66,13 @@ public class NavigationBean implements Serializable {
         return "wall?faces-redirect=true";
     }
 
-    private String wallPage(String page, String souspage) {
+    private String wallSousPage(String page, String souspage) {
         String username = this.getUsername();
         if (username != null) {
-            return "wall.xhtml?faces-redirect=true&p=" + page + "&sp="+souspage+"&u=" + username;
+            return "wall.xhtml?faces-redirect=true&p=" + page + "&sp=" + souspage + "&u=" + username;
         }
-        return "wall?faces-redirect=true";
+        //return "wall?faces-redirect=true";
+        return "wall.xhtml?faces-redirect=true&p=" + page + "&sp=" + souspage + "&u=ooo";
     }
 
     private String getUsername() {
@@ -104,7 +99,18 @@ public class NavigationBean implements Serializable {
     }
 
     public String media() {
-        return this.wallPage("media" , "photo");
+        String username = this.getUsername();
+        if (username != null) {
+            return "wall.xhtml?faces-redirect=true&p=media" + "&u=" + username;
+        }
+        return "wall?faces-redirect=true"; //
+    }
+
+    public String createAlbum() {
+        System.err.println(" +++++");
+        this.sp = "createAlbum";
+        return this.wallSousPage("media", "createAlbum");
+
     }
 
     public String profile() {
@@ -118,8 +124,15 @@ public class NavigationBean implements Serializable {
         }
 
         //this.pageContent = "wall";
-        return this.page();
+        return "";
+    }
+
+    public String getSp() {
+        return sp;
+    }
+
+    public void setP(String sp) {
+        this.sp = sp;
     }
 
 }
-  

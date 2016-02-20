@@ -80,7 +80,7 @@ public class PostsBean implements Serializable {
         String realPath = ctx.getContextPath(); */ // CAUTION DO NOT USE REAL PATH 
 
         //String realPath = "/home/SP2MI/zdiawara/Bureau/images";
-        String realPath = "C:\\Users\\Karl Lauret\\AppData\\Roaming\\NetBeans\\8.1\\config\\GF_4.1.1\\domain1\\applications\\images";
+        String realPath = "/home/zakaridia/Documents/Depot_Git/File/image";
         postService.createNews(this.title, this.message, file, realPath, authorID, authorID);
         return navigationBean.home();
 

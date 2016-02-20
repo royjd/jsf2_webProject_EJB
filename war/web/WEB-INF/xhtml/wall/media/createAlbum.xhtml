@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    Creation d'un album 
+
+    <h:form class="navbar-form" role="form">
+        <h:inputText class="form-control" id="email" value="#{userBean.email}" pt:placeholder="E-mail or Username"></h:inputText>
+
+        <h:inputSecret class="form-control" id="password" value="#{userBean.password}" pt:placeholder="Password"></h:inputSecret>
+
+        <h:commandButton action="#{userBean.singIn()}" value="Sign In" class="btn btn-success"/>
+    </h:form>
+    
+</html>
+
