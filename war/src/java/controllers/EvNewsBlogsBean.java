@@ -8,9 +8,11 @@ package controllers;
 import dao.CommentEntity;
 import dao.PostEntity;
 import java.util.List;
+import java.util.Map;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import org.primefaces.context.RequestContext;
@@ -30,6 +32,9 @@ public class EvNewsBlogsBean implements java.io.Serializable {
     @EJB
     PostService postService;
 
+    @ManagedProperty("#{param.u}")
+    private String targetUsername;
+   
     private boolean moreData = true;
 
     @ManagedProperty(value = "#{navigationBean}")
@@ -46,22 +51,31 @@ public class EvNewsBlogsBean implements java.io.Serializable {
     }
 
     public String getComments(PostEntity p, String comments) {
-        if (p.getComments() == null && p.getComments().isEmpty()) { 
+        if (p.getComments() == null && p.getComments().isEmpty()) {
             return comments;
         }
         for (PostEntity po : p.getComments()) {
-            comments += po.getBody();  
-            comments += "=>"+this.getComments(po, comments);
+            comments += po.getBody();
+            comments += "=>" + this.getComments(po, comments);
         }
         return comments;
     }
 
-    public void setPhilBlogs(List<PostEntity> s) {
+    public List<PostEntity> wall(String username) {
+        if (list == null) {
+            list = getList();
+        }
+        return list;
+
     }
 
-    List<PostEntity> getList() {
-        System.err.println("getList");
-        return postService.getRecentPostFromFriendAndMe(SessionBean.getUserId());
+    private List<PostEntity> getList() {
+        System.err.println("getList username =" + this.targetUsername);
+        if (this.targetUsername == null) {
+            return postService.getRecentPostFromFriendAndMe(SessionBean.getUserId());
+        } else {
+            return postService.getRecentPostFromMe(this.targetUsername);
+        }
     }
 
     public TreeNode getTree(List<CommentEntity> l, TreeNode root) {
@@ -96,7 +110,16 @@ public class EvNewsBlogsBean implements java.io.Serializable {
 
     public void loadMore() {
         System.err.println("loadMore");
-        List<PostEntity> listtmp = postService.getNextPostFromFriendAndMe(SessionBean.getUserId(), this.list.get(this.list.size() - 1).getId());
+        List<PostEntity> listtmp;
+        System.err.println("loadMore username + " + this.targetUsername);
+
+        if (this.targetUsername == null || this.targetUsername.isEmpty()) {
+            listtmp = postService.getNextPostFromFriendAndMe(SessionBean.getUserId(), this.list.get(this.list.size() - 1).getId());
+
+        } else {
+            listtmp = postService.getNextPostFromUserID(this.targetUsername, this.list.get(this.list.size() - 1).getId());
+
+        }
         moreData = listtmp.size() == 5;
         this.list.addAll(listtmp);
     }
@@ -130,6 +153,14 @@ public class EvNewsBlogsBean implements java.io.Serializable {
 
     public void setMoreData(boolean moreData) {
         this.moreData = moreData;
+    }
+
+    public String getTargetUsername() {
+        return targetUsername;
+    }
+
+    public void setTargetUsername(String targetUsername) {
+        this.targetUsername = targetUsername;
     }
 
 }

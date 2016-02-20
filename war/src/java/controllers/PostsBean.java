@@ -32,7 +32,7 @@ public class PostsBean implements Serializable {
 
     private String title;
     private String message;
-    private String comment = "TOTO";
+    private String comment;
     private Part file;
     private Long targetID;
     private boolean canComment;

@@ -23,7 +23,15 @@ public class NavigationBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    public String getP() {
+        return p;
+    }
 
+    public void setP(String p) {
+        this.p = p;
+    }
+
+    private String p = "friend";
     /*private String pageContent;
      private String wallContent;*/
     public NavigationBean() {
@@ -45,7 +53,8 @@ public class NavigationBean implements Serializable {
         return "page";
     }
 
-    public String home() {
+    public String home() { 
+        System.err.println("HOME");
         //this.pageContent = "home";
         return "home?faces-redirect=true";
     }
@@ -53,13 +62,13 @@ public class NavigationBean implements Serializable {
     public String wall() {
         String username = this.getUsername();
         System.err.println("Username = " + username);
-        if (username != null) {
-            return "wall.xhtml?faces-redirect=true&u=" + username;
+        if (username != null) { 
+            return "wall?faces-redirect=true&u=" + username +"&p=default";
         }
         return "wall?faces-redirect=true";
     }
 
-    /**
+    /** 
      *
      * @param page
      * @return
@@ -67,15 +76,15 @@ public class NavigationBean implements Serializable {
     private String wallPage(String page) {
         String username = this.getUsername();
         if (username != null) {
-            return "wall.xhtml?faces-redirect=true&p=" + page + "&u=" + username;
+            return "wall?faces-redirect=true&p=" + page + "&u=" + username;
         }
-        return "wall?faces-redirect=true";
+        return "wall?faces-redirect=true&p=default";
     }
 
     private String wallPage(String page, String souspage) {
         String username = this.getUsername();
-        if (username != null) {
-            return "wall.xhtml?faces-redirect=true&p=" + page + "&sp="+souspage+"&u=" + username;
+        if (username != null) { 
+            return "wall?faces-redirect=true&p=" + page + "&sp="+souspage+"&u=" + username;
         }
         return "wall?faces-redirect=true";
     }
