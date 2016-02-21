@@ -95,8 +95,8 @@ public class NavigationBean implements Serializable {
      * @param page
      * @return
      */
-    private String wallPage(String page,String username) {
-        
+    private String wallPage(String page, String username) {
+
         if (username != null) {
             return "wall?faces-redirect=true&p=" + page + "&u=" + username;
         }
@@ -141,6 +141,10 @@ public class NavigationBean implements Serializable {
      */
     public String friend() {
         return this.wallPage("friend");
+    }
+
+    public String friend(String targetUsername) {
+        return this.wallPage("friend",targetUsername);
     }
 
     public String media() {

@@ -19,20 +19,24 @@
                                 <a href="#{friend_to_accept.owner.username}.htm" class=""> @#{friend_to_accept.owner.username} </a>
                                 <div class="pull-right">
                                     <h:form   >     
-                                        <p:commandLink  action="#{friendBean.acceptFriend(friend_to_accept.owner.id)}" 
-                                                       onclick="$(this).hide()" 
+                                        <p:commandLink  
+                                            action="#{navigationBean.home()}"
+                                            actionListener="#{friendBean.acceptFriend(friend_to_accept.owner.id)}" 
+                                            onclick="$(this).hide()" 
 
-                                                       class="btn btn-xs btn-success glyphicon glyphicon-ok">
+                                            class="btn btn-xs btn-success glyphicon glyphicon-ok">
 
-                                        </p:commandLink>   
-                                        <p:commandLink action="#{friendBean.deniedFriend(friend_to_accept.owner.id)}" 
-                                                       onclick="$('#friend_request_#{friend_to_accept.id}').hide()" 
-                                                       class="btn btn-xs btn-danger glyphicon glyphicon-remove">
+                                        </p:commandLink>    
+                                        <p:commandLink 
+                                            action="#{navigationBean.home()}"
+                                            actionListener="#{friendBean.deniedFriend(friend_to_accept.owner.id)}" 
+                                            onclick="$('#friend_request_#{friend_to_accept.id}').hide()" 
+                                            class="btn btn-xs btn-danger glyphicon glyphicon-remove">
 
                                         </p:commandLink>  
 
                                     </h:form>
-                               </div> 
+                                </div> 
                             </div>
                         </ui:repeat>  
                     </div>

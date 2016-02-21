@@ -187,7 +187,7 @@ public class UserServiceImpl implements UserService {
         UserEntity friend = this.userDao.findByUsername(username1);
         UserEntity owner = this.userDao.findByUsername(username2);
         FriendEntity fe = this.friendDao.findByFriendShip(friend.getId(), owner.getId());//Variables have bad Name the order doesn't matter for the find
-        return friend != null && owner != null && fe != null;
+        return friend != null && owner != null && fe!= null && fe.getAccepted();
     }
 
     /**
@@ -198,7 +198,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean removeFriend(Long friendId) {
         System.err.println("removeFriend 2");
-        System.err.println(friendId);  
+        System.err.println(friendId);
         FriendEntity fe = this.friendDao.findByID(friendId);
         if (fe != null) {
             System.err.println("removeFriend not null ");
@@ -250,14 +250,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean acceptFriendship(Long acceptedBy, Long acceptedFrom) {
         if (acceptedBy.equals(acceptedFrom)) {
+            System.err.println("accept Friendship false");
             return false;
         }
         FriendEntity fe = this.friendDao.findByFriendShip(acceptedBy, acceptedFrom);
         if (fe != null) {
             fe.setAccepted(Boolean.TRUE);
             this.friendDao.update(fe);
+            System.err.println("accept Friendship fe!=null");
             return true;
-        }
+        } 
+        System.err.println("accept Friendship fe==null");
         return false;
     }
 
@@ -280,6 +283,18 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    @Override
+    public boolean removeFriend(Long userID1, Long userID2) {
+        if (userID1.equals(userID2)) {
+            return false;
+        }
+        FriendEntity fe = this.friendDao.findByFriendShip(userID1, userID2);
+        if (fe != null) {
+            this.friendDao.delete(fe);
+        }
+        return false;
+    }
+
     /**
      *
      * @param userID
@@ -290,13 +305,44 @@ public class UserServiceImpl implements UserService {
         return this.friendDao.findFriendsByUserID(userID);
     }
 
+
+    @Override
+    public List<FriendOrNot> getFriendListByUsername(String askedBy, String friendOf) {
+        List<FriendEntity> friends = userService.getFriendsListFriendByUserUsername(friendOf);
+        List<FriendOrNot> results = new ArrayList<>();
+        if (askedBy != null) {
+            for (FriendEntity friend : friends) {
+                UserEntity ue;
+                if (friend.getFriend().getUsername().equals(friendOf)) {
+                    ue = friend.getOwner();
+                } else {
+                    ue = friend.getFriend();
+                }
+
+                results.add(new FriendOrNot(ue, this.isFriend(askedBy, ue.getUsername())));
+            }
+        } else {
+            for (FriendEntity friend : friends) {
+                UserEntity ue;
+                if (friend.getFriend().getUsername().equals(friendOf)) {
+                    ue = friend.getOwner();
+                } else {
+                    ue = friend.getFriend();
+                }
+                results.add(new FriendOrNot(ue, false));
+            }
+        }
+        return results;
+    }
+
     /**
      *
      * @param userID
      * @return
      */
     @Override
-    public List<UserEntity> getFriendsListUserByUserID(Long userID) {
+    public List<UserEntity> getFriendsListUserByUserID(Long userID
+    ) {
         List<UserEntity> lue = new ArrayList<>();
         List<FriendEntity> lfe = this.friendDao.findFriendsByUserID(userID);
         for (FriendEntity fe : lfe) {
@@ -316,7 +362,8 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public List<UserEntity> getFriendToAccept(UserEntity ue) {
+    public List<UserEntity> getFriendToAccept(UserEntity ue
+    ) {
         ue.getFriendToAccept().size();
         if (ue.getId() != null && ue.getFriendToAccept() != null) {
 
@@ -332,7 +379,8 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public List<FriendEntity> getFriends(UserEntity ue) {
+    public List<FriendEntity> getFriends(UserEntity ue
+    ) {
         if (ue.getId() != null) {
             List<FriendEntity> friends = new ArrayList<>();
             friends.addAll(ue.getFriends());
@@ -348,7 +396,8 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public List<FriendEntity> getFriends(Long userID) {
+    public List<FriendEntity> getFriends(Long userID
+    ) {
         UserEntity ue = userDao.findByID(userID);
         if (ue.getId() != null) {
             List<FriendEntity> friends = new ArrayList<>();

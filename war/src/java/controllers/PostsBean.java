@@ -171,6 +171,19 @@ public class PostsBean implements Serializable {
         return canComment;
     }
 
+    public boolean getCanCommentTheTarget(String targetUsername) {
+              String authorUsername = SessionBean.getUsername();
+        if (authorUsername == null) {  
+            //TODO GO TO ERROR PAGE
+            //NOT CONNECTED 
+        }
+        if(targetUsername == null || targetUsername.isEmpty())
+            targetUsername = authorUsername;
+        System.err.println(targetUsername + " targetusername");
+        return Objects.equals(authorUsername, targetUsername) || (userService.isFriend(authorUsername, targetUsername));
+    
+    }
+
     public boolean getCanRecommend(String targetUsername) {
         return userService.isFriend(SessionBean.getUsername(), targetUsername);
     }

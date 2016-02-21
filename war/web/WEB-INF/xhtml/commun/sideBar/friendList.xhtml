@@ -22,7 +22,8 @@
                                         <a href="#{friend_loop.friend.username}.htm" class=""> @#{friend_loop.friend.username} </a>
                                     </h:panelGroup>
 
-                                    <p:commandLink action="#{friendBean.removeFriend(friend_loop.id)}"  
+                                    <p:commandLink action="#{navigationBean.home()}"
+                                                   actionListener="#{friendBean.removeFriend(friend_loop.id)}"  
                                                    onclick="$('#friend_list_#{friend_loop.id}').hide()"  
                                                    class="btn btn-xs btn-danger glyphicon glyphicon-remove pull-right">
 

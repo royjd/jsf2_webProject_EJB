@@ -89,6 +89,9 @@ public interface UserService {
      * @return List
      */
     public List<FriendOrNot> search(String param, Long id);
+ 
+
+    public List<FriendOrNot> getFriendListByUsername(String askedBy, String friendOf);
 
     /**
      * return friends to accept
@@ -148,8 +151,9 @@ public interface UserService {
      */
     public List<FriendEntity> getFriends(UserEntity ue);
 
-    public List<FriendEntity> getFriends(Long userID) ;
-            /**
+    public List<FriendEntity> getFriends(Long userID);
+
+    /**
      * test if two user are friend
      *
      * @param userID1
@@ -167,5 +171,7 @@ public interface UserService {
      * @return true if they are else false
      */
     public boolean isFriend(String username1, String username2);
+
+    public boolean removeFriend(Long userID1, Long userID2);
 
 }

@@ -282,6 +282,10 @@ public class UserService2Impl implements UserService2 {
     public List<FriendEntity> getFriendsListFriendByUserID(Long userID) {
         return this.friendDao.findFriendsByUserID(userID);
     }
+    @Override
+    public List<FriendEntity> getFriendsListFriendByUserUsername(String username) {
+        return this.friendDao.findFriendsByUserUsername(username);
+    }
 
     /**
      *
