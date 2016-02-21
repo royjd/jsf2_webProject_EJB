@@ -1,0 +1,113 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    #{profileBean.loadProfil(param['u'])}
+
+    <div class="col-sm-7">
+        <div class="alert alert-success alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <strong>Message</strong>
+        </div>
+
+
+        <div class="row">
+
+            <div class="col-sm-4">
+                <h4>Define profile picture<button id="addPicture" class="btn btn-primary btn-sm glyphicon glyphicon-plus"></button></h4>
+                <div id="addPictureProfilDiv" style="display:none">
+                    <form enctype="multipart/form-data" method="post" class="form-horizontal" role="form" id="pictureProfileForm" action="#{pageContext.request.contextPath}/#{username}/media/addPicture.htm">
+                        <span class="btn btn-default btn-file">
+                            Choose profile picture <input type="file" name="file"/>
+                        </span>
+                        <input name="type" type ="hidden" value="profile"/>
+                        <div class="form-group">        
+                            <div class="col-sm-10">
+                                <button type="submit" class="btn btn-success">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="img-overlay">
+                    <img src="#{pageContext.request.contextPath}/resources/img/#{u.profile.pictureProfile.mediaType.link}" class="img-responsive"/>
+                </div>
+            </div>
+
+            <div class="col-sm-8">
+                <h2>#{profileBean.firstName} #{profileBean.lastName}</h2>       
+
+
+                <h3>
+                    Gender :  
+
+                    <small>
+                        <c:choose>
+                            <c:when test="#{empty profileBean.gender}">
+                                Not define
+                            </c:when>
+                            <c:when test="#{profileBean.gender=='M'}">
+                                Male
+                            </c:when>
+                            <c:otherwise>
+                                Female
+                            </c:otherwise>
+                        </c:choose>
+                    </small>   
+                </h3>
+
+
+                <h3>
+                    Height : <small>#{ empty profileBean.height ? "Not define" : profileBean.height}</small>
+
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    Weight : <small>#{ empty profileBean.weight ? "Not define" : profileBean.weight}</small>
+                </h3>
+
+                <h3>
+                    Live in : 
+                    <small>
+                        <c:choose>
+                            <c:when test="#{empty profileBean.country and empty profileBean.city}">
+                                Not define
+                            </c:when>
+                            <c:otherwise>
+                                #{profileBean.city} #{not empty profileBean.city and not empty profileBean.country ? " / " : ""}#{profileBean.country}
+                            </c:otherwise>
+                        </c:choose>
+                    </small> 
+                </h3>
+            </div>
+        </div>
+
+        <hr />
+        <h3>Brief Description</h3>
+        <p class="well">
+                #{ empty profileBean.description ? "No description" : profileBean.description}
+        </p>
+    </div>
+    
+    <!-- edit if user can do it -->
+    
+    
+<div class="col-sm-3 padding-25">
+
+    <h4>Email : <small>#{profileBean.email}</small></h4>
+
+    <hr/>
+    <h4>@<small>#{profileBean.username}</small></h4>
+    
+    <hr />
+    <h4>Mobile Number : <small>#{ empty profileBean.phone ? "Not define" : profileBean.phone}</small></h4>
+   
+    <hr />
+    <h4>Birth day : <small>Not define</small></h4>
+
+</div> 
+
+</html>
+

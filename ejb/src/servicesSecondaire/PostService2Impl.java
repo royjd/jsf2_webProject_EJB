@@ -87,12 +87,12 @@ public class PostService2Impl implements servicesSecondaire.PostService2 {
 
     @Override
     public List<PostEntity> getNextRecommendationFromUsersID(List<Long> l, Long postID) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return postDao.getNextPostFromUsersID(l, postID); 
     }
 
     @Override
     public Object getRecentRecommendationFromUsersID(List<Long> l) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return postDao.getRecentRecommendationFromUsersID(l);
     }
 
     @Override

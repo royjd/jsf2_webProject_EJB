@@ -11,7 +11,6 @@
             <ui:include src="WEB-INF/xhtml/commun/importCss.xhtml" />
         </ui:insert>
         <title>Wall</title>
-
     </h:head>
 
     <h:body style="padding-top: 70px">
@@ -28,18 +27,29 @@
             <ui:include src="WEB-INF/xhtml/wall/header.xhtml" />
             <ui:include src="WEB-INF/xhtml/wall/navBar.xhtml" />
 
-            <div class="container">
+            <div class="container"> 
                 <ui:fragment rendered="#{buttonView.page == 'default'}"> 
-                </ui:fragment>
+                    <ui:include src="WEB-INF/xhtml/wall/post.xhtml" >
+                        <ui:param name="dataTableID" value="default"/>
+                    </ui:include>
+                </ui:fragment> 
                 <ui:fragment rendered="#{buttonView.page == 'recommendation'}"> 
-                    <ui:include src="WEB-INF/xhtml/wall/recommendation/recommendation.xhtml" /> 
+                    <ui:include src="WEB-INF/xhtml/wall/recommendation/recommendation.xhtml" >
+                        <ui:param name="dataTableID" value="recommendation"/>
+
+                    </ui:include>
                 </ui:fragment> 
                 <ui:fragment rendered="#{buttonView.page == 'friend'}"> 
-                    <ui:include src="WEB-INF/xhtml/wall/friend/friend.xhtml" /> 
+                    <ui:include src="WEB-INF/xhtml/wall/friend/friend.xhtml" >
+
+                    </ui:include> 
                 </ui:fragment>  
                 <ui:fragment rendered="#{buttonView.page == 'media'}"> 
                     <ui:include src="WEB-INF/xhtml/wall/media/media.xhtml" /> 
-                </ui:fragment>  
+                </ui:fragment>
+                <ui:fragment rendered="#{buttonView.page == 'profile'}"> 
+                    <ui:include src="WEB-INF/xhtml/wall/profile/profile.xhtml" /> 
+                </ui:fragment>
             </div>
         </ui:insert>
 

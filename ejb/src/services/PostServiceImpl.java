@@ -337,4 +337,22 @@ public class PostServiceImpl implements PostService {
         return postService.findByID(postID);
     }
 
+    @Override
+    public PostEntity createRecommendation(String title, String message, Long authorID, String targetUsername) {
+        //if username go on wall of the use matching the username
+        //target is also the user matching the username        if (pathVariables.containsKey("username")) {
+        UserEntity author = userService2.findByID(authorID);
+        if (author == null) {
+            return null;
+        }
+        UserEntity target = userService2.findByUsername(targetUsername);
+        if (target == null) {
+            return null;
+        }
+       
+        RecomendationEntity re = new RecomendationEntity(title, message);
+        return postService.createPost(re, author, target, true);
+
+    }
+
 }

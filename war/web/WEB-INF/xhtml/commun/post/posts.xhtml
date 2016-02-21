@@ -8,11 +8,9 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://java.sun.com/jsf/facelets">
     <ui:composition>
-        <f:metadata>
-            <f:event type="preRenderView" listener="#{postsBean.onPostLoad(1)}"/>
-        </f:metadata>
-        <p:outputPanel id="postDisplay">
-            <p:dataTable id="philblog" 
+
+        <p:outputPanel > 
+            <p:dataTable id="philblog#{dataTableID}" 
                          editable="true" 
                          var="tier" value="#{posts}" 
                          rowIndexVar="rowIndex">  
@@ -29,7 +27,7 @@
                         <div class="postComment col-sm-12">
                             <ui:repeat value="#{tier.comments}" var="commentPost" varStatus="loop">
 
-                                <ui:include src="post.xhtml" >  
+                                <ui:include src="post.xhtml" >   
                                     <ui:param name="post" value="#{commentPost}" />  
 
                                 </ui:include>  
@@ -59,8 +57,8 @@
 
                                 </p:commandButton>   
                                 <p:remoteCommand name="update_current#{tier.id}"
-                                                 update=":philblog"
-                                                 actionListener="#{evNewsBlogsBean.refresh(tier.id)}" >
+                                                 update=":philblog#{dataTableID}"
+                                                 actionListener="#{evNewsBlogsBean.refresh(dataTableID,tier.id)}" >
                                 </p:remoteCommand>
                             </div> 
                         </div>  
@@ -77,21 +75,20 @@
                         $('.loadmore').waypoint(function (direction) {
 
                             if (direction === 'down') { 
-                                more_records([{name:'u', value: "#{param['u']}"}]);                             
+                                more_records();             
                             }
                         },
                                 {offset: '100%'}
                         );
                     });
-                </script>        
+                </script>         
                 <h:form>
  
                     <p:remoteCommand name="more_records"
-                                     update=":philblog" 
-                                     
-                                     actionListener="#{evNewsBlogsBean.loadMore()}" > 
+                                     update=":philblog#{dataTableID}" 
+                                     actionListener="#{evNewsBlogsBean.loadMore(buttonView.page,buttonView.targetUsername)}" > 
  
-                    </p:remoteCommand>
+                    </p:remoteCommand> 
                 </h:form>
             </h:panelGroup>
 

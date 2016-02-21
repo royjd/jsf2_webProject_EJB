@@ -8,11 +8,9 @@ package controllers;
 import dao.CommentEntity;
 import dao.PostEntity;
 import java.util.List;
-import java.util.Map;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import org.primefaces.context.RequestContext;
@@ -32,9 +30,18 @@ public class EvNewsBlogsBean implements java.io.Serializable {
     @EJB
     PostService postService;
 
-    @ManagedProperty("#{param.u}")
     private String targetUsername;
-   
+
+    private String postType;
+
+    public String getPostType() {
+        return postType;
+    }
+
+    public void setPostType(String postType) {
+        this.postType = postType;
+    }
+
     private boolean moreData = true;
 
     @ManagedProperty(value = "#{navigationBean}")
@@ -44,7 +51,7 @@ public class EvNewsBlogsBean implements java.io.Serializable {
 
     public List<PostEntity> getPhilBlogs() {
         if (list == null) {
-            list = getList();
+            list = getList("", null);
         }
         return list;
 
@@ -63,18 +70,29 @@ public class EvNewsBlogsBean implements java.io.Serializable {
 
     public List<PostEntity> wall(String username) {
         if (list == null) {
-            list = getList();
+            list = getList("default", username);
         }
         return list;
 
     }
 
-    private List<PostEntity> getList() {
-        System.err.println("getList username =" + this.targetUsername);
-        if (this.targetUsername == null) {
+    public List<PostEntity> recommendation(String username) {
+        System.err.println("recommendation => Username = " + username);
+        if (list == null) {
+            list = this.getList("recommendation", username);
+        }
+        return list;
+
+    }
+
+    private List<PostEntity> getList(String page, String username) {
+        System.err.println("getList username =" + username + " page : " + page);
+        if (username == null) {
             return postService.getRecentPostFromFriendAndMe(SessionBean.getUserId());
-        } else {
-            return postService.getRecentPostFromMe(this.targetUsername);
+        } else if (page.equals("default") && !username.isEmpty()) {
+            return postService.getRecentPostFromMe(username);
+        } else /*if(buttonView.getPage().equals("recommentdation"))*/ {
+            return (List<PostEntity>) postService.getRecentRecommendationFromUserID(username);
         }
     }
 
@@ -90,41 +108,37 @@ public class EvNewsBlogsBean implements java.io.Serializable {
 
         }
         return root;
-        /*root = new DefaultTreeNode("Root", null);
-        TreeNode node0 = new DefaultTreeNode("Node 0", root);
-        TreeNode node1 = new DefaultTreeNode("Node 1", root);
 
-        TreeNode node00 = new DefaultTreeNode("Node 0.0", node0);
-        TreeNode node01 = new DefaultTreeNode("Node 0.1", node0);
-
-        TreeNode node10 = new DefaultTreeNode("Node 1.0", node1);
-
-        node1.getChildren().add(new DefaultTreeNode("Node 1.1"));
-        node00.getChildren().add(new DefaultTreeNode("Node 0.0.0"));
-        node00.getChildren().add(new DefaultTreeNode("Node 0.0.1"));
-        node01.getChildren().add(new DefaultTreeNode("Node 0.1.0"));
-        node10.getChildren().add(new DefaultTreeNode("Node 1.0.0"));
-        root.getChildren().add(new DefaultTreeNode("Node 2"));
-        return root; */
     }
 
-    public void loadMore() {
+    public void loadMore(String page, String username) {
         System.err.println("loadMore");
         List<PostEntity> listtmp;
+        this.targetUsername = username;
         System.err.println("loadMore username + " + this.targetUsername);
+        if (this.list.size() >= 5) { 
+            if (this.targetUsername == null || this.targetUsername.isEmpty()) {
 
-        if (this.targetUsername == null || this.targetUsername.isEmpty()) {
-            listtmp = postService.getNextPostFromFriendAndMe(SessionBean.getUserId(), this.list.get(this.list.size() - 1).getId());
+                listtmp = postService.getNextPostFromFriendAndMe(SessionBean.getUserId(), this.list.get(this.list.size() - 1).getId());
+
+            } else if (page.equals("default")) {
+
+                listtmp = postService.getNextPostFromUserID(this.targetUsername, this.list.get(this.list.size() - 1).getId());
+
+            } else /*if(buttonView.getPage().equals("recommentdation"))*/ {
+
+                listtmp = (List<PostEntity>) postService.getNextRecommendationFromUserID(this.targetUsername, this.list.get(this.list.size() - 1).getId());
+            }
+            System.err.println(listtmp.size() + "size of load more list");
+            moreData = listtmp.size() == 5;
+            this.list.addAll(listtmp);
 
         } else {
-            listtmp = postService.getNextPostFromUserID(this.targetUsername, this.list.get(this.list.size() - 1).getId());
-
+            moreData = false;
         }
-        moreData = listtmp.size() == 5;
-        this.list.addAll(listtmp);
     }
 
-    public void refresh(Long id) {
+    public void refresh(String componentID, Long id) {
         System.err.println("refresh");
         PostEntity postModified = postService.findByID(id);
         System.err.println(postModified.getId());
@@ -136,7 +150,7 @@ public class EvNewsBlogsBean implements java.io.Serializable {
         }
 
         this.list.set(index, postModified);
-        RequestContext.getCurrentInstance().update("philblog");
+        RequestContext.getCurrentInstance().update("philblog" + componentID);
     }
 
     public NavigationBean getNavigationBean() {

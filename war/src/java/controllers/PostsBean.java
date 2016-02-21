@@ -74,8 +74,9 @@ public class PostsBean implements Serializable {
         uploadedFiles = new ArrayList<>();
     }
 
-    public void upload(FileUploadEvent event) {
-        uploadedFiles.add(event.getFile());
+    public String homeSaveNews() {
+        this.saveNews();
+        return navigationBean.home();
     }
 
     public List<PostEntity> getHomePosts() {
@@ -90,7 +91,7 @@ public class PostsBean implements Serializable {
         return postService.getRecentPostFromFriendAndMe(SessionBean.getUserId());
     }
 
-    public String saveNews() {
+    public void saveNews() {
 
         Long authorID = SessionBean.getUserId();
         if (authorID == null) {
@@ -101,11 +102,24 @@ public class PostsBean implements Serializable {
         /*ServletContext ctx = (ServletContext) FacesContext.getCurrentInstance()
          .getExternalContext().getContext();
          String realPath = ctx.getContextPath(); */ // CAUTION DO NOT USE REAL PATH 
+
         //String realPath = "/home/SP2MI/zdiawara/Bureau/images";
         //tSring realPath = "/home/zakaridia/Documents/Depot_Git/File/image";
         postService.createNews(this.title, this.message, file, realPath, authorID, authorID);
-        return navigationBean.home();
+        //return navigationBean.home();
 
+    }
+
+    public void saveRecommendation(String targetUsername) {
+
+        Long authorID = SessionBean.getUserId();
+        if (authorID == null) {
+            //TODO GO TO ERROR PAGE
+            //NOT CONNECTED
+        }
+        postService.createRecommendation(this.title, this.message, authorID, targetUsername);
+
+        //return navigationBean.home();
     }
 
     public void saveComment(Long parentID, Long mainID, boolean main) {
@@ -141,14 +155,16 @@ public class PostsBean implements Serializable {
     }
 
     //TODO LATER WITH A REAL targetID
-    public void onPostLoad(Long targetID) {
-        Long authorID = SessionBean.getUserId();
-        if (authorID == null) {
+    public void onPostLoad(String targetUsername) {
+        String authorUsername = SessionBean.getUsername();
+        if (authorUsername == null) { 
             //TODO GO TO ERROR PAGE
-            //NOT CONNECTED
+            //NOT CONNECTED 
         }
-
-        this.canComment = (userService.isFriend(authorID, targetID) || Objects.equals(authorID, targetID));
+        if(targetUsername == null || targetUsername.isEmpty())
+            targetUsername = authorUsername;
+        System.err.println(targetUsername + " targetusername");
+        this.canComment = Objects.equals(authorUsername, targetUsername) || (userService.isFriend(authorUsername, targetUsername));
     }
 
     public Long getTargetID() {
@@ -187,6 +203,10 @@ public class PostsBean implements Serializable {
 
     public boolean getCanComment() {
         return canComment;
+    }
+
+    public boolean getCanRecommend(String targetUsername) {
+        return userService.isFriend(SessionBean.getUsername(), targetUsername);
     }
 
     public void setCanComment(boolean canComment) {

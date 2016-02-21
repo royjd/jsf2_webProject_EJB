@@ -85,9 +85,9 @@
 
                                                         </p:commandButton>   
                                                         <p:remoteCommand name="update_current#{post.postMain.id}"
-                                                                         update=":philblog" 
-                                                                         actionListener="#{evNewsBlogsBean.refresh(post.postMain.id)}" />
-                                                    </div>
+                                                                         update=":philblog#{dataTableID}" 
+                                                                         actionListener="#{evNewsBlogsBean.refresh(dataTableID,post.postMain.id)}" />
+                                                     </div>
                                                 </div>
                                             </fieldset>
                                         </h:form>

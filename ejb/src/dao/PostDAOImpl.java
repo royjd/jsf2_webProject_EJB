@@ -205,7 +205,7 @@ public class PostDAOImpl implements PostDAO {
         postEntities = this.em.createQuery("SELECT t FROM PostEntity t where "
                 + " TYPE(t) = RecomendationEntity"
                 + " AND (t.id < :postID ) AND "
-                + " (t.target.id IN (:inclList))"
+                + " (t.target.id IN :inclList)"
                 + " order by t.id desc")
                 .setParameter("postID", postID)
                 .setParameter("inclList", usersID)
@@ -225,7 +225,7 @@ public class PostDAOImpl implements PostDAO {
         List<PostEntity> postEntities = this.em.createQuery("SELECT t FROM PostEntity t where "
                 + "TYPE(t) = RecomendationEntity "
                 + "AND"
-                + " (t.target.id IN (:inclList))"
+                + " (t.target.id IN :inclList)"
                 + " order by t.id desc")
                 .setMaxResults(5)
                 .setParameter("inclList", usersID).getResultList();

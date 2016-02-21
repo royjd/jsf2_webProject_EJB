@@ -26,6 +26,11 @@ import services.UserService;
 public class ProfileBean {
 
     //Profile
+    private String username;
+    private String email;
+    private String phone;
+    private String firstName;
+    private String lastName;
     private String city;
     private String Country;
     private String profilePicture;
@@ -60,34 +65,41 @@ public class ProfileBean {
     }
 
     public void loadProfile(Long ID) {
-
-        UserEntity u = userService.findByID(ID);
+        load(userService.findByID(ID));
+    }
+    
+    public void loadProfil(String username){
+        load(userService.findByUsername(username));       
+    }
+    
+    private void load(UserEntity u){
+        if(u==null){
+            // error page
+        }
         ProfileEntity p = u.getProfile();
-        if (p != null) {
-            //Profile
-            this.city = p.getCity();
-            this.Country = p.getCountry();
-            this.profilePicture = p.getPictureProfile().getMediaType().getLink();
-            this.coverPicture = p.getPictureCover().getMediaType().getLink();
+        this.city = p.getCity();
+        this.Country = p.getCountry();
+        this.profilePicture = p.getPictureProfile().getMediaType().getLink();
+        this.coverPicture = p.getPictureCover().getMediaType().getLink();
+        this.lastName = p.getLastName();
+        this.firstName = p.getFirstName();
+        this.email = u.getEmail();
+        this.username = u.getUsername();
+        
+        //Physical
+        this.gender = p.getPhysical().getGender();
+        this.height = p.getPhysical().getHeight();
+        this.weight = p.getPhysical().getWeight();
+        
+        //Experience
+        ExperienceEntity e = profileService.getLastExperienceByProfile(p.getId());
+        if(e!=null){
+            this.title = e.getTitle();
+            this.description = e.getDescription();
+            this.realisationDate = e.getRealisationDate();
 
-            //Physical
-            this.gender = p.getPhysical().getGender();
-            this.height = p.getPhysical().getHeight();
-            this.weight = p.getPhysical().getWeight();
-
-            //Experience
-            ExperienceEntity e = profileService.getLastExperienceByProfile(p.getId());
-            if(e!=null){
-                this.title = e.getTitle();
-                this.description = e.getDescription();
-                this.realisationDate = e.getRealisationDate();
-
-                //localisation Experience
-                this.experienceCity = e.getLocalisation().getCity();
-            }
-
-        } else {
-            //TODO ERROR PAGE
+            //localisation Experience
+            this.experienceCity = e.getLocalisation().getCity();
         }
 
     }
@@ -212,4 +224,46 @@ public class ProfileBean {
         this.experienceCityZipcode = experienceCityZipcode;
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    
+    
 }
