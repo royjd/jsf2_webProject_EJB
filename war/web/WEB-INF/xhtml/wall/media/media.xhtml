@@ -18,7 +18,7 @@
             <div class="panel-content">
 
                 <div class="row">
-                    <h:form>
+                   
                         <div class="col-sm-2">              
                             <div class="list-group padding-25">
                                 <h:commandLink  class="list-group-item" value="Albums" action="#{navigationBean.displayAlbum()}">
@@ -30,7 +30,7 @@
                         </div>
                         <div   class="col-sm-10 padding-25">
                             <div class="pull-right">
-
+                                 <h:form>
                                 <h:commandLink  value="+ Create album" action="#{navigationBean.createAlbum()}">
                                     <f:param name="u" value="#{param['u']}"/>
                                 </h:commandLink>
@@ -38,6 +38,7 @@
                                 <h:commandLink  value="+ Add photo" action="#">
                                     <f:param name="u" value="#{param['u']}"/>
                                 </h:commandLink>
+                                </h:form>
                             </div>
 
                             <div>
@@ -53,11 +54,10 @@
                             </div>
 
                         </div>
-                    </h:form>
+                    
                 </div>
 
             </div>
-            
         </div>
     </ui:composition>
 </html>
