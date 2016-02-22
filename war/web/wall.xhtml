@@ -13,9 +13,9 @@
         <title>Wall</title>
     </h:head>
 
-    <h:body style="padding-top: 70px">
+    <h:body style="padding-top: 70px"> 
         <f:metadata>
-            <f:event type="preRenderView" listener="#{buttonView.doSomething(param['p'], param['u'])}"/>
+            <f:viewAction action="#{buttonView.doSomething(param['p'], param['u'])}"/>
         </f:metadata>
         <div id="header">
             <ui:insert name="header" >
@@ -31,11 +31,14 @@
                 <ui:fragment rendered="#{buttonView.page == 'default'}"> 
                     <ui:include src="WEB-INF/xhtml/wall/post.xhtml" >
                         <ui:param name="dataTableID" value="default"/>
+
+                        <ui:param name="targetUserName" value="#{param['u']}"/> 
                     </ui:include>
                 </ui:fragment> 
                 <ui:fragment rendered="#{buttonView.page == 'recommendation'}"> 
                     <ui:include src="WEB-INF/xhtml/wall/recommendation/recommendation.xhtml" >
                         <ui:param name="dataTableID" value="recommendation"/>
+                        <ui:param name="targetUserName" value="#{param['u']}"/> 
 
                     </ui:include>
                 </ui:fragment> 

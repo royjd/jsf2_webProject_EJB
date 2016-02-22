@@ -39,7 +39,7 @@ public interface PostService2 {
 
     public List<PostEntity> getNextRecommendationFromUsersID(List<Long> l, Long postID);
 
-    public Object getRecentRecommendationFromUsersID(List<Long> l);
+    public List<PostEntity> getRecentRecommendationFromUsersID(List<Long> l);
 
     public AlbumEntity findAlbum(Long id, String type);
 

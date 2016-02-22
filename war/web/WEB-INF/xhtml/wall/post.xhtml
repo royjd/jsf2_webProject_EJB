@@ -11,13 +11,13 @@
         <!-- load required message from the bundle messages -->
         <f:loadBundle basename="bundle.messages" var="msg"/>
         <f:metadata>
-            <f:event type="preRenderView" listener="#{evNewsBlogsBean.setTargetUsername(param['u'])}"/> 
-            <f:event type="preRenderView" listener="#{postsBean.onPostLoad(param['u'])}"/> 
+            <f:viewAction  action="#{evNewsBlogsBean.setTargetUsername(param['u'])}"/> 
+            <f:viewAction   action="#{postsBean.onPostLoad(param['u'])}"/> 
         </f:metadata> 
-        <div class="row">
+        <div class="row"> 
             <div class="col-sm-12">
-                <h:panelGroup rendered="#{postsBean.canComment}"> 
- 
+                <h:panelGroup rendered="#{postsBean.getCanCommentTheTarget(buttonView.targetUsername)}">  
+
                     <h2>Add a news <button id="addAnews" class="btn btn-primary btn-sm glyphicon glyphicon-plus"></button></h2>
                     <div id="addAnewsDiv" style="display:none;">
 
@@ -47,12 +47,13 @@
 
                                     <h:message id="fileMessage" for="file" errorClass="erreur"  class="control-label text-danger"/>
                                 </span>
-                            </div> 
+                            </div>   
                             <div class="form-group">        
                                 <div class="col-sm-offset-2 col-sm-10">
                                     <h:commandButton id="newsFormSubmit" value="Submit" class="btn btn-success pull-right"
                                                      action="#{navigationBean.wall(buttonView.targetUsername)}" actionListener="#{postsBean.saveNews()}" disabled="#{facesContext.validationFailed}">
-                                    </h:commandButton>
+
+                                    </h:commandButton> 
                                 </div>
                             </div>
                         </h:form>
@@ -61,7 +62,7 @@
 
                 </h:panelGroup>
                 <ui:include src="../commun/post/posts.xhtml" >
-                    <ui:param name="posts" value="#{evNewsBlogsBean.wall(param['u'])}" />
+                    <ui:param name="posts" value="#{evNewsBlogsBean.wall(param['u'])}" /> 
                 </ui:include>
                 <div id="loadmore" class="loadmore">LOADING OMG</div>
                 <div class="nomoreloadmore" style="display: none;">No more Post</div>

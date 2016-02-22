@@ -64,7 +64,8 @@ public class PostsBean implements Serializable {
 
     private PostEntity postComment;
 
-    private static final String realPath = "/home/zakaridia/Documents/Depot_Git/File/image";
+    //private static final String realPath = "/home/zakaridia/Documents/Depot_Git/File/image";
+    private static final String realPath = "C:/Users/Karl Lauret/AppData/Roaming/NetBeans/8.1/config/GF_4.1.1/domain1/applications/images";
 
     /**
      * Creates a new instance of PostsBean
@@ -106,9 +107,8 @@ public class PostsBean implements Serializable {
         /*ServletContext ctx = (ServletContext) FacesContext.getCurrentInstance()
          .getExternalContext().getContext();
          String realPath = ctx.getContextPath(); */ // CAUTION DO NOT USE REAL PATH 
-
         //String realPath = "/home/SP2MI/zdiawara/Bureau/images";
-        //tSring realPath = "/home/zakaridia/Documents/Depot_Git/File/image";
+        // String realPath = "/home/zakaridia/Documents/Depot_Git/File/image";
         postService.createNews(this.title, this.message, file, realPath, authorID, authorID);
         //return navigationBean.home();
 
@@ -145,7 +145,7 @@ public class PostsBean implements Serializable {
     }
 
     public String createAlbum() {
-        
+
         Long authorId = SessionBean.getUserId();
         if (authorId == null) {//TODO GO TO ERROR PAGE, NOT CONNECTED
             return null;
@@ -157,20 +157,21 @@ public class PostsBean implements Serializable {
         }
         return null; //
     }
-    
-    public List<PostEntity> loadAllAlbums(String username){
+
+    public List<PostEntity> loadAllAlbums(String username) {
         return postService2.findByUsernameAndType(username, "album");
     }
 
     //TODO LATER WITH A REAL targetID
     public void onPostLoad(String targetUsername) {
         String authorUsername = SessionBean.getUsername();
-        if (authorUsername == null) { 
+        if (authorUsername == null) {
             //TODO GO TO ERROR PAGE
             //NOT CONNECTED 
         }
-        if(targetUsername == null || targetUsername.isEmpty())
+        if (targetUsername == null || targetUsername.isEmpty()) {
             targetUsername = authorUsername;
+        }
         System.err.println(targetUsername + " targetusername");
         this.canComment = Objects.equals(authorUsername, targetUsername) || (userService.isFriend(authorUsername, targetUsername));
     }
@@ -214,19 +215,21 @@ public class PostsBean implements Serializable {
     }
 
     public boolean getCanCommentTheTarget(String targetUsername) {
-              String authorUsername = SessionBean.getUsername();
-        if (authorUsername == null) {  
+        String authorUsername = SessionBean.getUsername();
+        if (authorUsername == null) {
             //TODO GO TO ERROR PAGE
             //NOT CONNECTED 
         }
-        if(targetUsername == null || targetUsername.isEmpty())
+        if (targetUsername == null || targetUsername.isEmpty()) {
             targetUsername = authorUsername;
+        }
         System.err.println(targetUsername + " targetusername");
         return Objects.equals(authorUsername, targetUsername) || (userService.isFriend(authorUsername, targetUsername));
-    
+
     }
 
     public boolean getCanRecommend(String targetUsername) {
+        System.err.println(targetUsername + " targetusername getCanRecommend");
         return userService.isFriend(SessionBean.getUsername(), targetUsername);
     }
 

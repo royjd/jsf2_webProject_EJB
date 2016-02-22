@@ -91,8 +91,10 @@ public class EvNewsBlogsBean implements java.io.Serializable {
             return postService.getRecentPostFromFriendAndMe(SessionBean.getUserId());
         } else if (page.equals("default") && !username.isEmpty()) {
             return postService.getRecentPostFromMe(username);
-        } else /*if(buttonView.getPage().equals("recommentdation"))*/ {
-            return (List<PostEntity>) postService.getRecentRecommendationFromUserID(username);
+        } else if(page.equals("recommendation")){ 
+            return postService.getRecentRecommendationFromUserID(username);
+        } else{
+            return null;
         }
     }
 
