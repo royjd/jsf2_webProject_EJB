@@ -181,9 +181,13 @@ public class NavigationBean implements Serializable {
     public String createAlbum() {
         return this.wallSousPage("media", "createAlbum");
     }
-    
+
     public String displayAlbum() {
         return this.wallSousPage("media", "displayAlbum");
+    }
+
+    public String displayAlbum(String username) {
+        return this.wallPage("media", "displayAlbum",username);
     }
 
     public String profile() {

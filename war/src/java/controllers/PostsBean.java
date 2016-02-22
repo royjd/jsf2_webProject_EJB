@@ -153,9 +153,10 @@ public class PostsBean implements Serializable {
         if (this.file != null && !this.file.getName().equals("") && realPath != null) {
             AlbumEntity album = postService.createAlbum(title, message, localisation, authorId);
             PostEntity post = photoService.createPhoto(album, authorId, file, realPath, true);
-            return navigationBean.home(); // change it
+            return navigationBean.displayAlbum(); // change it
         }
-        return null; //
+        //return null; //
+        return navigationBean.displayAlbum(SessionBean.getUsername());
     }
     
     public List<PostEntity> loadAllAlbums(String username){

@@ -6,7 +6,7 @@
 
     <h2 class="col-sm-offset-3">Create new album</h2>
 
-    <h:form class="navbar-form" role="form" enctype="multipart/form-data">
+    <h:form class="navbar-form" role="horizontal" enctype="multipart/form-data">
 
         <div class="col-sm-offset-3">
             <h:inputText class="form-control" value="#{postsBean.title}" pt:placeholder="Title">
@@ -14,12 +14,11 @@
             </h:inputText>
         </div>
 
-        <div class="col-sm-offset-3">
-            <span class="btn btn-default btn-file">
-                Choose photo(s) <h:inputFile id="file" value="#{postsBean.file}"  class="form-control"/>
-                
-            </span>
-        </div>
+        <span class="btn btn-default btn-file">
+            Add a picture <h:inputFile id="file" value="#{postsBean.file}"  class="form-control">
+
+            </h:inputFile>
+        </span>
 
         <div class="col-sm-offset-3">
             <h:inputText class="form-control" value="#{postsBean.localisation}" pt:placeholder="Localisation">
