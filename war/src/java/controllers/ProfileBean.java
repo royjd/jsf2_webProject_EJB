@@ -10,6 +10,7 @@ import dao.LocalisationEntity;
 import dao.PhysicalEntity;
 import dao.ProfileEntity;
 import dao.UserEntity;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
@@ -31,9 +32,9 @@ import servicesSecondaire.PhysicalService;
 @Named(value = "profileBean")
 @ManagedBean
 @ViewScoped
-public class ProfileBean {
+public class ProfileBean implements Serializable{
 
-    //Profile
+    //Profile 
     private String username;
     private String email;
     private String phone;

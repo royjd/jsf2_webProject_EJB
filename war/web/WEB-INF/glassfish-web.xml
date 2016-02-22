@@ -10,3 +10,4 @@
   </jsp-config>
   <property name="alternatedocroot_1" value="from=/images/* dir=/home/zakaridia/Documents/Depot_Git/File"/> 
 </glassfish-web-app>
+ 

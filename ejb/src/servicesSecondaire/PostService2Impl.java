@@ -91,7 +91,7 @@ public class PostService2Impl implements servicesSecondaire.PostService2 {
     }
 
     @Override
-    public Object getRecentRecommendationFromUsersID(List<Long> l) {
+    public List<PostEntity> getRecentRecommendationFromUsersID(List<Long> l) {
         return postDao.getRecentRecommendationFromUsersID(l);
     }
 

@@ -2,42 +2,43 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <ui:composition> 
+        <h2 class="col-sm-offset-3">Create new album</h2>
 
-    <h2 class="col-sm-offset-3">Create new album</h2>
+        <h:form class="navbar-form" role="form" enctype="multipart/form-data">
 
-    <h:form class="navbar-form" role="horizontal" enctype="multipart/form-data">
+            <div class="col-sm-offset-3">
+                <h:inputText class="form-control" value="#{postsBean.title}" pt:placeholder="Title">
 
-        <div class="col-sm-offset-3">
-            <h:inputText class="form-control" value="#{postsBean.title}" pt:placeholder="Title">
+                </h:inputText>
+            </div>
 
-            </h:inputText>
-        </div>
+            <div class="col-sm-offset-3">
+                <span class="btn btn-default btn-file">
+                    Choose photo(s) <h:inputFile id="file" value="#{postsBean.file}"  class="form-control"/>
+                </span>
+            </div>
 
-        <span class="btn btn-default btn-file">
-            Add a picture <h:inputFile id="file" value="#{postsBean.file}"  class="form-control">
+            <div class="col-sm-offset-3">
+                <h:inputText class="form-control" value="#{postsBean.localisation}" pt:placeholder="Localisation">
 
-            </h:inputFile>
-        </span>
-
-        <div class="col-sm-offset-3">
-            <h:inputText class="form-control" value="#{postsBean.localisation}" pt:placeholder="Localisation">
-
-            </h:inputText>
-        </div>
+                </h:inputText>
+            </div>
 
 
-        <div class="col-sm-offset-3">
-            <h:inputTextarea class="form-control" value="#{postsBean.message}" pt:placeholder="Description">
+            <div class="col-sm-offset-3">
+                <h:inputTextarea class="form-control" value="#{postsBean.message}" pt:placeholder="Description">
 
-            </h:inputTextarea>
-        </div>
+                </h:inputTextarea>
+            </div>
 
-        <div class="form-group col-sm-offset-3">
-            <h:commandButton action="#{postsBean.createAlbum()}" value="Create" class="btn btn-success pull-right"/>
-        </div>
+            <div class="form-group col-sm-offset-3">
+                <h:commandButton action="#{postsBean.createAlbum()}" value="Create" class="btn btn-success pull-right"/>
+            </div>
 
-    </h:form>
-
+        </h:form>
+    </ui:composition>
 </html>
 

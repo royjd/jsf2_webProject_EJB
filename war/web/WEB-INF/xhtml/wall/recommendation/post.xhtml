@@ -10,11 +10,11 @@
         <!-- load required message from the bundle messages -->
         <f:loadBundle basename="bundle.messages" var="msg"/>
         <f:metadata>
-            <f:event type="preRenderView" listener="#{evNewsBlogsBean.setTargetUsername(param['u'])}"/> 
-            <f:event type="preRenderView" listener="#{postsBean.onPostLoad(param['u'])}"/>
+            <f:viewAction  action="#{evNewsBlogsBean.setTargetUsername(param['u'])}"/> 
+            <f:viewAction   action="#{postsBean.onPostLoad(param['u'])}"/> 
         </f:metadata>  
         <div class="row">
-            <div class="col-sm-12">
+            <div class="col-sm-12"> 
                 <h:panelGroup rendered="#{postsBean.getCanRecommend(buttonView.targetUsername)}">
 
                     <h2>Add a Recommendation <button id="addAnews" class="btn btn-primary btn-sm glyphicon glyphicon-plus"></button></h2>
@@ -51,7 +51,7 @@
 
                 </h:panelGroup> 
                 <ui:include src="../../commun/post/posts.xhtml" > 
-                    <ui:param name="posts" value="#{evNewsBlogsBean.recommendation(param['u'])}" />
+                    <ui:param name="posts" value="#{evNewsBlogsBean.recommendation(buttonView.targetUsername)}" />
                 </ui:include>
                 <div id="loadmore" class="loadmore">LOADING OMG</div>
                 <div class="nomoreloadmore" style="display: none;">No more Post</div>

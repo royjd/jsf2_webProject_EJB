@@ -211,7 +211,7 @@ public class PhotoServiceImpl implements PhotoService {
         UserEntity author = userService.findByID(authorId);
         if(author==null)
             return null;
-        return createPhoto(album, author, file, contextPath, display);
+        return this.createPhoto(album, author, file, contextPath, display);
     }
 
 }

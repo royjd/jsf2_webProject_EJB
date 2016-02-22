@@ -67,8 +67,9 @@ public class NavigationBean implements Serializable {
         }
         return "wall?faces-redirect=true";
     }
-
+ 
     public String wall(String username) {
+        System.err.println("Wall pad with username : "+username);
         if (username != null) {
             return "wall?faces-redirect=true&u=" + username + "&p=default";
         }

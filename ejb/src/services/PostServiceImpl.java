@@ -302,7 +302,7 @@ public class PostServiceImpl implements PostService {
      * @return
      */
     @Override
-    public Object getRecentRecommendationFromUserID(String username) {
+    public List<PostEntity> getRecentRecommendationFromUserID(String username) {
         UserEntity ue = this.userDao.findByUsername(username);
         List<Long> l = new ArrayList<>();
         l.add(ue.getId());

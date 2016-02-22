@@ -181,6 +181,9 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public boolean isFriend(String username1, String username2) {
+        if(username1 == null || username1.isEmpty() || username2 == null || username2.isEmpty()){ 
+            return false;
+        }
         if (username1.equals(username2)) {
             return false;
         }

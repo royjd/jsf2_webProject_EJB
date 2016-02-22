@@ -165,7 +165,7 @@ public interface PostService {
      * @param username
      * @return
      */
-    public Object getRecentRecommendationFromUserID(String username);
+    public List<PostEntity> getRecentRecommendationFromUserID(String username);
 
     /**
      * create a news
