@@ -38,6 +38,9 @@ public class PhotoServiceImpl implements PhotoService {
         
     @EJB
     PostService2 postService2;
+    
+    @EJB
+    UserService2 userService;
 
     /**
      *
@@ -201,6 +204,14 @@ public class PhotoServiceImpl implements PhotoService {
             Logger.getLogger(PostServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
         return post;
+    }
+
+    @Override
+    public PostEntity createPhoto(AlbumEntity album, Long authorId, Part file, String contextPath, Boolean display) {
+        UserEntity author = userService.findByID(authorId);
+        if(author==null)
+            return null;
+        return createPhoto(album, author, file, contextPath, display);
     }
 
 }

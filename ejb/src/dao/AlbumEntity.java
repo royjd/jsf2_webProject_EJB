@@ -15,9 +15,8 @@ import javax.persistence.OneToOne;
 
 /**
  *
- * @author Karl Lauret  Zakaridia Diawara
+ * @author Karl Lauret Zakaridia Diawara
  */
-
 @Entity
 @DiscriminatorValue("Album")
 public class AlbumEntity extends PostEntity {
@@ -29,7 +28,7 @@ public class AlbumEntity extends PostEntity {
     private List<MediaEntity> medias = new ArrayList<>();
 
     private String localisation;
-    
+
     /**
      * Default constructor
      */
@@ -39,7 +38,7 @@ public class AlbumEntity extends PostEntity {
 
     /**
      * Constructor
-     * 
+     *
      * @param title String the title of the Album
      * @param body String the description of the album
      * @param author UserEntity the author of the album
@@ -48,10 +47,15 @@ public class AlbumEntity extends PostEntity {
         super(title, body, author, author);
     }
 
+    public AlbumEntity(String title, String body, String localisation, UserEntity author) {
+        super(title, body, author, author);
+        this.localisation = localisation;
+    }
+
     /**
      * add a media to the media list of the album
-     * 
-     * @param me MediaEntity 
+     *
+     * @param me MediaEntity
      */
     public void addMedia(MediaEntity me) {
         this.medias.add(me);
@@ -84,6 +88,7 @@ public class AlbumEntity extends PostEntity {
 
     /**
      * Set the Album's list of media
+     *
      * @param medias the medias of the album
      */
     public void setMedias(List<MediaEntity> medias) {
@@ -99,13 +104,11 @@ public class AlbumEntity extends PostEntity {
     }
 
     /**
-     * 
+     *
      * @param localisation String
      */
     public void setLocalisation(String localisation) {
         this.localisation = localisation;
     }
-    
-    
 
 }

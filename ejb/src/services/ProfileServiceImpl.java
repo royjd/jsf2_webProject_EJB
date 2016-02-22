@@ -10,6 +10,7 @@ import dao.PhysicalEntity;
 import dao.ProfileDAO;
 import dao.ProfileEntity;
 import dao.UserEntity;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import servicesSecondaire.ExperienceService;
@@ -109,6 +110,16 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public Boolean createProfile(ProfileEntity profile) {
         return physicalService.save(profile.getPhysical()) && this.save(profile);
+    }
+
+    @Override
+    public List<ExperienceEntity> getProfileExperiences(Long profileID, int limit) {
+        return experienceService.findExperiencesForProfil(profileID,limit);
+    }
+
+    @Override
+    public List<ExperienceEntity> getProfileExperiences(Long profileID) {
+        return experienceService.findExperiencesForProfil(profileID);
     }
 
 }

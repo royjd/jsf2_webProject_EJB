@@ -8,6 +8,7 @@ package services;
 import dao.ExperienceEntity;
 import dao.ProfileEntity;
 import dao.UserEntity;
+import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -52,6 +53,10 @@ public interface ProfileService {
      * @return ExperienceEntity
      */
     public ExperienceEntity getLastExperienceByProfile(Long profileID);
+    
+    public List<ExperienceEntity> getProfileExperiences(Long profileID, int limit);
+    
+    public List<ExperienceEntity> getProfileExperiences(Long profileID);
 
     public Boolean createProfile(ProfileEntity profile);
     

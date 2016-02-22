@@ -14,6 +14,13 @@ import javax.faces.event.ActionEvent;
 public class ButtonView implements Serializable{ 
      
     private String page;
+
+    private String sousPage;
+
+    public ButtonView() {
+        this.page = "default";
+    }
+    
     private String targetUsername;
     public String getPage() {
         return page;
@@ -28,17 +35,17 @@ public class ButtonView implements Serializable{
             this.targetUsername = u;
         } 
     }
+
     public void setPage(String page) {
         this.page = page;
     }
-    
-    public void buttonAction(ActionEvent actionEvent) {
-        addMessage("Welcome to Primefaces!!");
+
+    public String getSousPage() {
+        return sousPage;
     }
-     
-    public void addMessage(String summary) {
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary,  null);
-        FacesContext.getCurrentInstance().addMessage(null, message);
+
+    public void setSousPage(String sousPage) {
+        this.sousPage = sousPage;
     }
 
     public String getTargetUsername() {

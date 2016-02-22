@@ -36,7 +36,6 @@ public class NavigationBean implements Serializable {
     /*private String pageContent;
      private String wallContent;*/
     public NavigationBean() {
-        //pageContent = "home";
     }
 
     public String index() {
@@ -70,7 +69,6 @@ public class NavigationBean implements Serializable {
     }
 
     public String wall(String username) {
-        System.err.println("Username = " + username);
         if (username != null) {
             return "wall?faces-redirect=true&u=" + username + "&p=default";
         }
@@ -103,18 +101,42 @@ public class NavigationBean implements Serializable {
         return "wall?faces-redirect=true&p=default";
     }
 
-    private String wallPageSousPage(String page, String souspage) {
-        String username = this.getUsername();
+    private String wallPage(String page, String souspage, String username) {
         if (username != null) {
             return "wall?faces-redirect=true&p=" + page + "&sp=" + souspage + "&u=" + username;
         }
-        return "wall?faces-redirect=true";
+        //return "wall?faces-redirect=true";
+        return "wall.xhtml?faces-redirect=true&p=" + page + "&sp=" + souspage + "&u=ooo";
+    }
+
+    private String wallSousPage(String page, String souspage) {
+        String username = this.getUsername();
+        return this.wallPage(page, souspage, username);
+    }
+
+    private String wallSousPage(String page, String souspage, Long id) {
+        String username = this.getUsername();
+        if (username != null) {
+            return "wall?faces-redirect=true&p=" + page + "&sp=" + souspage + "&id=" + id + "&u=" + username;
+        }
+        //return "wall?faces-redirect=true";
+        return "wall.xhtml?faces-redirect=true&p=" + page + "&sp=" + souspage + "&u=ooo";
     }
 
     private String getUsername() {
         FacesContext fc = FacesContext.getCurrentInstance();
         Map<String, String> params = fc.getExternalContext().getRequestParameterMap();
         return params.get("u");
+    }
+
+    private Long getIdFromUrl() {
+        FacesContext fc = FacesContext.getCurrentInstance();
+        Map<String, String> params = fc.getExternalContext().getRequestParameterMap();
+        String string = params.get("id");
+        if (string == null) {
+            return 0L;
+        }
+        return Long.parseLong(params.get("id"));
     }
 
     /**
@@ -128,6 +150,7 @@ public class NavigationBean implements Serializable {
 
     /**
      *
+     * @param username
      * @return
      */
     public String recommendation(String username) {
@@ -144,25 +167,58 @@ public class NavigationBean implements Serializable {
     }
 
     public String friend(String targetUsername) {
-        return this.wallPage("friend",targetUsername);
+        return this.wallPage("friend", targetUsername);
     }
 
     public String media() {
-        return this.wallPage("media", "photo");
+        String username = this.getUsername();
+        if (username != null) {
+            return "wall.xhtml?faces-redirect=true&p=media" + "&u=" + username;
+        }
+        return "wall?faces-redirect=true"; //
+    }
+
+    public String createAlbum() {
+        return this.wallSousPage("media", "createAlbum");
+    }
+    
+    public String displayAlbum() {
+        return this.wallSousPage("media", "displayAlbum");
     }
 
     public String profile() {
-        FacesContext fc = FacesContext.getCurrentInstance();
-        Map<String, String> params = fc.getExternalContext().getRequestParameterMap();
-        String file = params.get("file");
-        if (file != null && !file.isEmpty()) {
-            //    this.wallContent = wallFolder + "/profile/"+file;
-        } else {
-            //    this.wallContent = wallFolder + "/profile/viewProfile";
+        String username = this.getUsername();
+        if (username != null) {
+            return "wall.xhtml?faces-redirect=true&p=profile" + "&u=" + username;
         }
+        return "";
+    }
 
-        //this.pageContent = "wall";
-        return this.page();
+    public String profile(String username) {
+        if (username != null) {
+            return "wall.xhtml?faces-redirect=true&p=profile" + "&u=" + username;
+        }
+        return "";
+    }
+
+    public String editProfile() {
+        return this.wallSousPage("profile", "editProfile");
+    }
+
+    public String experience() {
+        return this.wallSousPage("profile", "displayExperiences");
+    }
+
+    public String experience(String username) {
+        return this.wallPage("profile", "displayExperiences", username);
+    }
+
+    public String manageExperience() {
+        Long id = this.getIdFromUrl();
+        if (id == null) {
+            id = 0L;
+        }
+        return this.wallSousPage("profile", "manageExperience", id);
     }
 
 }

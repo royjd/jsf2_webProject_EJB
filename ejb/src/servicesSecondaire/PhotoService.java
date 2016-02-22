@@ -66,4 +66,6 @@ public interface PhotoService{
 
     public PostEntity createPhoto(AlbumEntity album, UserEntity author, Part file,String contextPath,Boolean display);
     
+    public PostEntity createPhoto(AlbumEntity album, Long authorId, Part file,String contextPath,Boolean display);
+    
 }

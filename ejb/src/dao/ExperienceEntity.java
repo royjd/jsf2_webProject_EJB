@@ -55,10 +55,12 @@ public class ExperienceEntity implements Serializable {
      *
      * @param title the title of the experience
      * @param description the description of the experience
+     * @param realisationDate
      */
-    public ExperienceEntity(String title, String description) {
+    public ExperienceEntity(String title, String description, Date realisationDate) {
         this.title = title;
         this.description = description;
+        this.realisationDate = realisationDate;
     } 
     
     /**

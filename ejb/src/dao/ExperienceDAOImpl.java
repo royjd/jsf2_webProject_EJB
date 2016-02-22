@@ -77,8 +77,8 @@ public class ExperienceDAOImpl implements ExperienceDAO {
     @Override
     public List<ExperienceEntity> findExperiencesForProfil(Long profileId) {
         Query q;
-        q = this.em.createQuery("SELECT e FROM ExperienceEntity e WHERE e.profile.id = ?");
-        q.setParameter(1, profileId);
+        q = this.em.createQuery("SELECT e FROM ExperienceEntity e WHERE e.profile.id = :profileId");
+        q.setParameter("profileId", profileId);
         return q.getResultList();
     }
 
@@ -101,8 +101,8 @@ public class ExperienceDAOImpl implements ExperienceDAO {
     @Override
     public List<ExperienceEntity> findExperiencesForProfil(Long profileId, int limit) {
         Query q;
-        q = this.em.createQuery("SELECT e FROM ExperienceEntity e WHERE e.profile.id = ?");
-        q.setParameter(1, profileId);
+        q = this.em.createQuery("SELECT e FROM ExperienceEntity e WHERE e.profile.id = :profileId");
+        q.setParameter("profileId", profileId);
         q.setMaxResults(limit);
         return q.getResultList();
     }

@@ -6,15 +6,23 @@
 package controllers;
 
 import dao.ExperienceEntity;
+import dao.LocalisationEntity;
+import dao.PhysicalEntity;
 import dao.ProfileEntity;
 import dao.UserEntity;
 import java.util.Date;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ViewScoped;
 import services.ProfileService;
 import services.UserService;
+import servicesSecondaire.ExperienceService;
+import servicesSecondaire.LocalisationService;
+import servicesSecondaire.PhysicalService;
 
 /**
  *
@@ -22,14 +30,21 @@ import services.UserService;
  */
 @Named(value = "profileBean")
 @ManagedBean
-@RequestScoped
+@ViewScoped
 public class ProfileBean {
 
     //Profile
+    private String username;
+    private String email;
+    private String phone;
+    private String firstName;
+    private String lastName;
     private String city;
-    private String Country;
+    private String country;
     private String profilePicture;
     private String coverPicture;
+    private String briefDescription;
+    private Date birthDay;
 
     //Physical
     private String gender;
@@ -37,59 +52,191 @@ public class ProfileBean {
     private Double weight;
 
     //Experience
+    private Long experienceId;
     private String title;
     private String description;
     private Date realisationDate;
 
     //localisation Experience
+    private Long localisationId;
     private String experienceCity;
     private String experienceCityStat;
     private String experienceCityStreet;
     private Integer experienceCityZipcode;
 
+    private Long profileId;
+
     @EJB
     ProfileService profileService;
+
+    @EJB
+    PhysicalService PhysicalService;
+
+    @EJB
+    ExperienceService experienceService;
     
     @EJB
+    LocalisationService localisationService;
+
+    @EJB
     UserService userService;
+
+    @ManagedProperty(value = "#{navigationBean}")
+    private NavigationBean navigationBean;
 
     /**
      * Creates a new instance of ProfileBean
      */
     public ProfileBean() {
+        this.experienceId = 0L;
+        this.localisationId = 0L;
+    }
+
+    public String editProfile() {
+        Long id = SessionBean.getUserId();
+        if (id != null) {
+            UserEntity u = userService.findByID(id);
+            ProfileEntity p = u.getProfile();
+
+            // Set data about profile
+            p.setCountry(country);
+            p.setCity(city);
+            p.setLastName(lastName);
+            p.setFirstName(firstName);
+            p.setBirthDay(birthDay);
+            p.setPhone(phone);
+            p.setDescription(briefDescription);
+
+            profileService.update(p); // Update the profile
+
+            //Set data about physic
+            PhysicalEntity physic = p.getPhysical();
+            physic.setGender(gender);
+            physic.setHeight(height);
+            physic.setWeight(weight);
+
+            PhysicalService.update(physic); // Update the physic 
+
+            return navigationBean.profile(SessionBean.getUsername());
+        }
+
+        return "";// Error page  
     }
 
     public void loadProfile(Long ID) {
 
-        UserEntity u = userService.findByID(ID);
-        ProfileEntity p = u.getProfile();
-        if (p != null) {
-            //Profile
+        load(userService.findByID(ID));
+
+        //Experience
+        ExperienceEntity e = profileService.getLastExperienceByProfile(this.profileId);
+        if (e != null) {
+            this.title = e.getTitle();
+            this.description = e.getDescription();
+            this.realisationDate = e.getRealisationDate();
+
+            //localisation Experience
+            this.experienceCity = e.getLocalisation().getCity();
+        }
+    }
+
+    public void loadProfil(String username) {
+        load(userService.findByUsername(username));
+    }
+
+    private void load(UserEntity u) {
+        if (u != null) {
+            ProfileEntity p = u.getProfile();
+            this.profileId = p.getId();
             this.city = p.getCity();
-            this.Country = p.getCountry();
+            this.country = p.getCountry();
             this.profilePicture = p.getPictureProfile().getMediaType().getLink();
             this.coverPicture = p.getPictureCover().getMediaType().getLink();
-
+            this.lastName = p.getLastName();
+            this.firstName = p.getFirstName();
+            this.email = u.getEmail();
+            this.username = u.getUsername();
+            this.phone = p.getPhone();
+            this.briefDescription = p.getDescription();
             //Physical
             this.gender = p.getPhysical().getGender();
             this.height = p.getPhysical().getHeight();
             this.weight = p.getPhysical().getWeight();
+        } else {
+            //error page
+        }
 
-            //Experience
-            ExperienceEntity e = profileService.getLastExperienceByProfile(p.getId());
-            if(e!=null){
+    }
+
+    public String manageExperience() {
+        Long id = SessionBean.getUserId();
+        if (id == null) {
+            // Not connected
+        }
+        ExperienceEntity e = new ExperienceEntity(this.title, this.description, this.realisationDate);
+        LocalisationEntity l = new LocalisationEntity(this.experienceCity, this.experienceCityStat, this.experienceCityStreet, this.experienceCityZipcode);
+        e.setProfile(userService.findByID(id).getProfile()); // Set the profile 
+        if (this.experienceId == 0) {
+            e.setLocalisation(l);
+            experienceService.save(e);
+        } else {
+            e.setId(this.experienceId);
+            l.setId(this.localisationId);
+            e.setLocalisation(l);
+            experienceService.update(e);
+            localisationService.update(l);
+        }
+        return navigationBean.experience(SessionBean.getUsername());
+    }
+
+    public String removeExperience() {
+        Long id = SessionBean.getUserId();
+        if (id != null) {
+            ExperienceEntity e = experienceService.findById(this.experienceId);
+            if(e!=null)
+                experienceService.delete(e);
+            return navigationBean.experience(SessionBean.getUsername());
+        }
+        return ""; // error page
+    }
+
+    public void loadExperience(Long id) {
+        if (id != null && id != 0) {
+
+            ExperienceEntity e = experienceService.findById(id);
+            if (e != null) {
+                this.experienceId = e.getId();
                 this.title = e.getTitle();
                 this.description = e.getDescription();
                 this.realisationDate = e.getRealisationDate();
-
-                //localisation Experience
-                this.experienceCity = e.getLocalisation().getCity();
+                LocalisationEntity l = e.getLocalisation();
+                if (l != null) {
+                    this.localisationId = l.getId();
+                    this.experienceCity = l.getCity();
+                    this.experienceCityStat = l.getStat();
+                    this.experienceCityStreet = l.getStreet();
+                    this.experienceCityZipcode = l.getZipcode();
+                }
             }
-
-        } else {
-            //TODO ERROR PAGE
         }
+    }
 
+    public List<ExperienceEntity> getExperiences(String username, int limit) {
+        UserEntity u = userService.findByUsername(username);
+        if (u != null) {
+            ProfileEntity p = u.getProfile();
+            return profileService.getProfileExperiences(p.getId(), limit);
+        }
+        return null;
+
+    }
+
+    public List<ExperienceEntity> getExperiences(String username) {
+        UserEntity u = userService.findByUsername(username);
+        if (u != null) {
+            ProfileEntity p = u.getProfile();
+            return profileService.getProfileExperiences(p.getId());
+        }
+        return null;
     }
 
     public String getCity() {
@@ -101,11 +248,11 @@ public class ProfileBean {
     }
 
     public String getCountry() {
-        return Country;
+        return country;
     }
 
-    public void setCountry(String Country) {
-        this.Country = Country;
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public String getGender() {
@@ -210,6 +357,74 @@ public class ProfileBean {
 
     public void setExperienceCityZipcode(Integer experienceCityZipcode) {
         this.experienceCityZipcode = experienceCityZipcode;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getBriefDescription() {
+        return briefDescription;
+    }
+
+    public void setBriefDescription(String briefDescription) {
+        this.briefDescription = briefDescription;
+    }
+
+    public Date getBirthDay() {
+        return birthDay;
+    }
+
+    public void setBirthDay(Date birthDay) {
+        this.birthDay = birthDay;
+    }
+
+    public NavigationBean getNavigationBean() {
+        return navigationBean;
+    }
+
+    public void setNavigationBean(NavigationBean navigationBean) {
+        this.navigationBean = navigationBean;
+    }
+
+    public Long getExperienceId() {
+        return experienceId;
     }
 
 }
