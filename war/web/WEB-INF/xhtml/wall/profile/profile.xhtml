@@ -7,14 +7,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:composition>
         <f:metadata>
-            <c:choose>
-                <c:when test="${not empty param['sp']}">
-                    <f:event type="preRenderView" listener="#{buttonView.setSousPage(param['sp'])}"/>
-                </c:when>
-                <c:otherwise>
-                    <f:event type="preRenderView" listener="#{buttonView.setSousPage('')}"/>
-                </c:otherwise>
-            </c:choose>
+            <f:event type="preRenderView" listener="#{buttonView.setSousPage(param['sp'])}"/>
         </f:metadata>
         <div class = "panel panel-default">
             <div class ="panel-heading">
@@ -24,16 +17,27 @@
                 <div class="row">
                     <div class="col-sm-2">              
                         <div class="list-group padding-25">
-                            <a href="${pageContext.request.contextPath}/${username}/profile.htm" class="list-group-item">Resume </a>
-                            <a href="${pageContext.request.contextPath}/${username}/experience.htm" class="list-group-item">Experiences</a>
+                            <h:form>
+                                <h:commandLink value="Experiences" action="#{navigationBean.experience()}">
+                                    <f:param name="u" value="#{param['u']}" />
+                                </h:commandLink>
+                            </h:form>
                         </div>
                     </div>
                     <ui:fragment rendered="#{buttonView.sousPage == ''}"> 
                         <ui:include src="displayProfile.xhtml" /> 
                     </ui:fragment>
-
-                </div>
-            </div>
+                    <ui:fragment rendered="#{buttonView.sousPage == 'editProfile'}"> 
+                        <ui:include src="editProfile.xhtml" /> 
+                    </ui:fragment>
+                    <ui:fragment rendered="#{buttonView.sousPage == 'displayExperiences'}"> 
+                        <ui:include src="displayExperiences.xhtml" /> 
+                    </ui:fragment>
+                    <ui:fragment rendered="#{buttonView.sousPage == 'manageExperience'}"> 
+                        <ui:include src="manageExperience.xhtml" /> 
+                    </ui:fragment>
+                </div>                              
+            </div>              
         </div>
     </ui:composition>
 </html>

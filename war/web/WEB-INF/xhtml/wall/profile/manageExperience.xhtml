@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <div class="col-sm-7 padding-25">
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <strong>Message</strong>
+        </div>
+
+        <!-- Load the load -->
+        #{profileBean.loadExperience(param['id'])}
+
+        <c:set var="add" value="${param['id'] eq 0}" scope="request"/>
+
+        <div class="row">
+            <div class="col-sm-offset-2">
+                <h3>
+                    <c:choose>
+                        <c:when test="${add}">
+                            Add an Experience
+                        </c:when>
+                        <c:otherwise>
+                            Edit your experience
+                        </c:otherwise>
+                    </c:choose>
+
+                </h3>
+            </div>
+        </div>
+
+
+        <h:form class="form-horizontal" role="form">
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-10">
+                    <h:inputText class="form-control" value="#{profileBean.title}" pt:placeholder="Title"></h:inputText>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-10">
+                    <h:inputText class="form-control" value="#{profileBean.experienceCity}" pt:placeholder="City"></h:inputText>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-10">
+                    <h:inputText class="form-control" value="#{profileBean.experienceCityStat}" pt:placeholder="Stat"></h:inputText>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-10">
+                    <h:inputText class="form-control" value="#{profileBean.experienceCityStreet}" pt:placeholder="Street"></h:inputText>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-10">
+                    <h:inputText class="form-control" value="#{profileBean.experienceCityZipcode}" pt:placeholder="ZipCode"></h:inputText>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-10">
+                    <h:inputTextarea class="form-control" value="#{profileBean.description}" pt:placeholder="Description"></h:inputTextarea>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <h:commandButton action="#{profileBean.manageExperience()}" value="${param['id'] eq 0 ? 'Save Changes' : 'Edit experience'}" class="btn btn-success pull-right"/>
+                    <h:commandLink class="btn btn-primary" value="Cancel" action="#{navigationBean.experience()}">
+                        <f:param name="u" value="#{param['u']}" />
+                    </h:commandLink>
+                </div>
+            </div>
+        </h:form>
+    </div>
+</html>
+

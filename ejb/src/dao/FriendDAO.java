@@ -43,12 +43,14 @@ public interface FriendDAO {
 
     /**
      * confirm the friendship
+     *
      * @param fe friendEntity
      */
     public void acceptFriendship(FriendEntity fe);
-    
+
     /**
      * return the list of friends to accept
+     *
      * @param userID
      * @return list of friends to accept
      */
@@ -56,23 +58,29 @@ public interface FriendDAO {
 
     /**
      * return the list of friends for a given user id
+     *
      * @param userID
      * @return list of friends
      */
     public List<FriendEntity> findFriendsByUserID(Long userID);
 
+    public List<FriendEntity> findFriendsByUserUsername(String username);
+
     /**
      * return the friend relation between 2 users
-     * @param userID1   
-     * @param userID2 user2 
+     *
+     * @param userID1
+     * @param userID2 user2
      * @return
      */
     public FriendEntity findByFriendShip(Long userID1, Long userID2);
-    
+
+
     /**
      *
      * @param userID
      * @return
      */
+
     public List<Long> findUsersIdOfFriends(Long userID);
 }

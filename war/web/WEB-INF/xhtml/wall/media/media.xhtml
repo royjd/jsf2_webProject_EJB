@@ -8,8 +8,7 @@
     <ui:composition>
         <f:metadata>
             <c:if test="${not empty param['sp']}">
-                
-            <f:event type="preRenderView" listener="#{buttonView.setSousPage(param['sp'])}"/>
+                <f:event type="preRenderView" listener="#{buttonView.setSousPage(param['sp'])}"/>
             </c:if>
         </f:metadata>
         <div class = "panel panel-default">
@@ -19,38 +18,42 @@
             <div class="panel-content">
 
                 <div class="row">
-                    <div class="col-sm-2">              
-                        <div class="list-group padding-25">
-                            <a href="${pageContext.request.contextPath}/${username}/media/photo.htm" class="list-group-item">Photos</a> 
-                            <a href="${pageContext.request.contextPath}/${username}/media/video.htm" class="list-group-item">Videos</a>
-
-                            <a href="${pageContext.request.contextPath}/${username}/media/album.htm" class="list-group-item">Albums</a>
-
+                    <h:form>
+                        <div class="col-sm-2">              
+                            <div class="list-group padding-25">
+                                <h:commandLink  class="list-group-item" value="Albums" action="#{navigationBean.displayAlbum()}">
+                                    <f:param name="u" value="#{param['u']}"/>
+                                </h:commandLink>
+                                <a href="${pageContext.request.contextPath}/${username}/media/photo.htm" class="list-group-item">Photos</a> 
+                                <a href="${pageContext.request.contextPath}/${username}/media/video.htm" class="list-group-item">Videos</a>
+                            </div>
                         </div>
-                    </div>
-                    <div   class="col-sm-10 padding-25">
-                        <div class="pull-right">
-                            <h:form>
+                        <div   class="col-sm-10 padding-25">
+                            <div class="pull-right">
+
                                 <h:commandLink  value="+ Create album" action="#{navigationBean.createAlbum()}">
-                                    <f:param name="u" value="username"/>
+                                    <f:param name="u" value="#{param['u']}"/>
                                 </h:commandLink>
-                            </h:form>
-
-                            <h:form>
+                                | 
                                 <h:commandLink  value="+ Add photo" action="#">
-                                    <f:param name="u" value="username"/>
+                                    <f:param name="u" value="#{param['u']}"/>
                                 </h:commandLink>
-                            </h:form>                           
+                            </div>
+
+                            <div>
+                                <ui:fragment rendered="#{buttonView.sousPage == 'createAlbum'}"> 
+                                    <ui:include src="createAlbum.xhtml" /> 
+                                </ui:fragment>
+                            </div>
+
+                            <div>
+                                <ui:fragment rendered="#{buttonView.sousPage == 'displayAlbum'}"> 
+                                    <ui:include src="displayAlbum.xhtml" /> 
+                                </ui:fragment>
+                            </div>
+
                         </div>
-
-                        <div>
-                            <ui:fragment rendered="#{buttonView.sousPage == 'createAlbum'}"> 
-                                <ui:include src="createAlbum.xhtml" /> 
-                            </ui:fragment>
-                        </div>
-
-                    </div>
-
+                    </h:form>
                 </div>
 
             </div>

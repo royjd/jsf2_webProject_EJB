@@ -2,9 +2,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 
+    <!-- Load profile -->
     #{profileBean.loadProfil(param['u'])}
+
+    <!-- Search all experiences and stocks result in experiences variables  -->
+    <c:set var="experiences" value="#{profileBean.getExperiences(param['u'],3)}" scope="request" />
+
+    <!-- to know if the visiteur can modify information -->
+    <c:set var="canModify" value="#{param['u'] eq username}" scope="request"/>
 
     <div class="col-sm-7">
         <div class="alert alert-success alert-dismissible" role="alert">
@@ -14,9 +22,7 @@
             <strong>Message</strong>
         </div>
 
-
         <div class="row">
-
             <div class="col-sm-4">
                 <h4>Define profile picture<button id="addPicture" class="btn btn-primary btn-sm glyphicon glyphicon-plus"></button></h4>
                 <div id="addPictureProfilDiv" style="display:none">
@@ -41,16 +47,16 @@
             <div class="col-sm-8">
                 <h2>#{profileBean.firstName} #{profileBean.lastName}</h2>       
 
-
                 <h3>
+                    #{profileBean.gender}
                     Gender :  
 
                     <small>
                         <c:choose>
-                            <c:when test="#{empty profileBean.gender}">
+                            <c:when test="#{profileBean.gender eq ''}">
                                 Not define
                             </c:when>
-                            <c:when test="#{profileBean.gender=='M'}">
+                            <c:when test="#{profileBean.gender eq 'M'}">
                                 Male
                             </c:when>
                             <c:otherwise>
@@ -72,11 +78,11 @@
                     Live in : 
                     <small>
                         <c:choose>
-                            <c:when test="#{empty profileBean.country and empty profileBean.city}">
+                            <c:when test="#{profileBean.country eq '' and profileBean.city eq ''}">
                                 Not define
                             </c:when>
                             <c:otherwise>
-                                #{profileBean.city} #{not empty profileBean.city and not empty profileBean.country ? " / " : ""}#{profileBean.country}
+                                #{profileBean.city} #{profileBean.city ne '' and profileBean.country ne '' ? " / " : ""}#{profileBean.country}
                             </c:otherwise>
                         </c:choose>
                     </small> 
@@ -87,27 +93,100 @@
         <hr />
         <h3>Brief Description</h3>
         <p class="well">
-                #{ empty profileBean.description ? "No description" : profileBean.description}
+            #{ empty profileBean.briefDescription ? "No description" : profileBean.briefDescription}
         </p>
-    </div>
-    
-    <!-- edit if user can do it -->
-    
-    
-<div class="col-sm-3 padding-25">
 
-    <h4>Email : <small>#{profileBean.email}</small></h4>
+        <!-- Button for edition -->
 
-    <hr/>
-    <h4>@<small>#{profileBean.username}</small></h4>
-    
-    <hr />
-    <h4>Mobile Number : <small>#{ empty profileBean.phone ? "Not define" : profileBean.phone}</small></h4>
-   
-    <hr />
-    <h4>Birth day : <small>Not define</small></h4>
+        <c:if test="${canModify}">
+            <div class="pull-right">
+                <h:form>
+                    <h:commandLink  class="btn btn-info" role="button" value="Edit profile" action="#{navigationBean.editProfile()}">
+                        <f:param name="u" value="#{param['u']}"/>
+                    </h:commandLink>
+                </h:form>
+            </div>
+        </c:if>
+        
+        <div class='clearfix'></div>
 
-</div> 
+
+        <h3>Experiences</h3>
+        <hr />
+
+        <c:forEach items="${experiences}" var="experience">
+            <div class="media">
+                <div class="media-body">
+                    <h4 class="media-heading">${experience.title}</h4>
+                    ${experience.description}
+                    <p class="text-muted">
+                        <small>
+                            On ${experience.realisationDate}<br/>
+
+                            <c:if test="${not empty experience.localisation.street}">
+                                ${experience.localisation.street}<br />
+                            </c:if>
+                            ${experience.localisation.zipcode} ${experience.localisation.city} - ${experience.localisation.stat} 
+                        </small>
+                    </p>
+                </div>
+                <c:if test="${canModify}">
+                    <div class="pull-right">
+
+                        <h:form>
+                            <h:commandLink  class="btn btn-info" value="Edit" action="#{navigationBean.manageExperience()}">
+                                <f:param name="u" value="#{param['u']}"/>
+                                <f:param name="id" value="#{experience.id}"/>
+                            </h:commandLink>
+                            <h:commandLink  class="btn btn-danger" value="Remove" action="#{profileBean.removeExperience()}">
+                                <f:param name="u" value="#{param['u']}"/>
+                                <f:param name="id" value="#{experience.id}"/>
+                            </h:commandLink>
+                        </h:form>
+                    </div>
+                </c:if>
+                <div class="clearfix"></div>
+            </div>
+            <hr/>
+        </c:forEach>
+
+
+        <c:if test="${not empty experiences}">
+            <a href="${pageContext.request.contextPath}/${u.username}/experience.htm"  class="btn btn-info" role="button">See more</a>
+        </c:if>
+
+        <c:if test="${canModify}">
+            <a href="${pageContext.request.contextPath}/${u.username}/experience/manage/0.htm"  class="pull-right btn btn-success" role="button">Add experience</a>
+        </c:if>
+    </div> 
+
+
+    <div class="col-sm-3 padding-25">
+
+        <h4>Email : <small>#{profileBean.email}</small></h4>
+
+        <hr/>
+        <h4>@<small>#{profileBean.username}</small></h4>
+
+        <hr />
+        <h4>
+            Mobile Number : 
+            <small>
+                <c:choose>
+                    <c:when test="#{profileBean.phone eq ''}">
+                        Not define                        
+                    </c:when>
+                    <c:otherwise>
+                        #{profileBean.phone}
+                    </c:otherwise>
+                </c:choose>
+            </small>
+        </h4>
+
+        <hr />
+        <h4>Birth day : <small>Not define</small></h4>
+
+    </div> 
 
 </html>
 

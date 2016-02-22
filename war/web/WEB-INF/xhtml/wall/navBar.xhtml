@@ -13,20 +13,17 @@
                     <ul class="nav navbar-nav">
                         <li class="active">
                             <h:commandLink value="Wall" action="#{navigationBean.wall()}">
-                                <f:param name="u" value="#{param['u']}"/>
                                 <f:param name="u" value="#{buttonView.targetUsername}"/>
                             </h:commandLink>
                             
                         </li>
                         <li>
                             <h:commandLink value="Recommendation" action="#{navigationBean.recommendation()}">
-                                <f:param name="u" value="#{param['u']}"/>
                                 <f:param name="u" value="#{buttonView.targetUsername}"/>
                             </h:commandLink>
                         </li>
                         <li>
                             <h:commandLink value="Friends" action="#{navigationBean.friend()}">
-                                <f:param name="u" value="#{param['u']}"/>
                                 <f:param name="u" value="#{buttonView.targetUsername}"/>
                             </h:commandLink>
                         </li>

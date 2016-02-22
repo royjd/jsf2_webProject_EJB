@@ -6,11 +6,60 @@
       xmlns:p="http://primefaces.org/ui">
 
     <ui:component>
-        Friend list
-        <h:form> 
-            <h:commandLink action="#{navigationBean.home()}" value="TEST"/> 
-        </h:form>
+        <div class="container">
+            <div class="row">   
+                <div class="col-sm-12">
+                    <h1>Friend List</h1>  
+                    <ui:repeat value="#{friendBean.findFriendsOfTarget(buttonView.targetUsername)}" var="var" >  
+                        <ui:param value="#{var.user}" name="user" /> 
+                        <ui:param value="#{var.friend}" name="isFriend" />
+
+                        <div class="col-sm-4">
+
+                            <div class="panel panel-default" id="friend">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-sm-4 btn-info">
+                                            <img class="img-responsive" src="#{request.contextPath}/images/${var.user.profile.pictureProfile.mediaType.link}"/>
+
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <h3> 
+                                                <a href="${pageContext.request.contextPath}/${var.user.username}.htm"  class="" >${var.user.profile.firstName} ${var.user.profile.lastName}</a><br/>
+                                                <a href="${pageContext.request.contextPath}/${var.user.username}.htm"  class="" ><small>@${var.user.username}</small></a>
+
+                                            </h3> 
+                                            <a href="${pageContext.request.contextPath}/${var.user.username}.htm"  class="btn btn-info btn-sm pull-left" >See wall</a>
+                                            <h:form rendered="#{isFriend == true &amp;&amp; username == buttonView.targetUsername}" >     
+                                                <p:commandLink value="Remove" actionListener="#{friendBean.removeFriend(user.id,id)}" 
+                                                               action="#{navigationBean.friend(buttonView.targetUsername)}"
+                                                               onclick="$(this).hide()"  
+
+                                                               class="pull-right btn btn-sm btn-danger" >
+
+                                                </p:commandLink>   
+
+                                            </h:form>
+                                            <h:form rendered="#{isFriend != true &amp;&amp; user.id != id}" >     
+                                                <p:commandLink value="Send Request" action="#{navigationBean.friend(buttonView.targetUsername)}"  
+                                                               actionListener="#{friendBean.addFriend(user.id)}" 
+                                                               onclick="$(this).hide()" 
+
+                                                               class="btn btn-success submitComment pull-right">
+
+                                                </p:commandLink>   
+
+                                            </h:form>
+                                        </div>
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+
+                    </ui:repeat>
+                </div>
+            </div>
+        </div>
     </ui:component> 
 </html> 
 
- 

@@ -26,6 +26,7 @@ import org.primefaces.model.UploadedFile;
 import services.PostService;
 import services.UserService;
 import servicesSecondaire.PhotoService;
+import servicesSecondaire.PostService2;
 
 /**
  *
@@ -48,6 +49,9 @@ public class PostsBean implements Serializable {
 
     @EJB
     PostService postService;
+
+    @EJB
+    PostService2 postService2;
 
     @EJB
     UserService userService;
@@ -153,6 +157,10 @@ public class PostsBean implements Serializable {
         }
         return null; //
     }
+    
+    public List<PostEntity> loadAllAlbums(String username){
+        return postService2.findByUsernameAndType(username, "album");
+    }
 
     //TODO LATER WITH A REAL targetID
     public void onPostLoad(String targetUsername) {
@@ -203,6 +211,19 @@ public class PostsBean implements Serializable {
 
     public boolean getCanComment() {
         return canComment;
+    }
+
+    public boolean getCanCommentTheTarget(String targetUsername) {
+              String authorUsername = SessionBean.getUsername();
+        if (authorUsername == null) {  
+            //TODO GO TO ERROR PAGE
+            //NOT CONNECTED 
+        }
+        if(targetUsername == null || targetUsername.isEmpty())
+            targetUsername = authorUsername;
+        System.err.println(targetUsername + " targetusername");
+        return Objects.equals(authorUsername, targetUsername) || (userService.isFriend(authorUsername, targetUsername));
+    
     }
 
     public boolean getCanRecommend(String targetUsername) {

@@ -72,7 +72,7 @@ public class PostService2Impl implements servicesSecondaire.PostService2 {
 
     @Override
     public List<PostEntity> findByUsernameAndType(String username, String type) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return postDao.findByUsernameAndType(username, type);
     }
 
     @Override

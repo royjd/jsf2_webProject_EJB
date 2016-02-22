@@ -19,6 +19,7 @@ public interface UserService2 {
 
     /**
      * create the given user
+     *
      * @param u
      * @return true if it was ok else fale
      */
@@ -26,6 +27,7 @@ public interface UserService2 {
 
     /**
      * delete the given user
+     *
      * @param u
      * @return
      */
@@ -33,6 +35,7 @@ public interface UserService2 {
 
     /**
      * return the user if we find a user with the same email and password
+     *
      * @param email
      * @param password
      * @return UserEntity if found null otherwise
@@ -41,7 +44,7 @@ public interface UserService2 {
 
     /**
      * return the user matching the given userID
-     * 
+     *
      * @param userID
      * @return UserEntity
      */
@@ -49,7 +52,7 @@ public interface UserService2 {
 
     /**
      * return the user matching the given user's email
-     * 
+     *
      * @param email
      * @return UserEntity
      */
@@ -57,14 +60,15 @@ public interface UserService2 {
 
     /**
      * return the user matching the given user's username
-     * 
+     *
      * @param username
      * @return UserEntity
      */
     public UserEntity findByUsername(String username);
 
     /**
-     * add a friend 
+     * add a friend
+     *
      * @param ownerId
      * @param friendId
      * @return true if it was ok else false
@@ -72,24 +76,24 @@ public interface UserService2 {
     public boolean addFriend(Long ownerId, Long friendId);
 
     /**
-     * remove a friend 
-     * 
+     * remove a friend
+     *
      * @param friendId
      * @return true if it was ok else false
      */
     public boolean removeFriend(Long friendId);
 
     /**
-     * search  users by email or username 
-     * 
+     * search users by email or username
+     *
      * @param param
-     * @return  List
+     * @return List
      */
     public List<UserEntity> search(String param);
 
     /**
      * return friends to accept
-     * 
+     *
      * @param id
      * @return List
      */
@@ -97,7 +101,7 @@ public interface UserService2 {
 
     /**
      * accept the friend request
-     * 
+     *
      * @param acceptedBy
      * @param acceptedFrom
      * @return
@@ -106,7 +110,7 @@ public interface UserService2 {
 
     /**
      * denied a friend request
-     * 
+     *
      * @param deniedBy
      * @param deniedFrom
      * @return
@@ -114,16 +118,16 @@ public interface UserService2 {
     public boolean deniedFriendship(Long deniedBy, Long deniedFrom);
 
     /**
-     * return the friends friended by the given user'id 
-     * 
+     * return the friends friended by the given user'id
+     *
      * @param id
-     * @return  List
+     * @return List
      */
     public List<FriendEntity> getFriendsListFriendByUserID(Long id);
 
     /**
      * return the list of user who are friend with the given userID
-     * 
+     *
      * @param userID
      * @return List
      */
@@ -131,7 +135,7 @@ public interface UserService2 {
 
     /**
      * return friends to accept attached to the given user
-     * 
+     *
      * @param ue
      * @return List
      */
@@ -139,31 +143,31 @@ public interface UserService2 {
 
     /**
      * return friends of a user
-     * 
+     *
      * @param ue
      * @return List
      */
     public List<FriendEntity> getFriends(UserEntity ue);
 
-
     /**
      * test if two user are friend
-     * 
+     *
      * @param userID1
      * @param userID2
      * @return true if they are else false
      */
     public boolean isFriend(Long userID1, Long userID2);
-    
+
     /**
      * test if two user are friend
-     * 
+     *
      * @param username1
      * @param username2
      * @return true if they are else false
      */
     public boolean isFriend(String username1, String username2);
-    
+
     public boolean existUser(String email, String username);
-       
+
+    public List<FriendEntity> getFriendsListFriendByUserUsername(String username);
 }

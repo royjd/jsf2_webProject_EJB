@@ -8,7 +8,6 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://java.sun.com/jsf/facelets">
     <ui:composition>
-
         <p:outputPanel > 
             <p:dataTable id="philblog#{dataTableID}" 
                          editable="true" 
@@ -38,10 +37,9 @@
                         </div>
 
 
-
+ 
                     </p:fragment>
-
-                    <h:form id="createUserForm_form" class="form-horizontal" rendered="#{postsBean.canComment}">
+                    <h:form id="createUserForm_form" class="form-horizontal" rendered="#{postsBean.getCanCommentTheTarget(buttonView.targetUsername)}">
 
                         <div class="form-group">
                             <div class="col-sm-12">

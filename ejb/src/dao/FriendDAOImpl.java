@@ -5,7 +5,6 @@
  */
 package dao;
 
-
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -97,8 +96,8 @@ public class FriendDAOImpl implements FriendDAO {
     @Override
     public List<FriendEntity> findFriendToAcceptFromUserID(Long userID) {
         try {
-             System.err.println(userID); 
-       
+            System.err.println(userID);
+
             List<FriendEntity> friendEntities = this.em.createQuery("SELECT t FROM FriendEntity t where t.friend.id = :value1 AND t.accepted = false")
                     .setParameter("value1", userID).getResultList();
 
@@ -128,6 +127,22 @@ public class FriendDAOImpl implements FriendDAO {
         }
     }
 
+    @Override
+    public List<FriendEntity> findFriendsByUserUsername(String username) {
+        try {
+            System.err.println("findFriendsByUserUsername : username = "+username);
+            List<FriendEntity> friendEntities = this.em.createQuery("SELECT t FROM FriendEntity t where (t.friend.username = :value1 OR t.owner.username = :value1) AND t.accepted = true")
+                    .setParameter("value1", username).getResultList();
+
+            return friendEntities;
+
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+   
+
     /**
      *
      * @param acceptedBy
@@ -138,8 +153,8 @@ public class FriendDAOImpl implements FriendDAO {
     public FriendEntity findByFriendShip(Long acceptedBy, Long acceptedFrom) {
         try {
 
-            FriendEntity friendEntity = (FriendEntity) this.em.createQuery("SELECT t FROM FriendEntity t where t.accepted = true AND ((t.friend.id = :value1 AND t.owner.id = :value2) OR (t.friend.id = :value2 AND t.owner.id = :value1))")
-                    .setParameter("value1", acceptedBy).setParameter("value2", acceptedFrom).getSingleResult(); 
+            FriendEntity friendEntity = (FriendEntity) this.em.createQuery("SELECT t FROM FriendEntity t where ((t.friend.id = :value1 AND t.owner.id = :value2) OR (t.friend.id = :value2 AND t.owner.id = :value1))")
+                    .setParameter("value1", acceptedBy).setParameter("value2", acceptedFrom).getSingleResult();
 
             return friendEntity;
 
@@ -157,26 +172,22 @@ public class FriendDAOImpl implements FriendDAO {
     public List<Long> findUsersIdOfFriends(Long userID) {
         try {
 
-            List<Long> list = this.em.createQuery
-                    (" SELECT t.id "
+            List<Long> list = this.em.createQuery(" SELECT t.id "
                     + " FROM UserEntity t "
                     + " WHERE t.id IN"
                     + "("
-                    +   " SELECT fe.friend.id"
-                    +   " FROM FriendEntity fe"
-                    +   " WHERE fe.owner.id = :value1 AND fe.accepted = true"
+                    + " SELECT fe.friend.id"
+                    + " FROM FriendEntity fe"
+                    + " WHERE fe.owner.id = :value1 AND fe.accepted = true"
                     + ")"
-                    +   " OR t.id IN"
+                    + " OR t.id IN"
                     + "("
-                    +   " SELECT fe2.owner.id"
-                    +   " FROM FriendEntity fe2"
-                    +   " WHERE fe2.friend.id = :value1 AND fe2.accepted = true"
+                    + " SELECT fe2.owner.id"
+                    + " FROM FriendEntity fe2"
+                    + " WHERE fe2.friend.id = :value1 AND fe2.accepted = true"
                     + ")"
-                    )
+            )
                     .setParameter("value1", userID).getResultList();
-            
-            
-            
 
             return list;
 

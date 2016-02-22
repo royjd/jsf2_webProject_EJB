@@ -58,8 +58,8 @@
                             <div class="row">
                                 <div class="col-xs-12 "><h3>
                                         #{post.author.username}  : #{post.body}
-                                    </h3></div>
-                                <h:panelGroup rendered="#{postsBean.canComment}">
+                                    </h3></div> 
+                                <h:panelGroup rendered="#{postsBean.getCanCommentTheTarget(buttonView.targetUsername)}">
                                     <div class="col-xs-12">
                                         <button class='pull-left btn btn-xs btn-primary repplyCommentBtn' onclick="$('#replyCom#{post.id}').toggle()">Reply</button>
                                     </div>

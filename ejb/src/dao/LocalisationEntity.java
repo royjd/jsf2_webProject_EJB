@@ -37,6 +37,16 @@ public class LocalisationEntity implements Serializable {
     @OneToOne(mappedBy = "localisation")
     private ExperienceEntity experience;
 
+    public LocalisationEntity(String city, String stat, String street, Integer zipcode) {
+        this.city = city;
+        this.stat = stat;
+        this.street = street;
+        this.zipcode = zipcode;
+    }
+    
+    public LocalisationEntity(){}
+
+    
     /**
      *
      * @return

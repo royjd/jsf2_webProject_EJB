@@ -13,9 +13,10 @@
             <f:event type="preRenderView" listener="#{evNewsBlogsBean.setTargetUsername(param['u'])}"/> 
             <f:event type="preRenderView" listener="#{postsBean.onPostLoad(param['u'])}"/>
         </f:metadata>  
-        <h:panelGroup rendered="#{postsBean.getCanRecommend(buttonView.targetUsername)}">
-            <div class="row">
-                <div class="col-sm-12">
+        <div class="row">
+            <div class="col-sm-12">
+                <h:panelGroup rendered="#{postsBean.getCanRecommend(buttonView.targetUsername)}">
+
                     <h2>Add a Recommendation <button id="addAnews" class="btn btn-primary btn-sm glyphicon glyphicon-plus"></button></h2>
                     <div id="addAnewsDiv" style="display:none;">
 
@@ -47,17 +48,18 @@
                         </h:form>
 
                     </div> 
-                    <ui:include src="../../commun/post/posts.xhtml" >
-                        <ui:param name="posts" value="#{evNewsBlogsBean.recommendation(param['u'])}" />
-                    </ui:include>
-                    <div id="loadmore" class="loadmore">LOADING OMG</div>
-                    <div class="nomoreloadmore" style="display: none;">No more Post</div>
 
-                </div>
-
+                </h:panelGroup> 
+                <ui:include src="../../commun/post/posts.xhtml" > 
+                    <ui:param name="posts" value="#{evNewsBlogsBean.recommendation(param['u'])}" />
+                </ui:include>
+                <div id="loadmore" class="loadmore">LOADING OMG</div>
+                <div class="nomoreloadmore" style="display: none;">No more Post</div>
 
             </div>
-        </h:panelGroup> 
+
+
+        </div>
         <script type="text/javascript">
 
             $(document).ready(function () {
