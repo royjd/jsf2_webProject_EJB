@@ -51,7 +51,7 @@
                             <div class="form-group">        
                                 <div class="col-sm-offset-2 col-sm-10">
                                     <h:commandButton id="newsFormSubmit" value="Submit" class="btn btn-success pull-right"
-                                                     action="#{navigationBean.wall(buttonView.targetUsername)}" actionListener="#{postsBean.saveNews()}" disabled="#{facesContext.validationFailed}">
+                                                     action="#{navigationBean.wall(buttonView.targetUsername)}" actionListener="#{postsBean.saveNews(buttonView.targetUsername)}" disabled="#{facesContext.validationFailed}">
 
                                     </h:commandButton> 
                                 </div>

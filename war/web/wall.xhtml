@@ -9,6 +9,7 @@
     <h:head>
         <ui:insert name="header" >
             <ui:include src="WEB-INF/xhtml/commun/importCss.xhtml" />
+            
         </ui:insert>
         <title>Wall</title>
     </h:head>
@@ -16,6 +17,8 @@
     <h:body style="padding-top: 70px"> 
         <f:metadata>
             <f:viewAction action="#{buttonView.doSomething(param['p'], param['u'])}"/>
+            <f:viewAction action="#{buttonView.setSousPage(param['sp'])}"/>
+           
         </f:metadata>
         <div id="header">
             <ui:insert name="header" >

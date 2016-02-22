@@ -113,7 +113,23 @@ public class PostsBean implements Serializable {
         //return navigationBean.home();
 
     }
+    public void saveNews(String targetUsername) {
 
+        String authorUsername = SessionBean.getUsername();
+        if (authorUsername == null) {
+            //TODO GO TO ERROR PAGE
+            //NOT CONNECTED
+        }
+
+        /*ServletContext ctx = (ServletContext) FacesContext.getCurrentInstance()
+         .getExternalContext().getContext();
+         String realPath = ctx.getContextPath(); */ // CAUTION DO NOT USE REAL PATH 
+        //String realPath = "/home/SP2MI/zdiawara/Bureau/images";
+        // String realPath = "/home/zakaridia/Documents/Depot_Git/File/image";
+        postService.createNews(this.title, this.message, file, realPath, authorUsername, targetUsername);
+        //return navigationBean.home();
+
+    }
     public void saveRecommendation(String targetUsername) {
 
         Long authorID = SessionBean.getUserId();

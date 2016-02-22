@@ -131,6 +131,38 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public PostEntity createNews(String title, String message, Part file, String contextPath, String authorUsernale, String targetUsernale) {
+        UserEntity author = userService2.findByUsername(authorUsernale);
+        if (author == null) {
+            return null;
+        }
+        UserEntity target;
+        if (!Objects.equals(authorUsernale, targetUsernale)) {
+            target = userService2.findByUsername(targetUsernale);
+            if (target == null) {
+                return null;
+            }
+        } else {
+            target = author;
+        }
+        NewsEntity news;
+        if (file != null && !file.getName().equals("") && contextPath != null) {
+            AlbumEntity album = postService.findAlbum(author.getId(), "NewsAlbum");
+
+            PostEntity post = photoService.createPhoto(album, author, file, contextPath, false);
+            if (post != null && post.getId() != null) {
+                news = new NewsEntity(title, message, author, target, (MediaEntity) post);
+
+            } else {
+                news = new NewsEntity(title, message, author, target);
+            }
+        } else {
+            news = new NewsEntity(title, message, author, target);
+        }
+        return postService.createPost(news, author, target, true);
+    }
+
+    @Override
     public PostEntity createNews(String title, String message, Part file, String contextPath, Long authorID, Long targetID) {
         //if username go on wall of the use matching the username
         //target is also the user matching the username        if (pathVariables.containsKey("username")) {
@@ -201,15 +233,16 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public AlbumEntity createAlbum(String title, String description, String localisation, Long authorId) {
-        
+
         UserEntity author = userService2.findByID(authorId);
-        
-        if(author==null)
+
+        if (author == null) {
             return null;
-        
+        }
+
         AlbumEntity album = new AlbumEntity(title, description, localisation, author);
         PostEntity p = postService.createPost(album, author, author, true);
-        if(p!=null){
+        if (p != null) {
             album.setId(p.getId());
             return album;
         }
@@ -349,7 +382,7 @@ public class PostServiceImpl implements PostService {
         if (target == null) {
             return null;
         }
-       
+
         RecomendationEntity re = new RecomendationEntity(title, message);
         return postService.createPost(re, author, target, true);
 
