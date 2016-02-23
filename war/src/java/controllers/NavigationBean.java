@@ -54,11 +54,10 @@ public class NavigationBean implements Serializable {
     }
 
     public String home() {
-        System.err.println("HOME");
-        //this.pageContent = "home";
         return "home?faces-redirect=true";
     }
 
+<<<<<<< HEAD
     public String wall() {
         String username = this.getUsername();
         System.err.println("Username = " + username);
@@ -88,23 +87,17 @@ public class NavigationBean implements Serializable {
 
     public String wall(String username) {
         System.err.println("Wall pad with username : " + username);
+=======
+    public String wall(String username) {
+>>>>>>> eca1f18a4131c2e2fb09bfdd5ad4e1f570cbfe91
         if (username != null) {
             return "wall?faces-redirect=true&u=" + username + "&p=default";
         }
         return "wall?faces-redirect=true";
     }
 
-    /**
-     *
-     * @param page
-     * @return
-     */
-    private String wallPage(String page) {
-        String username = this.getUsername();
-        if (username != null) {
-            return "wall?faces-redirect=true&p=" + page + "&u=" + username;
-        }
-        return "wall?faces-redirect=true&p=default";
+    public String wall() {
+        return this.wall(this.getUsername());
     }
 
     /**
@@ -119,27 +112,39 @@ public class NavigationBean implements Serializable {
         }
         return "wall?faces-redirect=true&p=default";
     }
+    
+    /**
+     *
+     * @param page
+     * @return
+     */
+    private String wallPage(String page) {
+        return this.wallPage(page, this.getUsername());
+    }
+
+    private String wallSousPage(String page, String souspage) {
+        return this.wallPage(page, souspage, this.getUsername());
+    }
 
     private String wallPage(String page, String souspage, String username) {
         if (username != null) {
             return "wall?faces-redirect=true&p=" + page + "&sp=" + souspage + "&u=" + username;
         }
-        //return "wall?faces-redirect=true";
-        return "wall.xhtml?faces-redirect=true&p=" + page + "&sp=" + souspage + "&u=ooo";
+        return "wall.xhtml?faces-redirect=true";  // Or error page 
     }
 
-    private String wallSousPage(String page, String souspage) {
-        String username = this.getUsername();
-        return this.wallPage(page, souspage, username);
-    }
 
     private String wallSousPage(String page, String souspage, Long id) {
         String username = this.getUsername();
+        return this.wallSousPage(page, souspage, username, id);
+    }
+
+    private String wallSousPage(String page, String souspage, String username, Long id) {
         if (username != null) {
             return "wall?faces-redirect=true&p=" + page + "&sp=" + souspage + "&id=" + id + "&u=" + username;
         }
         //return "wall?faces-redirect=true";
-        return "wall.xhtml?faces-redirect=true&p=" + page + "&sp=" + souspage + "&u=ooo";
+        return "wall.xhtml?faces-redirect=true"; // Error page 
     }
 
     private String getUsername() {
@@ -163,7 +168,6 @@ public class NavigationBean implements Serializable {
      * @return
      */
     public String recommendation() {
-        //this.pageContent = "walgFolder + "/recommendation/display";
         return this.wallPage("recommendation");
     }
 
@@ -173,7 +177,6 @@ public class NavigationBean implements Serializable {
      * @return
      */
     public String recommendation(String username) {
-        //this.pageContent = "walgFolder + "/recommendation/display";
         return this.wallPage("recommendation", username);
     }
 
@@ -190,21 +193,38 @@ public class NavigationBean implements Serializable {
     }
 
     public String media() {
-        String username = this.getUsername();
-        if (username != null) {
-            return "wall.xhtml?faces-redirect=true&p=media" + "&u=" + username;
-        }
-        return "wall?faces-redirect=true"; //
+        return this.wallPage("media", this.getUsername());
     }
 
+    public String album() {
+        return this.wallSousPage("media", "album");
+    }
+    
+    public String album(String username) {
+        return this.wallPage("media", "album" , username);
+    }
+        
     public String createAlbum() {
         return this.wallSousPage("media", "createAlbum");
     }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> eca1f18a4131c2e2fb09bfdd5ad4e1f570cbfe91
     public String displayAlbum() {
-        return this.wallSousPage("media", "displayAlbum");
+        return this.wallSousPage("media", "displayAlbum",this.getIdFromUrl());
+    }
+    
+    public String displayAlbum(String username, Long id){
+        return this.wallSousPage("media", "displayAlbum", username, id);
     }
 
+    public String addPhoto(){ 
+        System.err.println(this.getUsername()+" ++++ "+this.getIdFromUrl());
+        return this.wallSousPage("media", "addPhoto", this.getIdFromUrl());
+    }
+       
     public String profile() {
         String username = this.getUsername();
         if (username != null) {
@@ -233,11 +253,7 @@ public class NavigationBean implements Serializable {
     }
 
     public String manageExperience() {
-        Long id = this.getIdFromUrl();
-        if (id == null) {
-            id = 0L;
-        }
-        return this.wallSousPage("profile", "manageExperience", id);
+        return this.wallSousPage("profile", "manageExperience", this.getIdFromUrl());
     }
 
 }

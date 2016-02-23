@@ -44,7 +44,6 @@ public class PostsBean implements Serializable {
     private Long targetID;
     private boolean canComment;
     private String localisation;
-
     private List<UploadedFile> uploadedFiles;
 
     @EJB
@@ -64,8 +63,8 @@ public class PostsBean implements Serializable {
 
     private PostEntity postComment;
 
-    //private static final String realPath = "/home/zakaridia/Documents/Depot_Git/File/image";
-    private static final String realPath = "C:/Users/Karl Lauret/AppData/Roaming/NetBeans/8.1/config/GF_4.1.1/domain1/applications/images";
+    private static final String realPath = "/home/zakaridia/Documents/Depot_Git/File/image";
+    //private static final String realPath = "C:/Users/Karl Lauret/AppData/Roaming/NetBeans/8.1/config/GF_4.1.1/domain1/applications/images";
 
     /**
      * Creates a new instance of PostsBean
@@ -169,15 +168,27 @@ public class PostsBean implements Serializable {
         if (this.file != null && !this.file.getName().equals("") && realPath != null) {
             AlbumEntity album = postService.createAlbum(title, message, localisation, authorId);
             PostEntity post = photoService.createPhoto(album, authorId, file, realPath, true);
-            return navigationBean.home(); // change it
+            return navigationBean.album(SessionBean.getUsername()); // change it
         }
-        return null; //
+        //return null; //
+        return navigationBean.album(SessionBean.getUsername());
     }
 
     public List<PostEntity> loadAllAlbums(String username) {
         return postService2.findByUsernameAndType(username, "album");
     }
+    
+    public PostEntity loadAlbum(String username,Long id){
+        return postService2.findAlbum(username,id);
+    }
 
+    public String addPhotoToAlbum(){
+        if(SessionBean.isConnect()){
+            postService.addPhotoToAlbum(SessionBean.getUsername(), file, realPath, targetID);
+            return navigationBean.displayAlbum(SessionBean.getUsername(), this.targetID);
+        }
+        return ""; // Error page
+    }
     //TODO LATER WITH A REAL targetID
     public void onPostLoad(String targetUsername) {
         String authorUsername = SessionBean.getUsername();

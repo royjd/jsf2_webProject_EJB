@@ -249,6 +249,20 @@ public class PostServiceImpl implements PostService {
         return null;
     }
 
+    @Override
+    public boolean addPhotoToAlbum(String username, Part file, String path, Long albumId) {
+        UserEntity author = userService2.findByUsername(username);
+        if(author==null)
+            return false;
+        PostEntity post = postService.findAlbum(username, albumId);
+        if(post==null)
+            return false;
+        AlbumEntity a = new AlbumEntity();
+        a.setId(post.getId());
+        a.setTitle(post.getTitle());
+        return photoService.createPhoto(a, author, file, path, true) != null;
+    }
+    
     /**
      *
      * @param username

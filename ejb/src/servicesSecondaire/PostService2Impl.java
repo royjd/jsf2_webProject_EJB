@@ -44,7 +44,7 @@ public class PostService2Impl implements servicesSecondaire.PostService2 {
     UserDAO userDao;
 
     @Override
-    public PostEntity createPost(PostEntity p, UserEntity ue, UserEntity target,Boolean display) {
+    public PostEntity createPost(PostEntity p, UserEntity ue, UserEntity target, Boolean display) {
         Calendar c = Calendar.getInstance();
         p.setCreatedDate(new Date(c.getTimeInMillis()));
         p.setCreatedTime(new Time(c.getTimeInMillis()));
@@ -77,7 +77,7 @@ public class PostService2Impl implements servicesSecondaire.PostService2 {
 
     @Override
     public List<PostEntity> getRecentPostFromUsersID(List<Long> l) {
-       return postDao.getRecentPostFromUsersID(l);
+        return postDao.getRecentPostFromUsersID(l);
     }
 
     @Override
@@ -87,7 +87,7 @@ public class PostService2Impl implements servicesSecondaire.PostService2 {
 
     @Override
     public List<PostEntity> getNextRecommendationFromUsersID(List<Long> l, Long postID) {
-        return postDao.getNextPostFromUsersID(l, postID); 
+        return postDao.getNextPostFromUsersID(l, postID);
     }
 
     @Override
@@ -97,11 +97,16 @@ public class PostService2Impl implements servicesSecondaire.PostService2 {
 
     @Override
     public AlbumEntity findAlbum(Long id, String type) {
-            PostEntity post = postDao.findAlbum(id, type);
-            AlbumEntity album = new AlbumEntity();
-            album.setId(post.getId());
-            album.setTitle(type);
-            return album;
+        PostEntity post = postDao.findAlbum(id, type);
+        AlbumEntity album = new AlbumEntity();
+        album.setId(post.getId());
+        album.setTitle(type);
+        return album;
+    }
+
+    @Override
+    public PostEntity findAlbum(String username, Long albumId) {
+        return postDao.findAlbum(username, albumId);
     }
 
     @Override

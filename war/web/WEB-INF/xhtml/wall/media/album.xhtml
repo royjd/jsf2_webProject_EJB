@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    Display album
+    <ui:component>
+        <!-- Search all experiences and stocks result in experiences variables  -->
+        <c:set var="albums" value="#{postsBean.loadAllAlbums(param['u'])}" scope="request" />
+
+        <c:set var="canModify" value="#{param['u'] eq username}" scope="request"/>
+
+        <!-- Parcours la liste d'album-->
+        <ui:repeat value="#{albums}" var="album" varStatus="loop">
+
+            <div class="col-xs-12 col-sm-6 col-md-3">
+                <h:form>
+                    <h:commandLink action="#{navigationBean.displayAlbum(param['u'],album.id)}">
+                        <ui:include src="../../commun/displayAlbum.xhtml" >   
+                            <ui:param name="link" value="#{album.cover.mediaType.link}" />
+                            <ui:param name="title" value="#{album.title}" />
+                            <ui:param name="body" value="#{album.body}" />
+                            <ui:param name="id" value="#{album.id}" />
+                        </ui:include> 
+                    </h:commandLink>
+                </h:form>
+            </div>
+
+        </ui:repeat> 
+
+    </ui:component>
+
+</html>
+
