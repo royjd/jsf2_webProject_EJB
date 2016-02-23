@@ -44,7 +44,6 @@ public class PostsBean implements Serializable {
     private Long targetID;
     private boolean canComment;
     private String localisation;
-
     private List<UploadedFile> uploadedFiles;
 
     @EJB
@@ -113,7 +112,23 @@ public class PostsBean implements Serializable {
         //return navigationBean.home();
 
     }
+    public void saveNews(String targetUsername) {
 
+        String authorUsername = SessionBean.getUsername();
+        if (authorUsername == null) {
+            //TODO GO TO ERROR PAGE
+            //NOT CONNECTED
+        }
+
+        /*ServletContext ctx = (ServletContext) FacesContext.getCurrentInstance()
+         .getExternalContext().getContext();
+         String realPath = ctx.getContextPath(); */ // CAUTION DO NOT USE REAL PATH 
+        //String realPath = "/home/SP2MI/zdiawara/Bureau/images";
+        // String realPath = "/home/zakaridia/Documents/Depot_Git/File/image";
+        postService.createNews(this.title, this.message, file, realPath, authorUsername, targetUsername);
+        //return navigationBean.home();
+
+    }
     public void saveRecommendation(String targetUsername) {
 
         Long authorID = SessionBean.getUserId();
@@ -153,16 +168,27 @@ public class PostsBean implements Serializable {
         if (this.file != null && !this.file.getName().equals("") && realPath != null) {
             AlbumEntity album = postService.createAlbum(title, message, localisation, authorId);
             PostEntity post = photoService.createPhoto(album, authorId, file, realPath, true);
-            return navigationBean.displayAlbum(); // change it
+            return navigationBean.album(SessionBean.getUsername()); // change it
         }
         //return null; //
-        return navigationBean.displayAlbum(SessionBean.getUsername());
+        return navigationBean.album(SessionBean.getUsername());
     }
 
     public List<PostEntity> loadAllAlbums(String username) {
         return postService2.findByUsernameAndType(username, "album");
     }
+    
+    public PostEntity loadAlbum(String username,Long id){
+        return postService2.findAlbum(username,id);
+    }
 
+    public String addPhotoToAlbum(){
+        if(SessionBean.isConnect()){
+            postService.addPhotoToAlbum(SessionBean.getUsername(), file, realPath, targetID);
+            return navigationBean.displayAlbum(SessionBean.getUsername(), this.targetID);
+        }
+        return ""; // Error page
+    }
     //TODO LATER WITH A REAL targetID
     public void onPostLoad(String targetUsername) {
         String authorUsername = SessionBean.getUsername();

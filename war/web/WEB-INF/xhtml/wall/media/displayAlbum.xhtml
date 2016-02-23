@@ -2,17 +2,52 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-    Display album
-    
-    <!-- Search all experiences and stocks result in experiences variables  -->
-    <c:set var="albums" value="#{postsBean.loadAllAlbums(param['u'])}" scope="request" />
+    <!-- Charge l'album -->
+    <c:set var="album" value="#{postsBean.loadAlbum(param['u'], param['id'])}" scope="request" />
 
-    <c:set var="canModify" value="#{param['u'] eq username}" scope="request"/>
-    
-    #{albums}
-    
-    
+    ${album}
+    <c:if test="${not empty album}">
+
+        <!-- to know if the visiteur can modify information -->
+        <c:set var="canModify" value="#{param['u'] eq username}" scope="request"/>
+
+        <c:if test="${canModify}">
+            <h:form>
+                <h:commandLink action="#{navigationBean.addPhoto()}">
+                    <f:param name="id" value="#{album.id}"/>
+                    <f:param name="u" value="#{username}"/> 
+                    Add photo
+                    <c:choose>
+                        <c:when test="${empty album.title}">
+                            to your album
+                        </c:when> 
+                        <c:otherwise>
+                            to ${album.title} 
+                        </c:otherwise>
+                    </c:choose>
+                </h:commandLink>
+            </h:form>
+        </c:if>
+
+        <!-- Parcours la liste des madias de l'album -->
+        <ui:repeat value="#{album.medias}" var="photo" varStatus="loop">
+
+            <div class="col-xs-12 col-sm-6 col-md-3">
+                <h:form>
+                    <ui:include src="../../commun/displayPhoto.xhtml" >   
+                        <ui:param name="link" value="#{photo.mediaType.link}" />
+                        <ui:param name="title" value="#{photo.title}" />
+                        <ui:param name="body" value="#{photo.body}" />
+                    </ui:include> 
+                </h:form>
+            </div>
+
+        </ui:repeat> 
+    </c:if>
+
 </html>
 

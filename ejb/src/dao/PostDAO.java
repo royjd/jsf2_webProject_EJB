@@ -50,6 +50,8 @@ public interface PostDAO {
      */
     public PostEntity findAlbum(Long userId , String type);
     
+    public PostEntity findAlbum(String username, Long albumId);
+    
     /**
      * return the album matching the given album id
      * 

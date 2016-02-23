@@ -104,6 +104,7 @@ public interface PostService {
 
     public AlbumEntity createAlbum(String title, String description, String localisation, Long authorId);
     
+    public boolean addPhotoToAlbum(String username, Part file, String path, Long albumId);
     /**
      * return the posts attached to the user and matching the type given
      *
@@ -182,6 +183,8 @@ public interface PostService {
     public PostEntity findByID(Long postID);
 
     public PostEntity createRecommendation(String title, String message, Long authorID, String targetUsername);
+
+    public PostEntity createNews(String title, String message, Part file, String realPath, String authorUsername, String targetUsername);
 
 
 }

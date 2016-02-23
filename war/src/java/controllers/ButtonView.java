@@ -35,7 +35,9 @@ public class ButtonView implements Serializable{
             this.targetUsername = u;
         } 
     }
-
+    public void doSomething2(String sousPage){
+       this.sousPage = sousPage; 
+    }
     public void setPage(String page) {
         this.page = page;
     }

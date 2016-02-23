@@ -44,6 +44,8 @@ public interface PostService2 {
     public AlbumEntity findAlbum(Long id, String type);
 
     public PostEntity findAlbum(Long id, Long albumId);
+    
+    public PostEntity findAlbum(String username, Long albumId);
 
     public List<PostEntity> findByUsernameAndType(String username, String type);
 

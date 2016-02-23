@@ -268,4 +268,16 @@ public class PostDAOImpl implements PostDAO {
             return null;
         }
     }
+
+    @Override
+    public PostEntity findAlbum(String username, Long albumId) {
+        try {
+            Query q = this.em.createQuery("SELECT p FROM PostEntity p where p.author.username = :username and p.id =:albumId");
+            q.setParameter("username", username);
+            q.setParameter("albumId", albumId);
+            return (PostEntity) q.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
 }
