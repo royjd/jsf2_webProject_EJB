@@ -67,9 +67,27 @@ public class NavigationBean implements Serializable {
         }
         return "wall?faces-redirect=true";
     }
- 
+
+    public String message() {
+        String username = this.getUsername();
+        System.err.println("Username = " + username);
+        if (username != null) {
+            return "message?faces-redirect=true&u=" + username + "&p=default";
+        }
+        return "message?faces-redirect=true";
+    }
+
+    public String notification() {
+        String username = this.getUsername();
+        System.err.println("Username = " + username);
+        if (username != null) {
+            return "notification?faces-redirect=true&u=" + username + "&p=default";
+        }
+        return "notification?faces-redirect=true";
+    }
+
     public String wall(String username) {
-        System.err.println("Wall pad with username : "+username);
+        System.err.println("Wall pad with username : " + username);
         if (username != null) {
             return "wall?faces-redirect=true&u=" + username + "&p=default";
         }
@@ -182,7 +200,7 @@ public class NavigationBean implements Serializable {
     public String createAlbum() {
         return this.wallSousPage("media", "createAlbum");
     }
-    
+
     public String displayAlbum() {
         return this.wallSousPage("media", "displayAlbum");
     }

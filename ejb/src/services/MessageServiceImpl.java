@@ -5,6 +5,7 @@
  */
 package services;
 
+import commun.GroupListNewMessages;
 import dao.FriendEntity;
 import dao.MessageDAO;
 import dao.MessageEntity;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
@@ -112,10 +114,10 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public void messageRead(Long messageID) {
         MessageUserEntity mue = mgUserDao.findByID(messageID);
-        
-            mue.setNewMessage(false);
-            mgUserDao.update(mue);
-        
+
+        mue.setNewMessage(false);
+        mgUserDao.update(mue);
+
     }
 
     /**
@@ -142,7 +144,6 @@ public class MessageServiceImpl implements MessageService {
         MessageDisplayList mdl = new MessageDisplayList(hmmue, newMessages);
         return mdl;
     }*/
-
     /**
      *
      * @param userID
@@ -171,7 +172,6 @@ public class MessageServiceImpl implements MessageService {
         MessageDisplayList mdl = new MessageDisplayList(hmmue, newMessages, me);
         return mdl;
     }*/
-
     /**
      *
      * @param m
@@ -226,12 +226,56 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public NotificationEntity addNotification(PostEntity p, String subject, UserEntity ue) {
 
-        if (ue != null && ue.getId() != null ) {
+        if (ue != null && ue.getId() != null) {
             MessageEntity me = new NotificationEntity(p, "notif", ue);
             me = mgDao.save(me);
             return (NotificationEntity) me;
         }
         return null;
+    }
+
+    @Override
+    public void sendToMails(String message, String osef, Long userId, List<String> targets) {
+        MessageEntity m = this.add(message, osef, userId);
+        this.sendToMails(m, targets);
+    }
+
+    @Override
+    public List<GroupListNewMessages> findGroupMessageByUserID(Long userID) {
+        List<GroupListNewMessages> result = new ArrayList<>(); 
+        for (MessageUserEntity mue : this.mgUserDao.findAllMessageRByUserID(userID)) {
+            boolean found = false;
+            for (GroupListNewMessages glm : result) {
+                //System.err.println(mue.getMessage().getGroupName());
+
+                if (glm.getGroupName().equals(mue.getMessage().getGroupName())) {
+                    if (mue.isNewMessage()) {
+                        glm.setNbNewsMessages(glm.getNbNewsMessages() + 1);
+                    }
+                   
+                    found = true;
+                }
+
+            }
+            if (!found || result.isEmpty()) {
+                int x = 0;
+                if (mue.isNewMessage()) {
+                    x++;
+                }
+                GroupListNewMessages tmp = new GroupListNewMessages(mue.getMessage().getGroupName(), x);
+                for(MessageUserEntity tmpMue : mue.getMessage().getTarget()){
+                    tmp.addUsername(tmpMue.getUser().getUsername());
+                } 
+                result.add(tmp);
+
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public List<MessageUserEntity> findMessageUserByGroupName(Long userID,String groupName) {
+        return mgUserDao.findNewMessageForUserAndGroupMessage(userID, groupName);
     }
 
 }
