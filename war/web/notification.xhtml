@@ -3,18 +3,95 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:c="http://java.sun.com/jsp/jstl/core"
+
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
 
     <h:head>
         <ui:insert name="header" >
             <ui:include src="WEB-INF/xhtml/commun/importCss.xhtml" />
-            
+
         </ui:insert>
-        <title>Notification</title>
+        <title>Message</title>
     </h:head>
     <h:body style="padding-top: 70px"> 
-        notification
+        <f:metadata>
+            <f:viewAction action="#{buttonView.doSomething(param['p'], param['u'])}"/>
+            <f:viewAction action="#{buttonView.setSousPage(param['sp'])}"/>
+            <f:viewAction  action="#{evNewsBlogsBean.setTargetUsername(param['u'])}"/> 
+            <f:viewAction   action="#{postsBean.onPostLoad(param['u'])}"/> 
+
+        </f:metadata>
+        <div id="header">
+            <ui:insert name="header" >
+                <ui:include src="WEB-INF/xhtml/commun/header.xhtml" />
+            </ui:insert>
+        </div>
+        <div class="container">
+            <div class="row "> 
+                <div class="col-sm-4">
+                    <h:form >
+                        <p:dataTable id="notification" 
+                                     editable="true" 
+                                     var="notif" value="#{notificationBean.notifications}" 
+                                     rowIndexVar="rowIndex" 
+                                     selectionMode="single" selection="#{notificationBean.selectedNotificatin}"
+                                     rowKey="#{notif.id}"
+                                     > 
+                            <p:ajax event="rowSelect" listener="#{notificationBean.onRowSelect}"  update=":postDisplay notification" /> 
+                            <p:column  headerText="Notifications" width="80%">
+
+                                #{notif.message.post.getClass().simpleName} -- 
+                                #{notif.message.post.body} -- 
+                                to:#{notif.message.post.target.username} -- 
+                                by: #{notif.message.post.author.username} --
+                            </p:column>
+                            <p:column width="20%" headerText="!" >
+                                <p:outputPanel class="bg-primary" rendered="#{!notif.newMessage}"> 
+                                    <div class="row bg-success" >_</div>
+                                </p:outputPanel>
+                                <p:outputPanel class="bg-success" rendered="#{notif.newMessage}">
+                                    <div class="row bg-danger" >_</div>
+                                </p:outputPanel>
+
+                            </p:column>
+                        </p:dataTable>
+                    </h:form>
+                </div>
+                <div class="col-sm-8 sidebar-outer" > 
+                    <div id="postDisplayPanel" class="fixed" >
+                        <p:panel id="postDisplay">  
+                            <ui:include  src="WEB-INF/xhtml/commun/post/posts.xhtml" >  
+                                <ui:param name="posts" value="#{evNewsBlogsBean.notification(buttonView.targetUsername, notificationBean.postOfNotification.id)}" />
+                                <ui:param name="dataTableID" value="#{notificationBean.postOfNotification.id}"/>
+                            </ui:include>
+                        </p:panel>
+                    </div>
+                </div>
+                <style> 
+                    .fixed {  position: fixed; overflow: auto; height: 100vh } 
+                    .sidebar-outer {
+                        position: relative;
+                    }
+                </style>
+                <script type="text/javascript">
+                    /*
+                     $(document).ready(function () {
+                     $('#postDisplayPanel').affix({
+                     offset: { 
+                     top: 100,
+                     right:500,
+                     bottom: function () {
+                     return (this.bottom) 
+                     }
+                     }
+                     })
+                     });*/
+                </script>      
+            </div>
+        </div>
     </h:body>
 </html>
 

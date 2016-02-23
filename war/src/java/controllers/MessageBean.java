@@ -14,6 +14,8 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
+import org.primefaces.context.RequestContext;
+import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.SelectEvent;
 import services.MessageService;
 import servicesSecondaire.UserService2;
@@ -27,7 +29,7 @@ import servicesSecondaire.UserService2;
 @ViewScoped
 public class MessageBean implements Serializable {
 
-    private String selectedGroupName;
+    private GroupListNewMessages selectedGroupName;
 
     @EJB
     UserService2 userService;
@@ -42,29 +44,40 @@ public class MessageBean implements Serializable {
     }
 
     @PostConstruct
-    public void init(){
-        
+    public void init() {
+
     }
-    
+
     public List<GroupListNewMessages> getGroupMessage() {
+       
         return this.messageService.findGroupMessageByUserID(SessionBean.getUserId());
+
     }
 
     public List<MessageUserEntity> getMessageForGroup() {
         System.err.println("GETMESSAGES : " + this.selectedGroupName);
         //TODO NEED TO MARK THEN AS READ
-        return messageService.findMessageUserByGroupName(SessionBean.getUserId(), this.selectedGroupName);
+        if(this.selectedGroupName!=null){
+            this.messageService.messageRead(SessionBean.getUserId(), this.selectedGroupName.getGroupName());
+            return messageService.findMessageUserByGroupName(SessionBean.getUserId(), this.selectedGroupName.getGroupName());
+        }else{
+            return null; 
+        }
     }
 
-    public String getSelectedGroupName() {
+    public GroupListNewMessages getSelectedGroupName() {
         return selectedGroupName;
     }
 
-    public void setSelectedGroupName(String selectedGroupName) {
+    public void setSelectedGroupName(GroupListNewMessages selectedGroupName) {
         this.selectedGroupName = selectedGroupName;
     }
 
     public void onRowSelect(SelectEvent event) {
-        this.selectedGroupName = ((GroupListNewMessages) event.getObject()).getGroupName();
+        GroupListNewMessages tmp = ((GroupListNewMessages) event.getObject());
+        tmp.setNbNewsMessages(0);
+        this.selectedGroupName = tmp;
+
     }
+
 }

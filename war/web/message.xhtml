@@ -84,14 +84,14 @@
                                  rowIndexVar="rowIndex" 
                                  selectionMode="single" selection="#{messageBean.selectedGroupName}"
                                  rowKey="#{group.groupName}"
-                                 >
-                        <p:ajax event="rowSelect" listener="#{messageBean.onRowSelect}" update=":messages" />
+                                 > 
+                        <p:ajax event="rowSelect" listener="#{messageBean.onRowSelect}"  update=":messages groupMessage" /> 
                         <p:column  headerText="Participants">
 
 
                             <ui:repeat value="#{group.usernames}" var="groupUser">
                                 @#{groupUser}
-                            </ui:repeat> 
+                            </ui:repeat>  
                         </p:column>
                         <p:column width="20" headerText="!">
                             #{group.nbNewsMessages}

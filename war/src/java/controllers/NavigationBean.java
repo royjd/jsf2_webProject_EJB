@@ -57,15 +57,6 @@ public class NavigationBean implements Serializable {
         return "home?faces-redirect=true";
     }
 
-<<<<<<< HEAD
-    public String wall() {
-        String username = this.getUsername();
-        System.err.println("Username = " + username);
-        if (username != null) {
-            return "wall?faces-redirect=true&u=" + username + "&p=default";
-        }
-        return "wall?faces-redirect=true";
-    }
 
     public String message() {
         String username = this.getUsername();
@@ -80,16 +71,13 @@ public class NavigationBean implements Serializable {
         String username = this.getUsername();
         System.err.println("Username = " + username);
         if (username != null) {
-            return "notification?faces-redirect=true&u=" + username + "&p=default";
+            return "notification?faces-redirect=true&u=" + username + "&p=notification";
         }
         return "notification?faces-redirect=true";
     }
 
     public String wall(String username) {
         System.err.println("Wall pad with username : " + username);
-=======
-    public String wall(String username) {
->>>>>>> eca1f18a4131c2e2fb09bfdd5ad4e1f570cbfe91
         if (username != null) {
             return "wall?faces-redirect=true&u=" + username + "&p=default";
         }
@@ -208,10 +196,6 @@ public class NavigationBean implements Serializable {
         return this.wallSousPage("media", "createAlbum");
     }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> eca1f18a4131c2e2fb09bfdd5ad4e1f570cbfe91
     public String displayAlbum() {
         return this.wallSousPage("media", "displayAlbum",this.getIdFromUrl());
     }

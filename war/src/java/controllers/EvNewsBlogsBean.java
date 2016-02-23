@@ -7,6 +7,7 @@ package controllers;
 
 import dao.CommentEntity;
 import dao.PostEntity;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -85,40 +86,38 @@ public class EvNewsBlogsBean implements java.io.Serializable {
 
     }
 
+    public List<PostEntity> notification(String username, Long postID) {
+        System.err.println("recommendation => Username = " + username + " , postID => " + postID);
+
+            PostEntity tmp = postService.findByID(postID);
+            if (tmp != null) {
+                list = new ArrayList<>();
+                list.add(tmp); 
+
+            }
+            return list; 
+
+    }
+
     private List<PostEntity> getList(String page, String username) {
         System.err.println("getList username =" + username + " page : " + page);
         if (username == null) {
             return postService.getRecentPostFromFriendAndMe(SessionBean.getUserId());
         } else if (page.equals("default") && !username.isEmpty()) {
             return postService.getRecentPostFromMe(username);
-        } else if(page.equals("recommendation")){ 
+        } else if (page.equals("recommendation")) {
             return postService.getRecentRecommendationFromUserID(username);
-        } else{
+        } else {
             return null;
         }
     }
 
-    public TreeNode getTree(List<CommentEntity> l, TreeNode root) {
-        if (root == null) {
-            root = new DefaultTreeNode("Root", null);
-        }
-        if (l == null || l.isEmpty()) {
-            return root;
-        }
-        for (PostEntity li : l) {
-            root.getChildren().add(new DefaultTreeNode(this.getTree(li.getComments(), new DefaultTreeNode(li, root))));
-
-        }
-        return root;
-
-    }
-
     public void loadMore(String page, String username) {
         System.err.println("loadMore");
-        List<PostEntity> listtmp;
+        List<PostEntity> listtmp = new ArrayList<>();
         this.targetUsername = username;
         System.err.println("loadMore username + " + this.targetUsername);
-        if (this.list.size() >= 5) { 
+        if (this.list.size() >= 5) {
             if (this.targetUsername == null || this.targetUsername.isEmpty()) {
 
                 listtmp = postService.getNextPostFromFriendAndMe(SessionBean.getUserId(), this.list.get(this.list.size() - 1).getId());
@@ -127,7 +126,7 @@ public class EvNewsBlogsBean implements java.io.Serializable {
 
                 listtmp = postService.getNextPostFromUserID(this.targetUsername, this.list.get(this.list.size() - 1).getId());
 
-            } else /*if(buttonView.getPage().equals("recommentdation"))*/ {
+            } else if (page.equals("recommendation")) {
 
                 listtmp = (List<PostEntity>) postService.getNextRecommendationFromUserID(this.targetUsername, this.list.get(this.list.size() - 1).getId());
             }

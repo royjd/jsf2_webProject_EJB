@@ -69,6 +69,7 @@ public interface MessageService {
      * @param groupMessage
      */
     public void messageRead(UserEntity ue, String groupMessage);
+    public void messageRead(Long userID, String groupMessage);
 
     /**
      * return a MessageDisplayListwhich contain multiple list needed for the

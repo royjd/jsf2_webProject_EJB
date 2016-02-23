@@ -278,4 +278,9 @@ public class MessageServiceImpl implements MessageService {
         return mgUserDao.findNewMessageForUserAndGroupMessage(userID, groupName);
     }
 
+    @Override
+    public void messageRead(Long userID, String groupMessage) {
+        this.messageRead(this.userDao.findByID(userID), groupMessage);
+    }
+
 }
