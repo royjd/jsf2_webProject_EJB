@@ -116,7 +116,7 @@ public class PostService2Impl implements servicesSecondaire.PostService2 {
 
     @Override
     public void update(PostEntity postEntity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.postDao.update(postEntity);  
     }
 
     @Override

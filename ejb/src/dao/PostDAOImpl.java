@@ -108,6 +108,8 @@ public class PostDAOImpl implements PostDAO {
      */
     @Override
     public List<PostEntity> findByUsernameAndType(String username, String type) {
+            System.err.println("Find type = "+type+" : username => " + username );
+
         try {
             switch (type) {
                 case "photo":
@@ -130,9 +132,17 @@ public class PostDAOImpl implements PostDAO {
                     return postEntities;
                 }
                 case "album": {
-                    List<PostEntity> postEntities = this.em.createQuery("SELECT t FROM AlbumEntity t where t.author.username = :value1 order by t.id desc")//target or author
-                            .setParameter("value1", username).getResultList();
+                    List<PostEntity> postEntities = this.em.createQuery("SELECT t FROM PostEntity t where TYPE(t) = AlbumEntity AND t.author.username = :value1 order by t.id desc")//target or author
+                            .setParameter("value1", username).getResultList();   
+                    if(postEntities!= null){
+                        
+                    System.err.println("Find type = album : username => " + username + "  size of result => " + postEntities.get(0).getClass() );
 
+                    }else{
+                        
+                    System.err.println("Find type = album : username => " + username + "  size of result => NULL" );
+
+                    } 
                     return postEntities;
                 }
                 default: {
@@ -188,7 +198,6 @@ public class PostDAOImpl implements PostDAO {
                 .setParameter("inclList", usersID)
                 .setMaxResults(5)
                 .getResultList();
-        
 
         return postEntities;
     }
@@ -260,7 +269,7 @@ public class PostDAOImpl implements PostDAO {
     @Override
     public PostEntity findAlbum(Long userId, Long albumId) {
         try {
-            Query q = this.em.createQuery("SELECT p FROM PostEntity p where p.author.id = :userId and p.id =:albumId");
+            Query q = this.em.createQuery("SELECT p FROM AlbumEntity p where p.author.id = :userId and p.id =:albumId");
             q.setParameter("userId", userId);
             q.setParameter("albumId", albumId);
             return (PostEntity) q.getSingleResult();
@@ -272,7 +281,7 @@ public class PostDAOImpl implements PostDAO {
     @Override
     public PostEntity findAlbum(String username, Long albumId) {
         try {
-            Query q = this.em.createQuery("SELECT p FROM PostEntity p where p.author.username = :username and p.id =:albumId");
+            Query q = this.em.createQuery("SELECT p FROM PostEntity p  where p.author.username = :username and p.id =:albumId");
             q.setParameter("username", username);
             q.setParameter("albumId", albumId);
             return (PostEntity) q.getSingleResult();

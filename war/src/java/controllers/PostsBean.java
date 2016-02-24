@@ -63,8 +63,9 @@ public class PostsBean implements Serializable {
 
     private PostEntity postComment;
 
+    private static final String realPath = "/home/SP2MI/zdiawara/Bureau/images";
     //private static final String realPath = "/home/zakaridia/Documents/Depot_Git/File/image";
-    private static final String realPath = "C:/Users/Karl Lauret/AppData/Roaming/NetBeans/8.1/config/GF_4.1.1/domain1/applications/images";
+    //private static final String realPath = "C:/Users/Karl Lauret/AppData/Roaming/NetBeans/8.1/config/GF_4.1.1/domain1/applications/images";
 
     /**
      * Creates a new instance of PostsBean
@@ -175,10 +176,12 @@ public class PostsBean implements Serializable {
     }
 
     public List<PostEntity> loadAllAlbums(String username) {
-        return postService2.findByUsernameAndType(username, "album");
+        List<PostEntity> post =  postService2.findByUsernameAndType(username, "album");
+        return post;  
     }
     
     public PostEntity loadAlbum(String username,Long id){
+        System.err.println("loadAlbum : username =>" + username + " ID => " + id );
         return postService2.findAlbum(username,id);
     }
 
@@ -239,6 +242,9 @@ public class PostsBean implements Serializable {
 
     public boolean getCanComment() {
         return canComment;
+    }
+    public boolean getCanModify(String username){
+        return SessionBean.isConnect() && SessionBean.getUsername().equals(username);
     }
 
     public boolean getCanCommentTheTarget(String targetUsername) {
