@@ -5,6 +5,7 @@
  */
 package services;
 
+import commun.Files;
 import dao.AlbumEntity;
 import dao.CommentEntity;
 import dao.MediaEntity;
@@ -12,7 +13,6 @@ import dao.NewsEntity;
 import dao.PostEntity;
 import dao.RecomendationEntity;
 import dao.UserEntity;
-import java.io.File;
 import java.util.List;
 import javax.ejb.Local;
 import javax.servlet.http.Part;
@@ -102,9 +102,11 @@ public interface PostService {
      */
     public PostEntity createAlbum(AlbumEntity album, UserEntity author);
 
-    public AlbumEntity createAlbum(String title, String description, String localisation, Long authorId);
+    //public AlbumEntity createAlbum(String title, String description, String localisation, Long authorId);
     
-    public boolean addPhotoToAlbum(String username, Part file, String path, Long albumId);
+    public boolean createAlbum(String title, String description, String localisation, Long authorId, List<Files> files, String contextPath);
+    
+    public PostEntity addPhotoToAlbum(String username, Files file, String path, Long albumId);
     /**
      * return the posts attached to the user and matching the type given
      *
