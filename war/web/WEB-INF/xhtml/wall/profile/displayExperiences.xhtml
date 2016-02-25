@@ -7,12 +7,6 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <div class="col-sm-7 padding-25">
-        <div class="alert alert-success alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            <strong>Message</strong>
-        </div>
 
         <!-- Search all experiences and stocks result in experiences variables  -->
         <c:set var="experiences" value="#{profileBean.getExperiences(param['u'])}" scope="request" />
@@ -26,7 +20,7 @@
             </p>
             <c:if test="${canModify}">
                 <h:form>
-                    <h:commandLink  value="Add experience" action="#{navigationBean.manageExperience()}">
+                    <h:commandLink  value="Add experience" action="#{navigationBean.manageExperience()}" class="btn btn-info">
                         <f:param name="u" value="#{param['u']}"/>
                     </h:commandLink>
                 </h:form>
@@ -64,12 +58,11 @@
                         </h:form>
                     </div>
                 </c:if>
-                <div class="clearfix"></div>
+                <div class="clearfix"></div><br/>
             </div>
             <hr/>
         </c:forEach>
-
-
+        <br/>
     </div>
     <div class="col-sm-3 padding-70">
         <c:if test="${canModify}">

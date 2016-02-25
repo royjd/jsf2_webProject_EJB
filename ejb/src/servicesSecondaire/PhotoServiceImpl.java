@@ -219,13 +219,8 @@ public class PhotoServiceImpl implements PhotoService {
     public PostEntity createPhoto(AlbumEntity album, UserEntity author, Part file, String contextPath, boolean b) {
         try {
             Files f = new Files(this.getFileName(file), file.getInputStream());
-            System.err.println("+++++++++++++++++++++++++++++++++++++++");
-            System.err.println(f.getName() + " " + f.getContent());
-            System.err.println(file.getName() + " " + file.getInputStream());
-            System.err.println("+++++++++++++++++++++++++++++++++++++++");
             return this.createPhoto(album, author, f, contextPath, b);
         } catch (IOException ex) {
-            System.err.println("------------------------------------------");
             return null;
         }
     }

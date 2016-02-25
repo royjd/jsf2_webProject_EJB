@@ -14,16 +14,23 @@
                 About me 
             </div>
             <div class="panel-content">
-                <div class="row">
+                <div class="row"><br/>
                     <div class="col-sm-2">              
                         <div class="list-group padding-25">
                             <h:form>
-                                <h:commandLink value="Experiences" action="#{navigationBean.experience()}">
-                                    <f:param name="u" value="#{param['u']}" />
+                                <h:commandLink value="Resume" action="#{navigationBean.profile()}" class="list-group-item">
+                                    <f:param name="u" value="#{buttonView.targetUsername}"/>
+                                </h:commandLink> 
+                                <h:commandLink value="Experiences" action="#{navigationBean.experience()}" class="list-group-item">
+                                    <f:param name="u" value="#{buttonView.targetUsername}" />
                                 </h:commandLink>
                             </h:form>
                         </div>
                     </div>
+                    
+                    <!-- to know if the visiteur can modify information -->
+                    <c:set var="canModify" value="#{not profileBean.canModify(buttonView.targetUsername)}" scope="request"/>
+                     #{canModify}
                     <ui:fragment rendered="#{buttonView.sousPage == ''}"> 
                         <ui:include src="displayProfile.xhtml" /> 
                     </ui:fragment>

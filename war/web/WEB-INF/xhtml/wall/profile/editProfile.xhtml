@@ -3,129 +3,166 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:p="http://primefaces.org/ui">
 
     <!-- To load information about user -->
 
-    #{profileBean.loadProfil(param['u'])}
 
-    <f:metadata>
-        <f:event type="preRenderView" listener="#{buttonView.setTargetUsername(param['u'])}"/>
-    </f:metadata>
+    <ui:component>
+        <f:metadata>
+            <f:event type="preRenderView" listener="#{buttonView.setTargetUsername(param['u'])}"/>
+        </f:metadata>
+        #{profileBean.loadProfil(buttonView.targetUsername)}
+        <f:loadBundle basename="bundle.messages" var="msg"/>
 
-    <div class="col-sm-7">
-        <div class="page-header ">
-            <h1><small>Edit your profile</small></h1>
-        </div>
-
-        <h:form class="form-horizontal" role="form">
-
-            <div class="alert alert-danger alert-dismissible" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <strong>Message</strong>
+        <div class="col-sm-7">
+            <div class="page-header ">
+                <h1><small>Edit your profile</small></h1>
             </div>
 
-            <div class="row">
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <div class="col-sm-12">
-                            <h:inputText class="form-control" value="#{profileBean.firstName}" pt:placeholder="First name"></h:inputText>
+            <h:form class="form-horizontal" role="form">
+
+                <!--<div class="alert alert-danger alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <strong>Message</strong>
+                </div>-->
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <h:inputText id="firstname" required="true" class="form-control" value="#{profileBean.firstName}" pt:type="text" pt:placeholder="First name" requiredMessage="#{msg['edit.firstname']}">
+                                    <f:ajax event="blur" render="firstnameMessage" />
+                                </h:inputText>
+                                <h:message id="firstnameMessage" for="firstname" class="control-label text-danger"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <h:inputText id="lastname" required="true" class="form-control" value="#{profileBean.lastName}" pt:type="text" pt:placeholder="Last name" requiredMessage="#{msg['edit.lastname']}">
+                                    <f:ajax event="blur" render="lastnameMessage" />
+                                </h:inputText>
+
+                                <h:message id="lastnameMessage" for="lastname" class="control-label text-danger"/>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <h:inputText id="phone" class="form-control" value="#{profileBean.phone}" pt:placeholder="Mobile number" validatorMessage="#{msg['edit.phone']}" >
+                                    <f:ajax event="blur" render="phoneMessage" />
+                                    <f:validateRegex pattern="^([0-9]*)$" />
+                                </h:inputText>
+                                <h:message id="phoneMessage" for="phone" class="control-label text-danger"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <div class="col-sm-12">
-                            <h:inputText class="form-control" value="#{profileBean.lastName}" pt:placeholder="Last name">
-                            </h:inputText>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <h:inputText id="height" class="form-control" value="#{profileBean.height}" pt:placeholder="Height" converterMessage="#{msg['edit.height']}" validatorMessage="#{msg['edit.heightBound']}"> 
+                                    <f:ajax event="blur" render="heightMessage" />
+                                    <f:convertNumber pattern="#0.000" />
+                                    <f:validateDoubleRange minimum="1.7" maximum="3.0"/>
+                                </h:inputText>
+                                <h:message for="height"  id="heightMessage" class="control-label text-danger"/>
+                            </div>
                         </div>
                     </div>
-
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <div class="col-sm-12">
-                            <h:inputText class="form-control" value="#{profileBean.phone}" pt:placeholder="Mobile number"></h:inputText>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <div class="col-sm-12">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <div class="col-sm-12">
-                            <h:inputText class="form-control" value="#{profileBean.height}" pt:placeholder="Height"></h:inputText>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <h:inputText id="weight" class="form-control" value="#{profileBean.weight}" pt:placeholder="Weight" converterMessage="#{msg['edit.weight']}" validatorMessage="#{msg['edit.weightBound']}">
+                                    <f:ajax event="blur" render="weightMessage" />
+                                    <f:convertNumber pattern="#0.000" />
+                                    <f:validateDoubleRange minimum="0" maximum="300.0"/>
+                                </h:inputText>
+                                <h:message for="weight"  id="weightMessage" class="control-label text-danger"/>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <div class="col-sm-12">
-                            <h:inputText class="form-control" value="#{profileBean.weight}" pt:placeholder="Weight"></h:inputText>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <h:inputText id="country" class="form-control" value="#{profileBean.country}" pt:placeholder="Country" validatorMessage="#{msg['edit.country']}">
+                                    <f:ajax event="blur" render="countryMessage" />
+                                    <f:validateRegex pattern="^([a-zA-Z]*)$" />
+                                </h:inputText>
+                                <h:message for="country"  id="countryMessage" class="control-label text-danger"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <h:inputText id="city" class="form-control" value="#{profileBean.city}" pt:placeholder="City" validatorMessage="#{msg['edit.city']}">
+                                    <f:ajax event="blur" render="cityMessage" />
+                                    <f:validateRegex pattern="^([a-zA-Z]*)$" />
+                                </h:inputText>
+                                <h:message for="city"  id="cityMessage" class="control-label text-danger"/>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="row">
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <div class="col-sm-12">
-                            <h:inputText class="form-control" value="#{profileBean.country}" pt:placeholder="Country"></h:inputText>
-                        </div>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <h:selectOneMenu value="#{profileBean.gender}" class="form-control">
+                            <f:selectItem itemValue="" itemLabel="Select gender" />
+                            <f:selectItem itemValue="M" itemLabel="Male" />
+                            <f:selectItem itemValue="F" itemLabel="Female" />
+                        </h:selectOneMenu>	
                     </div>
                 </div>
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <div class="col-sm-12">
-                            <h:inputText class="form-control" value="#{profileBean.city}" pt:placeholder="City"></h:inputText>
-                        </div>
+
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <h:inputTextarea class="form-control" value="#{profileBean.briefDescription}" pt:placeholder="Description">
+
+                        </h:inputTextarea>
                     </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-6">
-                    <h:selectOneMenu value="#{profileBean.gender}" class="form-control">
-                        <f:selectItem itemValue="" itemLabel="Select gender" />
-                        <f:selectItem itemValue="M" itemLabel="Male" />
-                        <f:selectItem itemValue="F" itemLabel="Female" />
-                    </h:selectOneMenu>	
+                
+                <div class="form-group">
+                    <div class="col-sm-offset-8 col-sm-4">
+                        <h:commandLink action="#{navigationBean.profile(buttonView.targetUsername)}" value="Cancel" class="btn btn-primary pull-right">
+                        </h:commandLink>
+                        
+
+                        <h:commandButton action="#{profileBean.editProfile()}" value="Save Changes" class="btn btn-success " disabled="#{facesContext.validationFailed}">
+                            <f:ajax execute="@form" render="@form" />
+                        </h:commandButton>
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <div class="col-sm-12">
-                    <h:inputTextarea class="form-control" value="#{profileBean.briefDescription}" pt:placeholder="Description">
+            </h:form>
 
-                    </h:inputTextarea>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-offset-8 col-sm-4">
-                    <h:commandLink action="#{navigationBean.profile(buttonView.targetUsername)}" value="Cancel" class="btn btn-primary pull-right">
-                    </h:commandLink>
-
-
-                    <h:commandButton action="#{profileBean.editProfile()}" value="Save Changes" class="btn btn-success "/>
-                </div>
-            </div>
-
-        </h:form>
-
-    </div> 
-    <div class="col-sm-3"></div>
+        </div> 
+        <div class="col-sm-3"></div>
+    </ui:component>
 </html>
 

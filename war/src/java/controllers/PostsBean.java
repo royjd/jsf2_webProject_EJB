@@ -34,6 +34,7 @@ import servicesSecondaire.PostService2;
 import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import services.ProfileService;
 
 /**
  *
@@ -65,6 +66,9 @@ public class PostsBean implements Serializable {
 
     @EJB
     PhotoService photoService;
+    
+    @EJB
+    ProfileService profileService;
 
     @ManagedProperty(value = "#{navigationBean}")
     private NavigationBean navigationBean;
@@ -185,7 +189,7 @@ public class PostsBean implements Serializable {
         if (SessionBean.isConnect()) {
             UploadedFile f = event.getFile();
             try {
-                if(this.photoList == null){
+                if (this.photoList == null) {
                     this.photoList = new ArrayList<>();
                 }
                 this.photoList.add(postService.addPhotoToAlbum(SessionBean.getUsername(), new Files(f.getFileName(), f.getInputstream()), realPath, targetID));
@@ -215,18 +219,18 @@ public class PostsBean implements Serializable {
     }
 
     public List<PostEntity> loadMedias(Long albumId) {
-        
+
         this.photoList = postService2.loadMedias(albumId);
-         return this.photoList;
+        return this.photoList;
     }
 
     /*public String addPhotoToAlbum() {
-        if (SessionBean.isConnect()) {
-            postService.addPhotoToAlbum(SessionBean.getUsername(), file, realPath, targetID);
-            return navigationBean.displayAlbum(SessionBean.getUsername(), this.targetID);
-        }
-        return ""; // Error page
-    }*/
+     if (SessionBean.isConnect()) {
+     postService.addPhotoToAlbum(SessionBean.getUsername(), file, realPath, targetID);
+     return navigationBean.displayAlbum(SessionBean.getUsername(), this.targetID);
+     }
+     return ""; // Error page
+     }*/
 
     //TODO LATER WITH A REAL targetID
     public void onPostLoad(String targetUsername) {
@@ -354,5 +358,5 @@ public class PostsBean implements Serializable {
     public void setPhotoList(List<PostEntity> photoList) {
         this.photoList = photoList;
     }
-    
+
 }

@@ -6,41 +6,35 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <!-- Load profile -->
-    #{profileBean.loadProfil(param['u'])}
+    #{profileBean.loadProfil(buttonView.targetUsername)}
 
     <!-- Search all experiences and stocks result in experiences variables  -->
-    <c:set var="experiences" value="#{profileBean.getExperiences(param['u'],3)}" scope="request" />
-
-    <!-- to know if the visiteur can modify information -->
-    <c:set var="canModify" value="#{param['u'] eq username}" scope="request"/>
+    <c:set var="experiences" value="#{profileBean.getExperiences(buttonView.targetUsername,3)}" scope="request" />
 
     <div class="col-sm-7">
-        <div class="alert alert-success alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            <strong>Message</strong>
-        </div>
-
         <div class="row">
             <div class="col-sm-4">
-                <h4>Define profile picture<button id="addPicture" class="btn btn-primary btn-sm glyphicon glyphicon-plus"></button></h4>
-                <div id="addPictureProfilDiv" style="display:none">
-                    <form enctype="multipart/form-data" method="post" class="form-horizontal" role="form" id="pictureProfileForm" action="#{pageContext.request.contextPath}/#{username}/media/addPicture.htm">
-                        <span class="btn btn-default btn-file">
-                            Choose profile picture <input type="file" name="file"/>
-                        </span>
-                        <input name="type" type ="hidden" value="profile"/>
-                        <div class="form-group">        
-                            <div class="col-sm-10">
-                                <button type="submit" class="btn btn-success">Submit</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+                <c:if test="${canModify}">
+                    <h4>Define profile picture<button id="addPicture" class="btn btn-primary btn-sm glyphicon glyphicon-plus"></button></h4>
+                    <div id="addProfileDiv" style="display:none" >
+                        <h:form enctype="multipart/form-data">
+                            <div id="addPictureProfilDiv" class="form-group">
+                                <span class="btn btn-default btn-file">
+                                    Choose profile picture <h:inputFile id="file" value="#{profileBean.file}"  class="form-control">
 
+                                    </h:inputFile>
+
+                                    <h:message id="fileMessage" for="file" errorClass="erreur"  class="control-label text-danger"/>
+                                </span>
+                            </div>
+                            <div class="form-group">
+                                <h:commandButton action="#{profileBean.defineProfilePicture()}" value="Apply" class="btn btn-success"/>
+                            </div>
+                        </h:form>
+                    </div>
+                </c:if>
                 <div class="img-overlay">
-                    <img src="#{pageContext.request.contextPath}/resources/img/#{u.profile.pictureProfile.mediaType.link}" class="img-responsive"/>
+                    <img src="#{request.contextPath}/images/#{profileBean.profilePicture}" class="img-responsive" />
                 </div>
             </div>
 
@@ -53,14 +47,14 @@
 
                     <small>
                         <c:choose>
-                            <c:when test="#{profileBean.gender eq ''}">
-                                Not define
+                            <c:when test="#{profileBean.gender eq 'F'}">
+                                Female
                             </c:when>
                             <c:when test="#{profileBean.gender eq 'M'}">
                                 Male
                             </c:when>
                             <c:otherwise>
-                                Female
+                                Not define 
                             </c:otherwise>
                         </c:choose>
                     </small>   
@@ -98,16 +92,16 @@
 
         <!-- Button for edition -->
 
-        <c:if test="${canModify}">
+        <c:if test="#{profileBean.canModify}">
             <div class="pull-right">
                 <h:form>
                     <h:commandLink  class="btn btn-info" role="button" value="Edit profile" action="#{navigationBean.editProfile()}">
-                        <f:param name="u" value="#{param['u']}"/>
+                        <f:param name="u" value="#{buttonView.targetUsername}"/>
                     </h:commandLink>
                 </h:form>
             </div>
         </c:if>
-        
+
         <div class='clearfix'></div>
 
 
@@ -135,11 +129,11 @@
 
                         <h:form>
                             <h:commandLink  class="btn btn-info" value="Edit" action="#{navigationBean.manageExperience()}">
-                                <f:param name="u" value="#{param['u']}"/>
+                                <f:param name="u" value="#{buttonView.targetUsername}"/>
                                 <f:param name="id" value="#{experience.id}"/>
                             </h:commandLink>
                             <h:commandLink  class="btn btn-danger" value="Remove" action="#{profileBean.removeExperience()}">
-                                <f:param name="u" value="#{param['u']}"/>
+                                <f:param name="u" value="#{buttonView.targetUsername}"/>
                                 <f:param name="id" value="#{experience.id}"/>
                             </h:commandLink>
                         </h:form>
@@ -150,14 +144,22 @@
             <hr/>
         </c:forEach>
 
+        <h:form>
 
-        <c:if test="${not empty experiences}">
-            <a href="${pageContext.request.contextPath}/${u.username}/experience.htm"  class="btn btn-info" role="button">See more</a>
-        </c:if>
+            <h:commandLink  value="See more" action="#{navigationBean.experience()}" class="btn btn-info">
+                <f:param name="u" value="#{buttonView.targetUsername}"/>
+            </h:commandLink>
 
-        <c:if test="${canModify}">
-            <a href="${pageContext.request.contextPath}/${u.username}/experience/manage/0.htm"  class="pull-right btn btn-success" role="button">Add experience</a>
-        </c:if>
+            <c:if test="${canModify}">
+                <h:commandLink  value="Add experience" action="#{navigationBean.manageExperience()}" class="pull-right btn btn-success">
+                    <f:param name="u" value="#{buttonView.targetUsername}"/>
+                </h:commandLink>
+            </c:if>
+        </h:form>
+        <div class="clearfix">
+
+        </div>
+        <br/>
     </div> 
 
 
