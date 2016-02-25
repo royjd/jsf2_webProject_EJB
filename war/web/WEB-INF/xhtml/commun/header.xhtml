@@ -6,7 +6,12 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:composition>
-        <h:form>
+
+        <h:panelGroup rendered="#{empty username}" >
+            <ui:include src="../index/header.xhtml" />
+
+        </h:panelGroup> 
+        <h:form rendered="#{not empty username}">
             <nav class="navbar navbar-inverse navbar-fixed-top">
                 <div class="container">
                     <div class="row">

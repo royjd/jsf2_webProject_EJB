@@ -52,19 +52,32 @@
                                         </div>
                                         <div class="col-sm-8">
                                             <h3> 
-                                                <a href="${pageContext.request.contextPath}/${var.user.username}.htm"  class="" >${var.user.profile.firstName} ${var.user.profile.lastName}</a><br/>
-                                                <a href="${pageContext.request.contextPath}/${var.user.username}.htm"  class="" ><small>@${var.user.username}</small></a>
+                                                <h:form>
+                                                    <h:commandLink value="${var.user.profile.firstName} ${var.user.profile.lastName}" action="#{navigationBean.wall()}">
+                                                        <f:param name="u" value="${var.user.username}"/>
+                                                    </h:commandLink>
+                                                </h:form>
+                                                <br></br>
+                                                <h:form>
+                                                    <h:commandLink value="@${var.user.username}" action="#{navigationBean.wall()}">
+                                                        <f:param name="u" value="${var.user.username}"/>
+                                                    </h:commandLink>
+                                                </h:form>
 
-                                            </h3>
-                                            <a href="${pageContext.request.contextPath}/${var.user.username}.htm"  class="btn btn-info btn-sm pull-left" >See wall</a>
-                                            <h:form rendered="#{isFriend != true &amp;&amp; user.id != id}" >     
+                                            </h3> 
+                                            <h:form>
+                                                <h:commandLink value="See wall" action="#{navigationBean.wall()}" class="btn btn-info btn-sm pull-left" >
+                                                    <f:param name="u" value="${var.user.username}"/> 
+                                                </h:commandLink>
+                                            </h:form>   
+                                            <h:form rendered="#{var.friend == false &amp;&amp; var.user.id != id &amp;&amp; not empty id}" >      
                                                 <p:commandLink value="Send Request" action="#{friendBean.addFriend(user.id)}" 
                                                                onclick="$(this).hide()" 
 
                                                                class="btn btn-success submitComment pull-right">
 
                                                 </p:commandLink>   
-  
+
                                             </h:form>
                                         </div>
                                     </div>
