@@ -43,7 +43,7 @@
                         </small>
                     </p>
                 </div>
-                <c:if test="${canModify}">
+                <c:if test="${canModify and not empty experiences}">
                     <div class="pull-right">
 
                         <h:form>

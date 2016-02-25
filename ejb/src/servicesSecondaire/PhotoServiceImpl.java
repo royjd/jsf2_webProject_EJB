@@ -212,6 +212,7 @@ public class PhotoServiceImpl implements PhotoService {
         for (Files file : files) {
             post = this.createPhoto(album, author, file, contextPath, display);
         }
+        this.setAlbumCover(album, post);
         return post;
     }
 
@@ -219,10 +220,19 @@ public class PhotoServiceImpl implements PhotoService {
     public PostEntity createPhoto(AlbumEntity album, UserEntity author, Part file, String contextPath, boolean b) {
         try {
             Files f = new Files(this.getFileName(file), file.getInputStream());
-            return this.createPhoto(album, author, f, contextPath, b);
+            PostEntity p = this.createPhoto(album, author, f, contextPath, b);
+            this.setAlbumCover(album, p);
+            return p;
         } catch (IOException ex) {
             return null;
         }
+    }
+    
+    private void setAlbumCover(AlbumEntity album, PostEntity p){
+        if(album==null || p==null)
+            return;
+        album.setCover((MediaEntity)p);
+        postService2.update(album);
     }
 
 }

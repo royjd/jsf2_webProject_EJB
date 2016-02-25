@@ -85,7 +85,7 @@
                                 <h:inputText id="height" class="form-control" value="#{profileBean.height}" pt:placeholder="Height" converterMessage="#{msg['edit.height']}" validatorMessage="#{msg['edit.heightBound']}"> 
                                     <f:ajax event="blur" render="heightMessage" />
                                     <f:convertNumber pattern="#0.000" />
-                                    <f:validateDoubleRange minimum="1.7" maximum="3.0"/>
+                                    <f:validateDoubleRange minimum="1.0" maximum="3.0"/>
                                 </h:inputText>
                                 <h:message for="height"  id="heightMessage" class="control-label text-danger"/>
                             </div>

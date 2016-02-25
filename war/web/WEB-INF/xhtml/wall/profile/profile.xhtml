@@ -29,8 +29,7 @@
                     </div>
                     
                     <!-- to know if the visiteur can modify information -->
-                    <c:set var="canModify" value="#{not profileBean.canModify(buttonView.targetUsername)}" scope="request"/>
-                     #{canModify}
+                    <c:set var="canModify" value="#{profileBean.canModify(buttonView.targetUsername)}" scope="request"/>
                     <ui:fragment rendered="#{buttonView.sousPage == ''}"> 
                         <ui:include src="displayProfile.xhtml" /> 
                     </ui:fragment>

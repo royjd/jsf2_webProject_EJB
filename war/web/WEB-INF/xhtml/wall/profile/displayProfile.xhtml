@@ -92,7 +92,7 @@
 
         <!-- Button for edition -->
 
-        <c:if test="#{profileBean.canModify}">
+        <c:if test="${canModify}">
             <div class="pull-right">
                 <h:form>
                     <h:commandLink  class="btn btn-info" role="button" value="Edit profile" action="#{navigationBean.editProfile()}">
@@ -145,11 +145,18 @@
         </c:forEach>
 
         <h:form>
-
-            <h:commandLink  value="See more" action="#{navigationBean.experience()}" class="btn btn-info">
-                <f:param name="u" value="#{buttonView.targetUsername}"/>
-            </h:commandLink>
-
+            <c:choose>
+                <c:when test="${not empty experiences}">
+                    <h:commandLink  value="See more" action="#{navigationBean.experience()}" class="btn btn-info">
+                        <f:param name="u" value="#{buttonView.targetUsername}"/>
+                    </h:commandLink>
+                </c:when>
+                <c:otherwise>
+                    <p class="well">
+                        No experiences
+                    </p>
+                </c:otherwise>
+            </c:choose>
             <c:if test="${canModify}">
                 <h:commandLink  value="Add experience" action="#{navigationBean.manageExperience()}" class="pull-right btn btn-success">
                     <f:param name="u" value="#{buttonView.targetUsername}"/>

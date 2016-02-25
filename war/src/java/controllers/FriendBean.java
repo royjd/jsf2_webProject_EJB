@@ -45,7 +45,7 @@ public class FriendBean implements Serializable {
     }
 
     public void acceptFriend(Long ownerID) {
-        System.err.println("acceptFriend owned by :"+ownerID);
+        System.err.println("acceptFriend owned by :" + ownerID);
         userService.acceptFriendship(SessionBean.getUserId(), ownerID);
 
     }
@@ -61,9 +61,9 @@ public class FriendBean implements Serializable {
 
     }
 
-    public String removeFriend(Long userID1,Long userID2) {
+    public String removeFriend(Long userID1, Long userID2) {
         System.err.println("removeFriend 1");
-        userService.removeFriend(userID1,userID2);
+        userService.removeFriend(userID1, userID2);
         return navigationBean.home();
 
     }
@@ -76,9 +76,16 @@ public class FriendBean implements Serializable {
     public List<FriendEntity> findFriends(Long id) {
         return userService.getFriendsListFriendByUserID(id);
     }
+ 
+    public List<FriendOrNot> findFriendsOfTarget(String username) { 
+        System.err.println("findFriendsOfTarget" + SessionBean.isConnect());
+        if (SessionBean.isConnect()) {
+            return userService.getFriendListByUsername(SessionBean.getUsername(), username);
+ 
+        } else {
+            return userService.getFriendListByUsername(null, username);
 
-    public List<FriendOrNot> findFriendsOfTarget(String username) {
-        return userService.getFriendListByUsername(SessionBean.getUsername(), username);
+        }
     }
 
     public void addMessage(String summary) {

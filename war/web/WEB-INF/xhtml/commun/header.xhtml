@@ -6,7 +6,12 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:composition>
-        <h:form>
+
+        <h:panelGroup rendered="#{empty username}" >
+            <ui:include src="../index/header.xhtml" />
+
+        </h:panelGroup> 
+        <h:form rendered="#{not empty username}">
             <nav class="navbar navbar-inverse navbar-fixed-top">
                 <div class="container">
                     <div class="row">
@@ -38,7 +43,11 @@
                                 <li class="dropdown pull-right">
                                     <a class="dropdown-toggle glyphicon glyphicon-user" data-toggle="dropdown" href="#"><span class="caret"></span></a>
                                     <ul class="dropdown-menu">
-                                        <li> <a href="/#{username}.htm"> #{username} </a></li>
+                                        <li>
+                                            <h:commandLink value="#{username}" action="#{navigationBean.wall()}">
+                                                <f:param name="u" value="#{username}"/>
+                                            </h:commandLink>
+                                        </li>
                                         <li>
                                             <h:commandLink value="Logout" action="#{userBean.logout()}"/> 
                                         </li>

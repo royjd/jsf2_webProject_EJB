@@ -7,7 +7,9 @@
         <nav class="navbar navbar-default">
             <div class="container">
                 <div class="navbar-header">
-                    <h:commandLink class="navbar-brand" value="Username" action="#{navigationBean.wall()}"/>
+                    <h:commandLink class="navbar-brand" value="#{buttonView.targetUsername}" action="#{navigationBean.wall()}">
+                        <f:param name="u" value="#{buttonView.targetUsername}"/>
+                    </h:commandLink>
                 </div>
                 <div>
                     <ul class="nav navbar-nav">
@@ -15,7 +17,7 @@
                             <h:commandLink value="Wall" action="#{navigationBean.wall()}">
                                 <f:param name="u" value="#{buttonView.targetUsername}"/>
                             </h:commandLink>
-                            
+
                         </li>
                         <li>
                             <h:commandLink value="Recommendation" action="#{navigationBean.recommendation()}">

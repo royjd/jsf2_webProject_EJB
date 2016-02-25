@@ -23,12 +23,18 @@ public class SessionBean {
      * @return
      */
     public static boolean isConnect() {
-        return getSession(false) != null;
+        try{
+            getUsername();
+            return true;
+        }catch(NullPointerException e){
+            return false;
+        }
+        
     }
 
     public static HttpSession getSession(boolean etat) {
         return (HttpSession) FacesContext.getCurrentInstance()
-                .getExternalContext().getSession(false);
+                .getExternalContext().getSession(etat);
     }
 
     /*public static HttpServletRequest getRequest() {
