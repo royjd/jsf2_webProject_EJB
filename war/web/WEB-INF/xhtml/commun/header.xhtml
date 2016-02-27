@@ -14,52 +14,60 @@
         <h:form rendered="#{not empty username}">
             <nav class="navbar navbar-inverse navbar-fixed-top">
                 <div class="container">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <ul class="nav navbar-nav">
-                                <li class="active">
-                                    <h:commandLink class="glyphicon glyphicon-home" action="#{navigationBean.home()}"/> 
-                                </li>
-                                <li>
-                                    <h:commandLink value="#{username}" action="#{navigationBean.wall()}">
-                                        <f:param name="u" value="#{username}"/>  
-                                    </h:commandLink>
-                                </li>
-                                <li>
-                                    <h:commandLink class="glyphicon glyphicon-envelope" action="#{navigationBean.message()}">
-                                        <f:param name="u" value="#{username}"/>  
-                                    </h:commandLink>
-                                </li>
-                                <li>
-                                    <h:commandLink class="glyphicon glyphicon-bell" action="#{navigationBean.notification()}">
-                                        <f:param name="u" value="#{username}"/>  
-                                    </h:commandLink>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-sm-6">
-                            <ul class="nav navbar-nav pull-right">
-                                <a class="navbar-brand pull-right" href="/home.htm">FanFare</a>
-                                <li class="dropdown pull-right">
-                                    <a class="dropdown-toggle glyphicon glyphicon-user" data-toggle="dropdown" href="#"><span class="caret"></span></a>
-                                    <ul class="dropdown-menu">
-                                        <li>
-                                            <h:commandLink value="#{username}" action="#{navigationBean.wall()}">
-                                                <f:param name="u" value="#{username}"/>
-                                            </h:commandLink>
-                                        </li>
-                                        <li>
-                                            <h:commandLink value="Logout" action="#{userBean.logout()}"/> 
-                                        </li>
-                                    </ul>
-                                </li>
-                                <div class="navbar-form pull-right">
-                                    <h:inputText  value="#{searchBean.param}"  class="form-control" id="friendSearch"></h:inputText>
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                         <h:commandLink class="navbar-brand pull-right" action="#{navigationBean.home()}" value="FanFare"/> 
+                    </div>
+                    <div class="collapse navbar-collapse" id="myNavbar">
 
-                                    <h:commandButton action="#{searchBean.search()}" value="Go" class="btn btn-success"></h:commandButton>
-                                </div>
-                            </ul>
-                        </div>
+                        <ul class="nav navbar-nav">
+                            <li class="active">
+                                <h:commandLink class="glyphicon glyphicon-home" action="#{navigationBean.home()}"/> 
+                            </li>
+                            <li>
+                                <h:commandLink value="#{username}" action="#{navigationBean.wall()}">
+                                    <f:param name="u" value="#{username}"/>  
+                                </h:commandLink>
+                            </li>
+                            <li>
+                                <h:commandLink class="glyphicon glyphicon-envelope" action="#{navigationBean.message()}">
+                                    <f:param name="u" value="#{username}"/>  
+                                </h:commandLink>
+                            </li>
+                            <li>
+                                <h:commandLink class="glyphicon glyphicon-bell" action="#{navigationBean.notification()}">
+                                    <f:param name="u" value="#{username}"/>  
+                                </h:commandLink>
+                            </li>
+                        </ul>
+
+                        <ul class="nav navbar-nav pull-right">
+                           
+                            <li class="dropdown pull-right">
+                                <a class="dropdown-toggle glyphicon glyphicon-user" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <h:commandLink value="#{username}" action="#{navigationBean.wall()}">
+                                            <f:param name="u" value="#{username}"/>
+                                        </h:commandLink>
+                                    </li>
+                                    <li>
+                                        <h:commandLink value="Logout" action="#{userBean.logout()}"/> 
+                                    </li>
+                                </ul>
+                            </li>
+                            <div class="navbar-form pull-right">
+                                <h:inputText  value="#{searchBean.param}"  class="form-control" id="friendSearch"></h:inputText>
+
+                                <h:commandButton action="#{searchBean.search()}" value="Go" class="btn btn-success"></h:commandButton>
+                            </div>
+                        </ul>
+
+
                     </div>
                 </div>
             </nav>

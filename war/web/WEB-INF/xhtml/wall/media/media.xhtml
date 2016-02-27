@@ -27,7 +27,7 @@
                     </div>
                     <div   class="col-sm-10 padding-25">
                         <div class="pull-right">
-                            <h:form>
+                            <h:form rendered="#{postsBean.getCanModify(paramViewBean.targetUsername)}">
                                 <h:commandLink  value="+ Create album" action="#{navigationBean.createAlbum()}">
                                     <f:param name="u" value="#{param['u']}"/>
                                 </h:commandLink>

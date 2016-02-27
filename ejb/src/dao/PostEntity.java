@@ -23,6 +23,7 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -60,6 +61,7 @@ public class PostEntity implements Serializable {
     private Time modifiedTime;
 
     @Column
+    @Lob //Force to set the type of the column to clob in java db => TEXT in mysql
     private String body;
 
     @Column
