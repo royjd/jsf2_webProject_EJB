@@ -10,6 +10,7 @@ import dao.ProfileEntity;
 import dao.UserEntity;
 import java.util.List;
 import javax.ejb.Local;
+import javax.servlet.http.Part;
 
 /**
  *
@@ -45,7 +46,12 @@ public interface ProfileService {
      * @return ExperienceEntity
      */
     public ExperienceEntity getLastExperienceByUser(Long userID);
+    
+    public boolean defineProfilePicture(Part file, Long userId,String context);
+    
+    public boolean defineCoverPicture(Part file, Long userId,String context);
 
+    public String coverUrl(String username);
     /**
      * get the last experience of the given profile'id
      * 

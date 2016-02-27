@@ -19,6 +19,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import javax.faces.bean.ViewScoped;
+import javax.servlet.http.Part;
 import services.ProfileService;
 import services.UserService;
 import servicesSecondaire.ExperienceService;
@@ -32,7 +33,7 @@ import servicesSecondaire.PhysicalService;
 @Named(value = "profileBean")
 @ManagedBean
 @ViewScoped
-public class ProfileBean implements Serializable{
+public class ProfileBean implements Serializable {
 
     //Profile 
     private String username;
@@ -43,7 +44,6 @@ public class ProfileBean implements Serializable{
     private String city;
     private String country;
     private String profilePicture;
-    private String coverPicture;
     private String briefDescription;
     private Date birthDay;
 
@@ -66,6 +66,13 @@ public class ProfileBean implements Serializable{
     private Integer experienceCityZipcode;
 
     private Long profileId;
+    
+    private Part file;
+    
+    private static final String realPath = "/home/SP2MI/zdiawara/Bureau/images";
+    //private static final String realPath = "/home/zakaridia/Documents/Depot_Git/File/image";
+    //private static final String realPath = "C:/Users/Karl Lauret/AppData/Roaming/NetBeans/8.1/config/GF_4.1.1/domain1/applications/images";
+
 
     @EJB
     ProfileService profileService;
@@ -75,7 +82,7 @@ public class ProfileBean implements Serializable{
 
     @EJB
     ExperienceService experienceService;
-    
+
     @EJB
     LocalisationService localisationService;
 
@@ -151,7 +158,6 @@ public class ProfileBean implements Serializable{
             this.city = p.getCity();
             this.country = p.getCountry();
             this.profilePicture = p.getPictureProfile().getMediaType().getLink();
-            this.coverPicture = p.getPictureCover().getMediaType().getLink();
             this.lastName = p.getLastName();
             this.firstName = p.getFirstName();
             this.email = u.getEmail();
@@ -193,8 +199,9 @@ public class ProfileBean implements Serializable{
         Long id = SessionBean.getUserId();
         if (id != null) {
             ExperienceEntity e = experienceService.findById(this.experienceId);
-            if(e!=null)
+            if (e != null) {
                 experienceService.delete(e);
+            }
             return navigationBean.experience(SessionBean.getUsername());
         }
         return ""; // error page
@@ -238,6 +245,27 @@ public class ProfileBean implements Serializable{
             return profileService.getProfileExperiences(p.getId());
         }
         return null;
+    }
+
+    public String chooseCoverPicture(String username){
+        return profileService.coverUrl(username);
+    }
+    
+    public String defineProfilePicture() {
+        if (SessionBean.isConnect()) {
+            profileService.defineProfilePicture(file,SessionBean.getUserId(),realPath);
+        }
+        return navigationBean.profile(SessionBean.getUsername());
+    }
+    public String defineCoverPicture() {
+        if (SessionBean.isConnect()) {
+            profileService.defineCoverPicture(file,SessionBean.getUserId(),realPath);
+        }
+        return navigationBean.profile(SessionBean.getUsername());
+    }
+    
+    public boolean canModify(String username) {
+        return SessionBean.isConnect() && SessionBean.getUsername().equals(username);
     }
 
     public String getCity() {
@@ -294,14 +322,6 @@ public class ProfileBean implements Serializable{
 
     public void setProfilePicture(String profilePicture) {
         this.profilePicture = profilePicture;
-    }
-
-    public String getCoverPicture() {
-        return coverPicture;
-    }
-
-    public void setCoverPicture(String coverPicture) {
-        this.coverPicture = coverPicture;
     }
 
     public String getTitle() {
@@ -428,4 +448,15 @@ public class ProfileBean implements Serializable{
         return experienceId;
     }
 
+    public Part getFile() {
+        return file;
+    }
+
+    public void setFile(Part file) {
+        this.file = file;
+    }
+    
+    
+
+    
 }

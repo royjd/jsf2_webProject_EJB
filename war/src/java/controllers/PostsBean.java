@@ -5,20 +5,24 @@
  */
 package controllers;
 
+import commun.Files;
 import dao.AlbumEntity;
 import dao.PostEntity;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import org.primefaces.event.FileUploadEvent;
@@ -27,6 +31,10 @@ import services.PostService;
 import services.UserService;
 import servicesSecondaire.PhotoService;
 import servicesSecondaire.PostService2;
+import java.io.InputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import services.ProfileService;
 
 /**
  *
@@ -44,7 +52,8 @@ public class PostsBean implements Serializable {
     private Long targetID;
     private boolean canComment;
     private String localisation;
-    private List<UploadedFile> uploadedFiles;
+    private List<Files> files;
+    private List<PostEntity> photoList;
 
     @EJB
     PostService postService;
@@ -57,14 +66,17 @@ public class PostsBean implements Serializable {
 
     @EJB
     PhotoService photoService;
+    
+    @EJB
+    ProfileService profileService;
 
     @ManagedProperty(value = "#{navigationBean}")
     private NavigationBean navigationBean;
 
     private PostEntity postComment;
-
-    //private static final String realPath = "/home/SP2MI/zdiawara/Bureau/images";
-    private static final String realPath = "/home/zakaridia/Documents/Depot_Git/File/image";
+ 
+    private static final String realPath = "/home/SP2MI/zdiawara/Bureau/images";
+    //private static final String realPath = "/home/zakaridia/Documents/Depot_Git/File/image";
     //private static final String realPath = "C:/Users/Karl Lauret/AppData/Roaming/NetBeans/8.1/config/GF_4.1.1/domain1/applications/images";
 
     /**
@@ -74,11 +86,10 @@ public class PostsBean implements Serializable {
 
     }
 
-    @PostConstruct
-    public void init() {
-        uploadedFiles = new ArrayList<>();
-    }
-
+    /*@PostConstruct
+     public void init() {
+     uploadedFiles = new ArrayList<>();
+     }*/
     public String homeSaveNews() {
         this.saveNews();
         return navigationBean.home();
@@ -113,6 +124,7 @@ public class PostsBean implements Serializable {
         //return navigationBean.home();
 
     }
+
     public void saveNews(String targetUsername) {
 
         String authorUsername = SessionBean.getUsername();
@@ -130,6 +142,7 @@ public class PostsBean implements Serializable {
         //return navigationBean.home();
 
     }
+
     public void saveRecommendation(String targetUsername) {
 
         Long authorID = SessionBean.getUserId();
@@ -160,15 +173,40 @@ public class PostsBean implements Serializable {
 
     }
 
+    public void saveFiles(FileUploadEvent event) {
+        if (this.files == null) {
+            this.files = new ArrayList<>();
+        }
+
+        try {
+            UploadedFile uploadedFile = event.getFile();
+            files.add(new Files(uploadedFile.getFileName(), uploadedFile.getInputstream()));
+        } catch (IOException ex) {
+        }
+    }
+
+    public void addPhotoToAlbum(FileUploadEvent event) {
+        if (SessionBean.isConnect()) {
+            UploadedFile f = event.getFile();
+            try {
+                if (this.photoList == null) {
+                    this.photoList = new ArrayList<>();
+                }
+                this.photoList.add(postService.addPhotoToAlbum(SessionBean.getUsername(), new Files(f.getFileName(), f.getInputstream()), realPath, targetID));
+            } catch (IOException ex) {
+            }
+        }
+
+    }
+
     public String createAlbum() {
 
         Long authorId = SessionBean.getUserId();
         if (authorId == null) {//TODO GO TO ERROR PAGE, NOT CONNECTED
             return null;
         }
-        if (this.file != null && !this.file.getName().equals("") && realPath != null) {
-            AlbumEntity album = postService.createAlbum(title, message, localisation, authorId);
-            PostEntity post = photoService.createPhoto(album, authorId, file, realPath, true);
+        if (this.files != null && !files.isEmpty()) {
+            postService.createAlbum(title, message, localisation, authorId, files, realPath);
             return navigationBean.album(SessionBean.getUsername()); // change it
         }
         //return null; //
@@ -176,22 +214,25 @@ public class PostsBean implements Serializable {
     }
 
     public List<PostEntity> loadAllAlbums(String username) {
-        List<PostEntity> post =  postService2.findByUsernameAndType(username, "album");
-        return post;  
-    }
-    
-    public PostEntity loadAlbum(String username,Long id){
-        System.err.println("loadAlbum : username =>" + username + " ID => " + id );
-        return postService2.findAlbum(username,id);
+        List<PostEntity> post = postService2.findByUsernameAndType(username, "album");
+        return post;
     }
 
-    public String addPhotoToAlbum(){
-        if(SessionBean.isConnect()){
-            postService.addPhotoToAlbum(SessionBean.getUsername(), file, realPath, targetID);
-            return navigationBean.displayAlbum(SessionBean.getUsername(), this.targetID);
-        }
-        return ""; // Error page
+    public List<PostEntity> loadMedias(Long albumId) {
+
+            
+        this.photoList = postService2.loadMedias(albumId);
+        return this.photoList;
     }
+
+    /*public String addPhotoToAlbum() {
+     if (SessionBean.isConnect()) {
+     postService.addPhotoToAlbum(SessionBean.getUsername(), file, realPath, targetID);
+     return navigationBean.displayAlbum(SessionBean.getUsername(), this.targetID);
+     }
+     return ""; // Error page
+     }*/
+
     //TODO LATER WITH A REAL targetID
     public void onPostLoad(String targetUsername) {
         String authorUsername = SessionBean.getUsername();
@@ -243,11 +284,16 @@ public class PostsBean implements Serializable {
     public boolean getCanComment() {
         return canComment;
     }
-    public boolean getCanModify(String username){
-        return SessionBean.isConnect() && SessionBean.getUsername().equals(username);
+ 
+    public boolean getCanModify(String username) {
+            return SessionBean.isConnect() && SessionBean.getUsername().equals(username);
+        
     }
 
     public boolean getCanCommentTheTarget(String targetUsername) {
+        if(!SessionBean.isConnect()){
+            return false; 
+        } 
         String authorUsername = SessionBean.getUsername();
         if (authorUsername == null) {
             //TODO GO TO ERROR PAGE
@@ -263,7 +309,13 @@ public class PostsBean implements Serializable {
 
     public boolean getCanRecommend(String targetUsername) {
         System.err.println(targetUsername + " targetusername getCanRecommend");
-        return userService.isFriend(SessionBean.getUsername(), targetUsername);
+        if(SessionBean.isConnect()){
+            return userService.isFriend(SessionBean.getUsername(), targetUsername);
+            
+        }else{ 
+            return userService.isFriend(null, targetUsername);
+            
+        }
     }
 
     public void setCanComment(boolean canComment) {
@@ -309,4 +361,13 @@ public class PostsBean implements Serializable {
         this.comment = name1;
         System.err.println("valOf : " + name1);
     }
+
+    public List<PostEntity> getPhotoList() {
+        return photoList;
+    }
+
+    public void setPhotoList(List<PostEntity> photoList) {
+        this.photoList = photoList;
+    }
+
 }

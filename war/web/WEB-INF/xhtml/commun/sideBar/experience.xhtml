@@ -1,12 +1,20 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets">
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:composition>
         <div class="row sideBarBlock">
             <div class="col-sm-12">
                 <div class="border-bot">
-                    <h2><a href="#{username}/experience.xhtml">Experience</a></h2>
+                    <h2>
+                        <h:form>
+                            <h:commandLink value="Experience" action="#{navigationBean.profile()}">
+                                <f:param name="u" value="#{username}"/>
+                            </h:commandLink>
+                        </h:form>
+                    </h2>  
                     <h4>Title:<small>#{experience.title}</small></h4>
                     <h4>Description:<small>#{experience.description}</small></h4>
                     <h4>When: <small>#{experience.realisationDate}</small></h4>

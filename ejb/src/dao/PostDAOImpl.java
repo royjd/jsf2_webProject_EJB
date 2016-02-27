@@ -136,7 +136,7 @@ public class PostDAOImpl implements PostDAO {
                             .setParameter("value1", username).getResultList();   
                     if(postEntities!= null){
                         
-                    System.err.println("Find type = album : username => " + username + "  size of result => " + postEntities.get(0).getClass() );
+                    System.err.println("Find type = album : username => " + username + "  size of result => " + ((AlbumEntity)postEntities.get(0)).getMedias().size() );
 
                     }else{
                         
@@ -279,12 +279,11 @@ public class PostDAOImpl implements PostDAO {
     }
 
     @Override
-    public PostEntity findAlbum(String username, Long albumId) {
+    public List<PostEntity> loadMedias(Long albumId) {
         try {
-            Query q = this.em.createQuery("SELECT p FROM PostEntity p  where p.author.username = :username and p.id =:albumId");
-            q.setParameter("username", username);
+            Query q = this.em.createQuery("SELECT m FROM MediaEntity m  where m.album.id = :albumId order by m.id desc");
             q.setParameter("albumId", albumId);
-            return (PostEntity) q.getSingleResult();
+            return q.getResultList();
         } catch (NoResultException e) {
             return null;
         }

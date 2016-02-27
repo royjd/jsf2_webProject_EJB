@@ -28,6 +28,7 @@ import javax.servlet.http.Part;
 import servicesSecondaire.FriendService;
 import servicesSecondaire.NotificationService;
 import servicesSecondaire.UserService2;
+import commun.Files;
 
 /**
  *
@@ -147,15 +148,15 @@ public class PostServiceImpl implements PostService {
         }
         NewsEntity news;
         if (file != null && !file.getName().equals("") && contextPath != null) {
-            AlbumEntity album = postService.findAlbum(author.getId(), "NewsAlbum");
-
-            PostEntity post = photoService.createPhoto(album, author, file, contextPath, false);
-            if (post != null && post.getId() != null) {
-                news = new NewsEntity(title, message, author, target, (MediaEntity) post);
-
-            } else {
-                news = new NewsEntity(title, message, author, target);
-            }
+                AlbumEntity album = postService.findAlbum(author.getId(), "NewsAlbum");
+                PostEntity post = photoService.createPhoto(album, author, file, contextPath,false);
+                if (post != null && post.getId() != null) {
+                    news = new NewsEntity(title, message, author, target, (MediaEntity) post);
+                    
+                } else {
+                    news = new NewsEntity(title, message, author, target);
+                }
+                
         } else {
             news = new NewsEntity(title, message, author, target);
         }
@@ -232,37 +233,56 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public AlbumEntity createAlbum(String title, String description, String localisation, Long authorId) {
+    public boolean createAlbum(String title, String description, String localisation, Long authorId, List<Files> files,String contextPath) {
 
         UserEntity author = userService2.findByID(authorId);
 
         if (author == null) {
-            return null;
+            return false;
         }
 
         AlbumEntity album = new AlbumEntity(title, description, localisation, author);
         PostEntity p = postService.createPost(album, author, author, true);
-        if (p != null) {
-            album.setId(p.getId());
-            return album;
+        if (p == null) {
+            return false;
         }
-        return null;
+        album.setId(p.getId());
+        
+        return photoService.createPhoto(album, author, files, contextPath, true) != null;
+        
     }
 
+    /*@Override
+    public AlbumEntity createAlbum(String title, String description, String localisation, Long authorId) {
+
+        UserEntity author = userService2.findByID(authorId);
+        if (author == null) 
+            return null;
+
+        AlbumEntity album = new AlbumEntity(title, description, localisation, author);
+        PostEntity p = postService.createPost(album, author, author, true);
+        return album;
+        /*if (p == null) 
+            return false;
+        
+        album.setId(p.getId());
+        
+        return photoService.createPhoto(album, author, files, title, true) != null;
+    }*/
+
     @Override
-    public boolean addPhotoToAlbum(String username, Part file, String path, Long albumId) {
+    public PostEntity addPhotoToAlbum(String username, Files file, String path, Long albumId) {
         UserEntity author = userService2.findByUsername(username);
-        if(author==null)
-            return false;
-        PostEntity post = postService.findAlbum(username, albumId);
-        if(post==null)
-            return false;
-        AlbumEntity a = new AlbumEntity();
-        a.setId(post.getId());
-        a.setTitle(post.getTitle());
-        return photoService.createPhoto(a, author, file, path, true) != null;
+        if (author == null) {
+            return null;
+        }
+        PostEntity post = postService.findByID(albumId);
+        if (post == null) {
+            return null;
+        }
+        return photoService.createPhoto((AlbumEntity) post, author, file, path, true);
     }
-    
+
     /**
      *
      * @param username

@@ -105,8 +105,8 @@ public class PostService2Impl implements servicesSecondaire.PostService2 {
     }
 
     @Override
-    public PostEntity findAlbum(String username, Long albumId) {
-        return postDao.findAlbum(username, albumId);
+    public List<PostEntity> loadMedias(Long albumId) {
+        return postDao.loadMedias(albumId);
     }
 
     @Override

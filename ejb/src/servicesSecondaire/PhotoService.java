@@ -5,6 +5,7 @@
  */
 package servicesSecondaire;
 
+import commun.Files;
 import dao.AlbumEntity;
 import dao.PhotoEntity;
 import dao.PostEntity;
@@ -15,6 +16,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import javax.ejb.Local;
 import javax.servlet.http.Part;
+import java.util.List;
 
 /**
  *
@@ -28,11 +30,12 @@ public interface PhotoService{
      * @param file
      * @param username
      * @param album
+     * @param contextPath
      * @return
      * @throws FileNotFoundException
      * @throws IOException
      */
-    public PhotoEntity upload(Part file ,String username , AlbumEntity album,String contextPath)throws FileNotFoundException, IOException;
+    public PhotoEntity upload(Files file ,String username , AlbumEntity album, String contextPath)throws FileNotFoundException, IOException;
 
     /**
      * create a photo
@@ -64,8 +67,10 @@ public interface PhotoService{
     public void createDefaultProfilePhotos(UserEntity p);
 
 
-    public PostEntity createPhoto(AlbumEntity album, UserEntity author, Part file,String contextPath,Boolean display);
+    public PostEntity createPhoto(AlbumEntity album, UserEntity author, Files file,String contextPath,Boolean display);
     
-    public PostEntity createPhoto(AlbumEntity album, Long authorId, Part file,String contextPath,Boolean display);
+    public PostEntity createPhoto(AlbumEntity album, UserEntity author, List<Files> files,String contextPath,Boolean display);
+
+    public PostEntity createPhoto(AlbumEntity album, UserEntity author, Part file, String contextPath, boolean b);
     
 }
