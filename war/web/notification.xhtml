@@ -18,9 +18,9 @@
     </h:head>
     <h:body style="padding-top: 70px"> 
         <f:metadata>
-            <f:viewAction action="#{buttonView.doSomething(param['p'], param['u'])}"/>
-            <f:viewAction action="#{buttonView.setSousPage(param['sp'])}"/>
-            <f:viewAction  action="#{evNewsBlogsBean.setTargetUsername(param['u'])}"/> 
+            <f:viewAction action="#{paramViewBean.doSomething(param['p'], param['u'])}"/>
+            <f:viewAction action="#{paramViewBean.setSousPage(param['sp'])}"/>
+            <f:viewAction  action="#{listPostAjaxBean.setTargetUsername(param['u'])}"/> 
             <f:viewAction   action="#{postsBean.onPostLoad(param['u'])}"/> 
 
         </f:metadata>
@@ -64,7 +64,7 @@
                     <div id="postDisplayPanel" class="fixed" >
                         <p:panel id="postDisplay">  
                             <ui:include  src="WEB-INF/xhtml/commun/post/posts.xhtml" >  
-                                <ui:param name="posts" value="#{evNewsBlogsBean.notification(buttonView.targetUsername, notificationBean.postOfNotification.id)}" />
+                                <ui:param name="posts" value="#{listPostAjaxBean.notification(paramViewBean.targetUsername, notificationBean.postOfNotification.id)}" />
                                 <ui:param name="dataTableID" value="#{notificationBean.postOfNotification.id}"/>
                             </ui:include>
                         </p:panel>

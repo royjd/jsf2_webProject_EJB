@@ -39,7 +39,7 @@
 
  
                     </p:fragment>
-                    <h:form id="createUserForm_form" class="form-horizontal" rendered="#{postsBean.getCanCommentTheTarget(buttonView.targetUsername)}">
+                    <h:form id="createUserForm_form" class="form-horizontal" rendered="#{postsBean.getCanCommentTheTarget(tier.author.username)}">
 
                         <div class="form-group">
                             <div class="col-sm-12">
@@ -56,7 +56,7 @@
                                 </p:commandButton>   
                                 <p:remoteCommand name="update_current#{tier.id}"
                                                  update=":philblog#{dataTableID}"
-                                                 actionListener="#{evNewsBlogsBean.refresh(dataTableID,tier.id)}" >
+                                                 actionListener="#{listPostAjaxBean.refresh(dataTableID,tier.id)}" >
                                 </p:remoteCommand>
                             </div> 
                         </div>  
@@ -66,7 +66,7 @@
                 </p:column>
             </p:dataTable>
 
-            <h:panelGroup rendered="#{evNewsBlogsBean.moreData}"> 
+            <h:panelGroup rendered="#{listPostAjaxBean.moreData}"> 
                 <script type="text/javascript">
 
                     $(document).ready(function () {
@@ -84,7 +84,7 @@
  
                     <p:remoteCommand name="more_records"
                                      update=":philblog#{dataTableID}" 
-                                     actionListener="#{evNewsBlogsBean.loadMore(buttonView.page,buttonView.targetUsername)}" > 
+                                     actionListener="#{listPostAjaxBean.loadMore(paramViewBean.page,paramViewBean.targetUsername)}" > 
  
                     </p:remoteCommand> 
                 </h:form>

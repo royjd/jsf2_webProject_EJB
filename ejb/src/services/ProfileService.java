@@ -6,8 +6,10 @@
 package services;
 
 import dao.ExperienceEntity;
+import dao.PhysicalEntity;
 import dao.ProfileEntity;
 import dao.UserEntity;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Local;
 import javax.servlet.http.Part;
@@ -19,51 +21,19 @@ import javax.servlet.http.Part;
 @Local
 public interface ProfileService {
 
-    /**
-     * create the profile 
-     * @param p
-     * @return the profile id created
-     */
-    public Boolean save(ProfileEntity p);
-
-    /**
-     * update the profile given
-     * @param p
-     */
-    public void update(ProfileEntity p);
-
-    /**
-     * delete the profile given
-     * @param p
-     */
-    public void delete(ProfileEntity p);
-
-
-    /**
-     * get the last experience of a user
-     * 
-     * @param userID
-     * @return ExperienceEntity
-     */
-    public ExperienceEntity getLastExperienceByUser(Long userID);
     
     public boolean defineProfilePicture(Part file, Long userId,String context);
     
     public boolean defineCoverPicture(Part file, Long userId,String context);
 
-    public String coverUrl(String username);
-    /**
-     * get the last experience of the given profile'id
-     * 
-     * @param profileID
-     * @return ExperienceEntity
-     */
-    public ExperienceEntity getLastExperienceByProfile(Long profileID);
+    public String coverUrltmp(String username);
     
-    public List<ExperienceEntity> getProfileExperiences(Long profileID, int limit);
-    
-    public List<ExperienceEntity> getProfileExperiences(Long profileID);
+    public void editProfile(String firstName, String lastName, String phone, String city, String country, String briefDescription, Double height, Double weight, String gender, Long userId);
 
-    public Boolean createProfile(ProfileEntity profile);
+    public void createExperience(Long userID,String title, String description, Date realisationDate, String experienceCity, String experienceCityStat, String experienceCityStreet, Integer experienceCityZipcode);
+    public void editExperience(Long experienceID,Long userID, String title, String description, Date realisationDate, String experienceCity, String experienceCityStat, String experienceCityStreet, Integer experienceCityZipcode);
+
+    public void deleteExperience(Long id, Long experienceId);
+
     
 }

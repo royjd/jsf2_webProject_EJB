@@ -64,8 +64,6 @@ public interface PhotoService{
      */
     public void delete(PhotoEntity photo);
     
-    public void createDefaultProfilePhotos(UserEntity p);
-
 
     public PostEntity createPhoto(AlbumEntity album, UserEntity author, Files file,String contextPath,Boolean display);
     

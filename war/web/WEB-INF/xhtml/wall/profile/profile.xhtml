@@ -7,7 +7,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:composition>
         <f:metadata>
-            <f:event type="preRenderView" listener="#{buttonView.setSousPage(param['sp'])}"/>
+            <f:event type="preRenderView" listener="#{paramViewBean.setSousPage(param['sp'])}"/>
         </f:metadata>
         <div class = "panel panel-default">
             <div class ="panel-heading">
@@ -19,27 +19,27 @@
                         <div class="list-group padding-25">
                             <h:form>
                                 <h:commandLink value="Resume" action="#{navigationBean.profile()}" class="list-group-item">
-                                    <f:param name="u" value="#{buttonView.targetUsername}"/>
+                                    <f:param name="u" value="#{paramViewBean.targetUsername}"/>
                                 </h:commandLink> 
                                 <h:commandLink value="Experiences" action="#{navigationBean.experience()}" class="list-group-item">
-                                    <f:param name="u" value="#{buttonView.targetUsername}" />
+                                    <f:param name="u" value="#{paramViewBean.targetUsername}" />
                                 </h:commandLink>
                             </h:form>
                         </div>
                     </div>
                     
                     <!-- to know if the visiteur can modify information -->
-                    <c:set var="canModify" value="#{profileBean.canModify(buttonView.targetUsername)}" scope="request"/>
-                    <ui:fragment rendered="#{buttonView.sousPage == ''}"> 
+                    <c:set var="canModify" value="#{profileBean.canModify(paramViewBean.targetUsername)}" scope="request"/>
+                    <ui:fragment rendered="#{paramViewBean.sousPage == ''}"> 
                         <ui:include src="displayProfile.xhtml" /> 
                     </ui:fragment>
-                    <ui:fragment rendered="#{buttonView.sousPage == 'editProfile'}"> 
+                    <ui:fragment rendered="#{paramViewBean.sousPage == 'editProfile'}"> 
                         <ui:include src="editProfile.xhtml" /> 
                     </ui:fragment>
-                    <ui:fragment rendered="#{buttonView.sousPage == 'displayExperiences'}"> 
+                    <ui:fragment rendered="#{paramViewBean.sousPage == 'displayExperiences'}"> 
                         <ui:include src="displayExperiences.xhtml" /> 
                     </ui:fragment>
-                    <ui:fragment rendered="#{buttonView.sousPage == 'manageExperience'}"> 
+                    <ui:fragment rendered="#{paramViewBean.sousPage == 'manageExperience'}"> 
                         <ui:include src="manageExperience.xhtml" /> 
                     </ui:fragment>
                 </div>                              

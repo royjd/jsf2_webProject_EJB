@@ -5,11 +5,13 @@
  */
 package servicesSecondaire;
 
+import servicesTertiaire.PostService2;
 import commun.Files;
 import dao.AlbumEntity;
 import dao.MediaEntity;
 import dao.PhotoDAO;
 import dao.PhotoEntity;
+import dao.PostDAO;
 import dao.PostEntity;
 import dao.UserEntity;
 import java.io.FileNotFoundException;
@@ -38,10 +40,10 @@ public class PhotoServiceImpl implements PhotoService {
     PhotoDAO photoDao;
 
     @EJB
-    PostService2 postService2;
+    PostDAO postDao;
 
     @EJB
-    UserService2 userService;
+    PostService2 postService2;
 
     /**
      *
@@ -162,26 +164,7 @@ public class PhotoServiceImpl implements PhotoService {
         return goodExtension(getFileExtension(filename));
     }
 
-    @Override
-    public void createDefaultProfilePhotos(UserEntity u) {
-
-        //Profile picture
-        PhotoEntity photo = new PhotoEntity("Profile Picture", "/Medias/defaulProfile.jpg");
-        this.add(photo);
-        MediaEntity m = new MediaEntity("Default Profile Picture", "", u);
-        m.setMediaType(photo);
-        postService2.createPost(m, u, u, false);
-        u.getProfile().setPictureProfile(m);
-
-        //Profile cover picture
-        PhotoEntity photo2 = new PhotoEntity("Cover Picture", "/Medias/defaulProfile.jpg");
-        this.add(photo2);
-        MediaEntity m2 = new MediaEntity("Default Cover Picture", "", u);
-        m2.setMediaType(photo2);
-        postService2.createPost(m2, u, u, false);
-        u.getProfile().setPictureCover(m2);
-
-    }
+   
 
     @Override
     public PostEntity createPhoto(AlbumEntity album, UserEntity author, Files file, String contextPath, Boolean display) {
@@ -227,12 +210,13 @@ public class PhotoServiceImpl implements PhotoService {
             return null;
         }
     }
-    
-    private void setAlbumCover(AlbumEntity album, PostEntity p){
-        if(album==null || p==null)
+
+    private void setAlbumCover(AlbumEntity album, PostEntity p) {
+        if (album == null || p == null) {
             return;
-        album.setCover((MediaEntity)p);
-        postService2.update(album);
+        }
+        album.setCover((MediaEntity) p);
+        postDao.update(album);
     }
 
 }

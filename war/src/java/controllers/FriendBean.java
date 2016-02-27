@@ -51,13 +51,13 @@ public class FriendBean implements Serializable {
     }
 
     public void deniedFriend(Long ownerID) {
-        userService.deniedFriendship(SessionBean.getUserId(), ownerID);
+        userService.removeFriend(SessionBean.getUserId(), ownerID);
 
     }
 
     public void removeFriend(Long friendID) {
         System.err.println("removeFriend 1");
-        userService.removeFriend(friendID);
+        userService2.removeFriend(friendID);
 
     }
 
@@ -70,11 +70,11 @@ public class FriendBean implements Serializable {
 
     public List<FriendEntity> findFriendsToAccept() {
 
-        return userService.getFriendToAccept(SessionBean.getUserId());
+        return userService2.findFriendToAccept(SessionBean.getUserId());
     }
 
     public List<FriendEntity> findFriends(Long id) {
-        return userService.getFriendsListFriendByUserID(id);
+        return userService2.findFriendsListFriendByUserID(id);
     }
  
     public List<FriendOrNot> findFriendsOfTarget(String username) { 
@@ -94,7 +94,7 @@ public class FriendBean implements Serializable {
     }
 
     public void addFriend(Long id) {
-        if (userService.addFriend(SessionBean.getUserId(), id)) {
+        if (userService2.addFriend(SessionBean.getUserId(), id)) {
 
             System.err.println(id);
             addMessage("Request Sent!");

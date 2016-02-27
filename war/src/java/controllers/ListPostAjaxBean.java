@@ -18,18 +18,22 @@ import org.primefaces.context.RequestContext;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 import services.PostService;
+import servicesTertiaire.PostService2;
 
 /**
  *
  * @author Karl Lauret
  */
-@Named(value = "evNewsBlogsBean")
+@Named(value = "listPostAjaxBean")
 @ManagedBean
 @ViewScoped
-public class EvNewsBlogsBean implements java.io.Serializable {
+public class ListPostAjaxBean implements java.io.Serializable {
 
     @EJB
     PostService postService;
+
+    @EJB
+    PostService2 postService2;
 
     private String targetUsername;
 
@@ -87,15 +91,14 @@ public class EvNewsBlogsBean implements java.io.Serializable {
     }
 
     public List<PostEntity> notification(String username, Long postID) {
-        System.err.println("recommendation => Username = " + username + " , postID => " + postID);
+        System.err.println("notification => Username = " + username + " , postID => " + postID);
 
-            PostEntity tmp = postService.findByID(postID);
-            if (tmp != null) {
-                list = new ArrayList<>();
-                list.add(tmp); 
+        PostEntity tmp = postService2.findByID(postID);
 
-            }
-            return list; 
+        list = new ArrayList<>();
+        list.add(tmp);
+
+        return list;
 
     }
 
@@ -141,7 +144,7 @@ public class EvNewsBlogsBean implements java.io.Serializable {
 
     public void refresh(String componentID, Long id) {
         System.err.println("refresh");
-        PostEntity postModified = postService.findByID(id);
+        PostEntity postModified = postService2.findByID(id);
         System.err.println(postModified.getId());
         int index = 0;
         for (PostEntity p : this.list) {

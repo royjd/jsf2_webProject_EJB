@@ -40,25 +40,25 @@
 
 
                         <div>  
-                            <ui:fragment rendered="#{buttonView.sousPage == 'createAlbum'}"> 
+                            <ui:fragment rendered="#{paramViewBean.sousPage == 'createAlbum'}"> 
                                 <ui:include src="createAlbum.xhtml" />  
                             </ui:fragment>
                         </div>
 
                         <div>
-                            <ui:fragment rendered="#{buttonView.sousPage == 'album'}"> 
+                            <ui:fragment rendered="#{paramViewBean.sousPage == 'album'}"> 
                                 <ui:include src="album.xhtml" /> 
                             </ui:fragment>
                         </div>
 
                         <div>
-                            <ui:fragment rendered="#{buttonView.sousPage == 'displayAlbum'}"> 
+                            <ui:fragment rendered="#{paramViewBean.sousPage == 'displayAlbum'}"> 
                                 <ui:include src="displayAlbum.xhtml" /> 
                             </ui:fragment>
                         </div>
 
                         <div>
-                            <ui:fragment rendered="#{buttonView.sousPage == 'addPhoto'}"> 
+                            <ui:fragment rendered="#{paramViewBean.sousPage == 'addPhoto'}"> 
                                 <ui:include src="addPhoto.xhtml" /> 
                             </ui:fragment>
                         </div>

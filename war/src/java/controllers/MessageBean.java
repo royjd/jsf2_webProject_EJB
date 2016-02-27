@@ -18,6 +18,7 @@ import org.primefaces.context.RequestContext;
 import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.SelectEvent;
 import services.MessageService;
+import servicesSecondaire.MessageElementaire;
 import servicesSecondaire.UserService2;
 
 /**
@@ -36,6 +37,10 @@ public class MessageBean implements Serializable {
 
     @EJB
     MessageService messageService;
+    
+    
+    @EJB
+    MessageElementaire messageElementaire;
 
     /**
      * Creates a new instance of MessageBean
@@ -50,7 +55,7 @@ public class MessageBean implements Serializable {
 
     public List<GroupListNewMessages> getGroupMessage() {
        
-        return this.messageService.findGroupMessageByUserID(SessionBean.getUserId());
+        return this.messageElementaire.findGroupMessageByUserID(SessionBean.getUserId());
 
     }
 
@@ -58,8 +63,8 @@ public class MessageBean implements Serializable {
         System.err.println("GETMESSAGES : " + this.selectedGroupName);
         //TODO NEED TO MARK THEN AS READ
         if(this.selectedGroupName!=null){
-            this.messageService.messageRead(SessionBean.getUserId(), this.selectedGroupName.getGroupName());
-            return messageService.findMessageUserByGroupName(SessionBean.getUserId(), this.selectedGroupName.getGroupName());
+            this.messageElementaire.messageRead(SessionBean.getUserId(), this.selectedGroupName.getGroupName());
+            return messageElementaire.findMessageUserByGroupName(SessionBean.getUserId(), this.selectedGroupName.getGroupName());
         }else{
             return null; 
         }

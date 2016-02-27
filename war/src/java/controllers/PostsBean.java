@@ -30,7 +30,7 @@ import org.primefaces.model.UploadedFile;
 import services.PostService;
 import services.UserService;
 import servicesSecondaire.PhotoService;
-import servicesSecondaire.PostService2;
+import servicesTertiaire.PostService2;
 import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -75,9 +75,9 @@ public class PostsBean implements Serializable {
 
     private PostEntity postComment;
  
-    private static final String realPath = "/home/SP2MI/zdiawara/Bureau/images";
+   // private static final String realPath = "/home/SP2MI/zdiawara/Bureau/images";
     //private static final String realPath = "/home/zakaridia/Documents/Depot_Git/File/image";
-    //private static final String realPath = "C:/Users/Karl Lauret/AppData/Roaming/NetBeans/8.1/config/GF_4.1.1/domain1/applications/images";
+    private static final String realPath = "C:/Users/Karl Lauret/AppData/Roaming/NetBeans/8.1/config/GF_4.1.1/domain1/applications/images";
 
     /**
      * Creates a new instance of PostsBean

@@ -11,7 +11,7 @@
             <div class="row">   
                 <div class="col-sm-12">
                     <h1>Friend List</h1>  
-                    <ui:repeat value="#{friendBean.findFriendsOfTarget(buttonView.targetUsername)}" var="var" >  
+                    <ui:repeat value="#{friendBean.findFriendsOfTarget(paramViewBean.targetUsername)}" var="var" >  
                         <ui:param value="#{var.user}" name="user" /> 
                         <ui:param value="#{var.friend}" name="isFriend" />
 
@@ -44,9 +44,9 @@
                                                     <f:param name="u" value="${var.user.username}"/>
                                                 </h:commandLink>
                                             </h:form>
-                                            <h:form rendered="#{isFriend == true &amp;&amp; username == buttonView.targetUsername}" >     
+                                            <h:form rendered="#{isFriend == true &amp;&amp; username == paramViewBean.targetUsername}" >     
                                                 <p:commandLink value="Remove" actionListener="#{friendBean.removeFriend(user.id,id)}" 
-                                                               action="#{navigationBean.friend(buttonView.targetUsername)}"
+                                                               action="#{navigationBean.friend(paramViewBean.targetUsername)}"
                                                                onclick="$(this).hide()"  
 
                                                                class="pull-right btn btn-sm btn-danger" >
@@ -55,7 +55,7 @@
 
                                             </h:form> 
                                             <h:form rendered="#{var.friend == false &amp;&amp; var.user.id != id &amp;&amp; not empty id}" >      
-                                                <p:commandLink value="Send Request" action="#{navigationBean.friend(buttonView.targetUsername)}"  
+                                                <p:commandLink value="Send Request" action="#{navigationBean.friend(paramViewBean.targetUsername)}"  
                                                                actionListener="#{friendBean.addFriend(user.id)}" 
                                                                onclick="$(this).hide()" 
 

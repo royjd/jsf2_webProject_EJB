@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import services.UserService;
 import javax.faces.bean.ViewScoped;
 import org.apache.commons.codec.digest.DigestUtils;
+import servicesSecondaire.UserService2;
 
 /**
  *
@@ -32,14 +33,16 @@ public class UserBean {
 
     @EJB
     UserService userService;
+    @EJB
+    UserService2 userElementaire;
 
-    @ManagedProperty( name = "navigationBean" , value = "#{navigationBean}")
+    @ManagedProperty(name = "navigationBean", value = "#{navigationBean}")
     private NavigationBean navigationBean;
 
     /**
      * Creates a new instance of SessionBean
      */
-    public UserBean() { 
+    public UserBean() {
 
     }
 
@@ -48,13 +51,13 @@ public class UserBean {
      * @return
      */
     public String singIn() {
-        UserEntity user = userService.isValidUser(email, password);
+        UserEntity user = userElementaire.isValidUser(email, password);
         if (user == null) {
             FacesContext.getCurrentInstance().getExternalContext().getFlash().put("singin", "Invalid identifiant");
             return navigationBean.index();
         }
         SessionBean.setDataUser(user.getId(), user.getUsername(), user.getEmail());
-        return navigationBean.home();  
+        return navigationBean.home();
     }
 
     /**
@@ -74,7 +77,7 @@ public class UserBean {
     /**
      *
      * @return
-     */  
+     */
     public String logout() {
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         return navigationBean.index();
@@ -130,7 +133,5 @@ public class UserBean {
     public void setNavigationBean(NavigationBean navigationBean) {
         this.navigationBean = navigationBean;
     }
-   
-    
 
 }

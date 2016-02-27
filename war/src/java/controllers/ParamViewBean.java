@@ -11,13 +11,13 @@ import javax.faces.event.ActionEvent;
  
 @ManagedBean
 @ViewScoped
-public class ButtonView implements Serializable{ 
+public class ParamViewBean implements Serializable{ 
      
     private String page;
 
     private String sousPage;
 
-    public ButtonView() {
+    public ParamViewBean() {
         this.page = "default";
     }
     
