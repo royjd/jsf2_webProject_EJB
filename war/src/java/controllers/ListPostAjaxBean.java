@@ -116,11 +116,12 @@ public class ListPostAjaxBean implements java.io.Serializable {
     }
 
     public void loadMore(String page, String username) {
-        System.err.println("loadMore");
+        System.err.println("loadMore====================================================================");
         List<PostEntity> listtmp = new ArrayList<>();
         this.targetUsername = username;
         System.err.println("loadMore username + " + this.targetUsername);
-        if (this.list.size() >= 5) {
+        System.err.println("loadMore = + " + this.moreData);
+        if (this.list.size() >= 5 && moreData) {
             if (this.targetUsername == null || this.targetUsername.isEmpty()) {
 
                 listtmp = postService.getNextPostFromFriendAndMe(SessionBean.getUserId(), this.list.get(this.list.size() - 1).getId());
@@ -133,13 +134,14 @@ public class ListPostAjaxBean implements java.io.Serializable {
 
                 listtmp = (List<PostEntity>) postService.getNextRecommendationFromUserID(this.targetUsername, this.list.get(this.list.size() - 1).getId());
             }
-            System.err.println(listtmp.size() + "size of load more list");
+            System.err.println(listtmp.size() + " size of load more list");
             moreData = listtmp.size() == 5;
             this.list.addAll(listtmp);
 
         } else {
             moreData = false;
         }
+        System.err.println("loadMore = + " + this.moreData);
     }
 
     public void refresh(String componentID, Long id) {

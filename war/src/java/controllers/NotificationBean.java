@@ -6,7 +6,6 @@
 package controllers;
 
 import com.sun.org.apache.bcel.internal.generic.INSTANCEOF;
-import commun.GroupListNewMessages;
 import dao.CommentEntity;
 import dao.MessageUserEntity;
 import dao.NotificationEntity;

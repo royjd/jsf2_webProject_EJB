@@ -5,7 +5,6 @@
  */
 package services;
 
-import commun.GroupListNewMessages;
 import dao.FriendEntity;
 import dao.MessageEntity;
 import dao.MessageUserEntity;

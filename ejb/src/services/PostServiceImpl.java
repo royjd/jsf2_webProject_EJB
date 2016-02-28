@@ -26,7 +26,8 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.servlet.http.Part;
 import servicesSecondaire.UserService2;
-import commun.Files;
+import java.io.InputStream;
+import java.util.Map;
 
 /**
  *
@@ -118,7 +119,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public boolean createAlbum(String title, String description, String localisation, Long authorId, List<Files> files, String contextPath) {
+    public boolean createAlbum(String title, String description, String localisation, Long authorId, Map<String,InputStream> files, String contextPath) {
 
         UserEntity author = userService2.findByID(authorId);
 
@@ -139,7 +140,7 @@ public class PostServiceImpl implements PostService {
 
    
     @Override
-    public PostEntity addPhotoToAlbum(String username, Files file, String path, Long albumId) {
+    public PostEntity addPhotoToAlbum(String username, String fileName, InputStream inputstream, String path, Long albumId) {
         UserEntity author = userService2.findByUsername(username);
         if (author == null) {
             return null;
@@ -148,7 +149,7 @@ public class PostServiceImpl implements PostService {
         if (post == null) {
             return null;
         }
-        return photoService.createPhoto((AlbumEntity) post, author, file, path, true);
+        return photoService.createPhoto((AlbumEntity) post, author, fileName, inputstream, path, true);
     }
 
 

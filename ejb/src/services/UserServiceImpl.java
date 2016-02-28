@@ -5,7 +5,6 @@
  */
 package services;
 
-import commun.FriendOrNot;
 import servicesSecondaire.PhotoService;
 import dao.ExperienceDAO;
 import dao.FriendDAO;
@@ -94,27 +93,6 @@ public class UserServiceImpl implements UserService {
         return friend != null && owner != null && fe != null && fe.getAccepted();
     }
 
-    /**
-     *
-     * @param param
-     * @param id
-     * @return
-     */
-    @Override
-    public List<FriendOrNot> search(String param, Long id) {
-        List<UserEntity> users = userService.search(param);
-        List<FriendOrNot> results = new ArrayList<>();
-        if (id != null) {
-            for (UserEntity user : users) {
-                results.add(new FriendOrNot(user, userService.isFriend(id, user.getId())));
-            }
-        } else {
-            for (UserEntity user : users) {
-                results.add(new FriendOrNot(user, false));
-            }
-        }
-        return results;
-    }
 
     /**
      *
@@ -146,9 +124,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<FriendOrNot> getFriendListByUsername(String askedBy, String friendOf) {
+    public List<UserEntity> getFriendListByUsername(String askedBy, String friendOf) {
         List<FriendEntity> friends = userService.findFriendsListFriendByUserUsername(friendOf);
-        List<FriendOrNot> results = new ArrayList<>();
+        List<UserEntity> results = new ArrayList<>();
         if (askedBy != null) {
             for (FriendEntity friend : friends) {
                 UserEntity ue;
@@ -158,7 +136,7 @@ public class UserServiceImpl implements UserService {
                     ue = friend.getFriend();
                 }
 
-                results.add(new FriendOrNot(ue, this.isFriend(askedBy, ue.getUsername())));
+                results.add(ue);
             }
         } else {
             for (FriendEntity friend : friends) {
@@ -168,7 +146,7 @@ public class UserServiceImpl implements UserService {
                 } else {
                     ue = friend.getFriend();
                 }
-                results.add(new FriendOrNot(ue, false));
+                results.add(ue);
             }
         }
         return results;

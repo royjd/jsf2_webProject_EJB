@@ -32,14 +32,12 @@
     <h:body style="padding-top: 70px">
 
         <ui:include src="WEB-INF/xhtml/commun/header.xhtml" />
-        #{copain}
         <div class="container">
             <div class="row">   
                 <div class="col-sm-12">
                     <h1>SEARCH</h1>  
-                    <ui:repeat value="#{searchBean.searchPram(searchBean.param)}" var="var" >  
-                        <ui:param value="#{var.user}" name="user" />
-                        <ui:param value="#{var.friend}" name="isFriend" />
+                    <ui:repeat value="#{searchBean.searchPram(searchBean.param)}" var="user" >  
+                        <ui:param value="#{user}" name="user" />
 
                         <div class="col-sm-4">
 
@@ -47,30 +45,30 @@
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="col-sm-4 btn-info">
-                                            <img class="img-responsive" src="#{request.contextPath}/images/${var.user.profile.pictureProfile.mediaType.link}"/>
+                                            <img class="img-responsive" src="#{request.contextPath}/images/${user.profile.pictureProfile.mediaType.link}"/>
 
                                         </div>
                                         <div class="col-sm-8">
                                             <h3> 
                                                 <h:form>
-                                                    <h:commandLink value="${var.user.profile.firstName} ${var.user.profile.lastName}" action="#{navigationBean.wall()}">
-                                                        <f:param name="u" value="${var.user.username}"/>
+                                                    <h:commandLink value="${user.profile.firstName} ${user.profile.lastName}" action="#{navigationBean.wall()}">
+                                                        <f:param name="u" value="${user.username}"/>
                                                     </h:commandLink>
                                                 </h:form>
                                                 <br></br>
                                                 <h:form>
-                                                    <h:commandLink value="@${var.user.username}" action="#{navigationBean.profile()}">
-                                                        <f:param name="u" value="${var.user.username}"/>
+                                                    <h:commandLink value="@${user.username}" action="#{navigationBean.profile()}">
+                                                        <f:param name="u" value="${user.username}"/>
                                                     </h:commandLink>
                                                 </h:form>
 
                                             </h3> 
                                             <h:form>
                                                 <h:commandLink value="See wall" action="#{navigationBean.wall()}" class="btn btn-info btn-sm pull-left" >
-                                                    <f:param name="u" value="${var.user.username}"/> 
+                                                    <f:param name="u" value="${user.username}"/> 
                                                 </h:commandLink>
                                             </h:form>   
-                                            <h:form rendered="#{var.friend == false &amp;&amp; var.user.id != id &amp;&amp; not empty id}" >      
+                                            <h:form rendered="#{friendBean.isFriend(user.username) == false &amp;&amp; user.id != id &amp;&amp; not empty id}" >      
                                                 <p:commandLink value="Send Request" action="#{friendBean.addFriend(user.id)}" 
                                                                onclick="$(this).hide()" 
 

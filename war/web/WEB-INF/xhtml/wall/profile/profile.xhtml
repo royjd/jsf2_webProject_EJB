@@ -6,6 +6,10 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:composition>
+        <!-- set the active button in the nav -->
+        <script>
+            $(".target-active.about").addClass("active");
+        </script>
         <f:metadata>
             <f:event type="preRenderView" listener="#{paramViewBean.setSousPage(param['sp'])}"/>
         </f:metadata>
@@ -27,7 +31,7 @@
                             </h:form>
                         </div>
                     </div>
-                    
+
                     <!-- to know if the visiteur can modify information -->
                     <c:set var="canModify" value="#{profileBean.canModify(paramViewBean.targetUsername)}" scope="request"/>
                     <ui:fragment rendered="#{paramViewBean.sousPage == ''}"> 

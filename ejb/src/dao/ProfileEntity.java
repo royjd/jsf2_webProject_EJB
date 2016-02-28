@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -43,6 +44,7 @@ public class ProfileEntity implements Serializable {
 
     private String phone;
 
+    @Lob //Force to set the type of the column to clob in java db => TEXT in mysql
     private String description;
 
     private String country;
@@ -57,7 +59,6 @@ public class ProfileEntity implements Serializable {
     @JoinColumn(name = "pictureCover_id")
     private MediaEntity pictureCover;
 
-    
     @OneToMany(mappedBy = "profile")
     private List<ExperienceEntity> experiences = new ArrayList<>();
 
@@ -82,9 +83,6 @@ public class ProfileEntity implements Serializable {
         this.lastName = lastName;
         this.physical = new PhysicalEntity();
     }
-
-
-    
 
     /**
      *

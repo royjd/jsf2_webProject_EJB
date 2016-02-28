@@ -8,90 +8,89 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://java.sun.com/jsf/facelets">
     <ui:composition> 
-        <p:outputPanel > 
-            <p:dataTable id="philblog#{dataTableID}" 
-                         editable="true" 
-                         var="tier" value="#{posts}" 
-                         rowIndexVar="rowIndex">  
 
-                <p:column> 
-                    <p:fragment id="postDisplay_name" class="post">
-                        <div  class= "col-sm-12 header-body-container">
-                            <ui:include src="post.xhtml" >  
-                                <ui:param name="post" value="#{tier}" />    
-                            </ui:include>   
+        <p:dataTable id="philblog#{dataTableID}" 
+                     editable="true" 
+                     var="tier" value="#{posts}" 
+                     rowIndexVar="rowIndex">  
+
+            <p:column> 
+                <p:fragment id="postDisplay_name" class="post">
+                    <div  class= "col-sm-12 header-body-container">
+                        <ui:include src="post.xhtml" >  
+                            <ui:param name="post" value="#{tier}" />    
+                        </ui:include>   
 
 
+                    </div>
+                    <div class="postComment col-sm-12">
+                        <ui:repeat value="#{tier.comments}" var="commentPost" varStatus="loop">
+
+                            <ui:include src="post.xhtml" >   
+                                <ui:param name="post" value="#{commentPost}" />  
+
+                            </ui:include>  
+
+                        </ui:repeat> 
+
+
+                    </div>
+
+
+
+                </p:fragment>
+                <h:form id="createUserForm_form" class="form-horizontal" rendered="#{postsBean.getCanCommentTheTarget(tier.author.username)}">
+
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <h:inputText value="#{postsBean.message}" class="form-control" id="bodyCommet" pt:placeholder="Type your comment here!"/>
                         </div>
-                        <div class="postComment col-sm-12">
-                            <ui:repeat value="#{tier.comments}" var="commentPost" varStatus="loop">
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10"> 
 
-                                <ui:include src="post.xhtml" >   
-                                    <ui:param name="post" value="#{commentPost}" />  
+                            <p:commandButton value="Send" actionListener="#{postsBean.saveComment(tier.id,tier.id,true)}" 
+                                             oncomplete="update_current#{tier.id}()" 
+                                             class="btn btn-success submitComment pull-right">
 
-                                </ui:include>  
+                            </p:commandButton>   
+                            <p:remoteCommand name="update_current#{tier.id}"
+                                             update=":philblog#{dataTableID}"
+                                             actionListener="#{listPostAjaxBean.refresh(dataTableID,tier.id)}" >
+                            </p:remoteCommand>
+                        </div> 
+                    </div>  
 
-                            </ui:repeat> 
+                </h:form>
 
-
-                        </div>
-
-
- 
-                    </p:fragment>
-                    <h:form id="createUserForm_form" class="form-horizontal" rendered="#{postsBean.getCanCommentTheTarget(tier.author.username)}">
-
-                        <div class="form-group">
-                            <div class="col-sm-12">
-                                <h:inputText value="#{postsBean.message}" class="form-control" id="bodyCommet" pt:placeholder="Type your comment here!"/>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-10"> 
-
-                                <p:commandButton value="Send" actionListener="#{postsBean.saveComment(tier.id,tier.id,true)}" 
-                                                 oncomplete="update_current#{tier.id}()" 
-                                                 class="btn btn-success submitComment pull-right">
-
-                                </p:commandButton>   
-                                <p:remoteCommand name="update_current#{tier.id}"
-                                                 update=":philblog#{dataTableID}"
-                                                 actionListener="#{listPostAjaxBean.refresh(dataTableID,tier.id)}" >
-                                </p:remoteCommand>
-                            </div> 
-                        </div>  
-
-                    </h:form>
-
-                </p:column>
-            </p:dataTable>
-
+            </p:column>
+        </p:dataTable>
+        <p:outputPanel id="outputpanel#{dataTableID}"> 
             <h:panelGroup rendered="#{listPostAjaxBean.moreData}"> 
                 <script type="text/javascript">
 
                     $(document).ready(function () {
                         $('.loadmore').waypoint(function (direction) {
 
-                            if (direction === 'down') { 
-                                more_records();             
+                            if (direction === 'down') {
+                                more_records();
                             }
-                        },
-                                {offset: '100%'}
-                        );
+                        }, {offset: '100%'});
                     });
                 </script>         
-                <h:form>
- 
-                    <p:remoteCommand name="more_records"
-                                     update=":philblog#{dataTableID}" 
-                                     actionListener="#{listPostAjaxBean.loadMore(paramViewBean.page,paramViewBean.targetUsername)}" > 
- 
-                    </p:remoteCommand> 
-                </h:form>
+
+                <div class="loadmore" />
+
             </h:panelGroup>
 
         </p:outputPanel>
+        <h:form> 
+            <p:remoteCommand name="more_records"
+                             update=":philblog#{dataTableID} :outputpanel#{dataTableID}" 
+                             actionListener="#{listPostAjaxBean.loadMore(paramViewBean.page,paramViewBean.targetUsername)}" > 
 
+            </p:remoteCommand> 
+        </h:form>
     </ui:composition>
 </html>
 

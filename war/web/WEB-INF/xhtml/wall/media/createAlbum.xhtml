@@ -15,9 +15,9 @@
                     </h:inputText>
 
                     <p:fileUpload fileUploadListener="#{postsBean.saveFiles}" mode="advanced" dragDropSupport="false" multiple="true"
-                                  auto="true" update="messages" sizeLimit="100000" fileLimit="10" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+                                  auto="true"  sizeLimit="100000000" fileLimit="10" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
 
-                    <p:growl id="messages" showDetail="true" />
+                    
 
                     <h:inputText class="form-control" value="#{postsBean.localisation}" pt:placeholder="Localisation">
                     </h:inputText>

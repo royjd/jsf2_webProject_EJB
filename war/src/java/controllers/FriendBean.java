@@ -5,9 +5,10 @@
  */
 package controllers;
 
-import commun.FriendOrNot;
 import dao.FriendEntity;
+import dao.UserEntity;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -69,19 +70,20 @@ public class FriendBean implements Serializable {
     }
 
     public List<FriendEntity> findFriendsToAccept() {
-
-        return userService2.findFriendToAccept(SessionBean.getUserId());
+        if(SessionBean.isConnect())
+            return userService2.findFriendToAccept(SessionBean.getUserId());
+        else
+            return new ArrayList<>();
     }
 
     public List<FriendEntity> findFriends(Long id) {
         return userService2.findFriendsListFriendByUserID(id);
     }
- 
-    public List<FriendOrNot> findFriendsOfTarget(String username) { 
-        System.err.println("findFriendsOfTarget" + SessionBean.isConnect());
+
+    public List<UserEntity> findFriendsOfTarget(String username) {
         if (SessionBean.isConnect()) {
             return userService.getFriendListByUsername(SessionBean.getUsername(), username);
- 
+
         } else {
             return userService.getFriendListByUsername(null, username);
 
@@ -103,6 +105,17 @@ public class FriendBean implements Serializable {
 
             System.err.println("no Add Friend");
             addMessage("Request failed!");
+
+        }
+    }
+
+    public boolean isFriend(String targetUsername) {
+        System.err.println(targetUsername + " targetusername getCanRecommend");
+        if (SessionBean.isConnect()) {
+            return userService.isFriend(SessionBean.getUsername(), targetUsername);
+
+        } else {
+            return userService.isFriend(null, targetUsername);
 
         }
     }

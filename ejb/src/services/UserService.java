@@ -5,7 +5,6 @@
  */
 package services;
 
-import commun.FriendOrNot;
 import dao.FriendEntity;
 import dao.ProfileEntity;
 import dao.UserEntity;
@@ -22,8 +21,6 @@ public interface UserService {
 
     public Long add(String email, String username, String password, String firstName, String lastName);
 
-    public List<FriendOrNot> search(String param, Long id);
- 
     /**
      * accept the friend request
      *
@@ -33,8 +30,6 @@ public interface UserService {
      */
     public boolean acceptFriendship(Long acceptedBy, Long acceptedFrom);
 
-
-  
     /**
      * test if two user are friend
      *
@@ -42,7 +37,6 @@ public interface UserService {
      * @param userID2
      * @return true if they are else false
      */
-
     public boolean isFriend(Long userID1, Long userID2);
 
     /**
@@ -55,5 +49,6 @@ public interface UserService {
     public boolean isFriend(String username1, String username2);
 
     public boolean removeFriend(Long userID1, Long userID2);
- public List<FriendOrNot> getFriendListByUsername(String askedBy, String friendOf);
+
+    public List<UserEntity> getFriendListByUsername(String askedBy, String friendOf);
 }

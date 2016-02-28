@@ -9,11 +9,8 @@
     <ui:component>
         <div class="container">
             <div class="row">   
-                <div class="col-sm-12">
-                    <h1>Friend List</h1>  
-                    <ui:repeat value="#{friendBean.findFriendsOfTarget(paramViewBean.targetUsername)}" var="var" >  
-                        <ui:param value="#{var.user}" name="user" /> 
-                        <ui:param value="#{var.friend}" name="isFriend" />
+                <div class="col-xs-10">
+                    <ui:repeat value="#{friendBean.findFriendsOfTarget(paramViewBean.targetUsername)}" var="user" >  
 
                         <div class="col-sm-4">
 
@@ -21,30 +18,30 @@
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="col-sm-4 btn-info">
-                                            <img class="img-responsive" src="#{request.contextPath}/images/${var.user.profile.pictureProfile.mediaType.link}"/>
+                                            <img class="img-responsive" src="#{request.contextPath}/images/${user.profile.pictureProfile.mediaType.link}"/>
 
                                         </div>
                                         <div class="col-sm-8">
                                             <h3> 
                                                 <h:form>
-                                                    <h:commandLink value="${var.user.profile.firstName} ${var.user.profile.lastName}" action="#{navigationBean.wall()}">
-                                                        <f:param name="u" value="${var.user.username}"/>
+                                                    <h:commandLink value="${user.profile.firstName} ${user.profile.lastName}" action="#{navigationBean.wall()}">
+                                                        <f:param name="u" value="${user.username}"/>
                                                     </h:commandLink>
                                                 </h:form>
                                                 <br></br>
                                                 <h:form>
-                                                    <h:commandLink value="@${var.user.username}" action="#{navigationBean.wall()}">
-                                                        <f:param name="u" value="${var.user.username}"/>
+                                                    <h:commandLink value="@${user.username}" action="#{navigationBean.wall()}">
+                                                        <f:param name="u" value="${user.username}"/>
                                                     </h:commandLink>
                                                 </h:form>
 
                                             </h3> 
                                             <h:form>
                                                 <h:commandLink value="See wall" action="#{navigationBean.wall()}" class="btn btn-info btn-sm pull-left" >
-                                                    <f:param name="u" value="${var.user.username}"/>
+                                                    <f:param name="u" value="${user.username}"/>
                                                 </h:commandLink>
                                             </h:form>
-                                            <h:form rendered="#{isFriend == true &amp;&amp; username == paramViewBean.targetUsername}" >     
+                                            <h:form rendered="#{friendBean.isFriend(user.username) == true &amp;&amp; username == paramViewBean.targetUsername}" >     
                                                 <p:commandLink value="Remove" actionListener="#{friendBean.removeFriend(user.id,id)}" 
                                                                action="#{navigationBean.friend(paramViewBean.targetUsername)}"
                                                                onclick="$(this).hide()"  
@@ -54,7 +51,7 @@
                                                 </p:commandLink>   
 
                                             </h:form> 
-                                            <h:form rendered="#{var.friend == false &amp;&amp; var.user.id != id &amp;&amp; not empty id}" >      
+                                            <h:form rendered="#{friendBean.isFriend(user.username) == false &amp;&amp; user.id != id &amp;&amp; not empty id}" >      
                                                 <p:commandLink value="Send Request" action="#{navigationBean.friend(paramViewBean.targetUsername)}"  
                                                                actionListener="#{friendBean.addFriend(user.id)}" 
                                                                onclick="$(this).hide()" 
@@ -72,6 +69,9 @@
 
                     </ui:repeat>
                 </div>
+                <h:panelGroup class="col-xs-2" rendered="#{not empty id and paramViewBean.targetUsername == username }">
+                    <ui:include src="../../commun/sideBar/friendRequest.xhtml" />  
+                </h:panelGroup>
             </div>
         </div>
     </ui:component> 

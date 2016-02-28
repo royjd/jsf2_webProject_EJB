@@ -7,7 +7,10 @@
       xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
       xmlns:ui="http://java.sun.com/jsf/facelets">
     <ui:composition>
-
+        <!-- set the active button in the nav -->
+        <script>
+            $(".target-active.wall").addClass("active");
+        </script>
         <!-- load required message from the bundle messages -->
         <f:loadBundle basename="bundle.messages" var="msg"/>
         <f:metadata>
@@ -64,8 +67,7 @@
                 <ui:include src="../commun/post/posts.xhtml" >
                     <ui:param name="posts" value="#{listPostAjaxBean.wall(param['u'])}" /> 
                 </ui:include>
-                <div id="loadmore" class="loadmore">LOADING OMG</div>
-                <div class="nomoreloadmore" style="display: none;">No more Post</div>
+
 
             </div>
 

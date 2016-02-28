@@ -7,51 +7,58 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:composition>
-
-        <div class="row sideBarBlock">
-            <div class="col-sm-12">
-                <div class="border-bot">
-                    <h2>
+        <div class="row">
+            <h:panelGroup class="col-xs-12">
+                <div class = "panel panel-default">
+                    <div class ="panel-heading">
                         <h:form >  
                             <h:commandLink value="Friend List" action="#{navigationBean.friend()}"  >
                                 <f:param name="u" value="#{username}"/>
                             </h:commandLink>
-                        </h:form>
-                    </h2>
-                    <div class="row"> 
-                        <ui:repeat value="#{friendBean.findFriends(id)}" var="friend_loop" >
-                            <h:form >     
-                                <div  id="friend_list_#{friend_loop.id}"  class="col-sm-12">
-                                    <h:panelGroup rendered="#{friend_loop.friend.id == id}">   
-
-                                        <h:commandLink value="@#{friend_loop.owner.username}" action="#{navigationBean.wall()}"  >
-                                            <f:param name="u" value="#{friend_loop.owner.username}"/>
-                                        </h:commandLink>
-                                    </h:panelGroup>
-                                    <h:panelGroup rendered="#{friend_loop.owner.id == id}">    
-
-                                        <h:commandLink value="@#{friend_loop.friend.username}" action="#{navigationBean.wall()}"  >
-                                            <f:param name="u" value="#{friend_loop.friend.username}"/>
-                                        </h:commandLink>
-
-                                    </h:panelGroup>
-
-                                    <p:commandLink action="#{navigationBean.home()}"
-                                                   actionListener="#{friendBean.removeFriend(friend_loop.id)}"  
-                                                   onclick="$('#friend_list_#{friend_loop.id}').hide()"  
-                                                   class="btn btn-xs btn-danger glyphicon glyphicon-remove pull-right">
-
-                                    </p:commandLink>  
-
-                                </div>  
-                            </h:form> 
-
-                        </ui:repeat>
+                        </h:form> 
                     </div>
+                    <div class="panel-content">
+                        <div class="row sideBarBlock">
+                            <div class="col-sm-12">
+                                <div class="border-bot">
+                                    <div class="row"> 
+                                        <ui:repeat value="#{friendBean.findFriends(id)}" var="friend_loop" >
+                                            <h:form >     
+                                                <div  id="friend_list_#{friend_loop.id}"  class="col-sm-12">
+                                                    <h:panelGroup rendered="#{friend_loop.friend.id == id}">   
 
+                                                        <h:commandLink value="@#{friend_loop.owner.username}" action="#{navigationBean.wall()}"  >
+                                                            <f:param name="u" value="#{friend_loop.owner.username}"/>
+                                                        </h:commandLink>
+                                                    </h:panelGroup>
+                                                    <h:panelGroup rendered="#{friend_loop.owner.id == id}">    
+
+                                                        <h:commandLink value="@#{friend_loop.friend.username}" action="#{navigationBean.wall()}"  >
+                                                            <f:param name="u" value="#{friend_loop.friend.username}"/>
+                                                        </h:commandLink>
+
+                                                    </h:panelGroup>
+
+                                                    <p:commandLink action="#{navigationBean.home()}"
+                                                                   actionListener="#{friendBean.removeFriend(friend_loop.id)}"  
+                                                                   onclick="$('#friend_list_#{friend_loop.id}').hide()"  
+                                                                   class="btn btn-xs btn-danger glyphicon glyphicon-remove pull-right">
+
+                                                    </p:commandLink>  
+
+                                                </div>  
+                                            </h:form> 
+
+                                        </ui:repeat>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
-            </div>
+            </h:panelGroup>
         </div>
     </ui:composition>
 </html>

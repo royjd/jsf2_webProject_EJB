@@ -5,7 +5,6 @@
  */
 package services;
 
-import commun.Files;
 import dao.AlbumEntity;
 import dao.CommentEntity;
 import dao.MediaEntity;
@@ -13,7 +12,9 @@ import dao.NewsEntity;
 import dao.PostEntity;
 import dao.RecomendationEntity;
 import dao.UserEntity;
+import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 import javax.ejb.Local;
 import javax.servlet.http.Part;
 
@@ -24,19 +25,13 @@ import javax.servlet.http.Part;
 @Local
 public interface PostService {
 
-  
-
     public PostEntity createComment(String message, Long authorID, Long parentID, Long mainID);
 
-   
- 
-   
     //public AlbumEntity createAlbum(String title, String description, String localisation, Long authorId);
-    
-    public boolean createAlbum(String title, String description, String localisation, Long authorId, List<Files> files, String contextPath);
-    
-    public PostEntity addPhotoToAlbum(String username, Files file, String path, Long albumId);
-   
+    public boolean createAlbum(String title, String description, String localisation, Long authorId, Map<String,InputStream> files, String contextPath);
+
+    public PostEntity addPhotoToAlbum(String username, String fileName, InputStream inputstream, String path, Long albumId);
+
     /**
      * return the most recent post from the given user id and his friends
      *
@@ -91,13 +86,10 @@ public interface PostService {
      */
     public List<PostEntity> getRecentRecommendationFromUserID(String username);
 
-
     public PostEntity createNews(String title, String message, Part file, String contextPath, Long authorID, Long targetID);
- 
 
     public PostEntity createRecommendation(String title, String message, Long authorID, String targetUsername);
 
     public PostEntity createNews(String title, String message, Part file, String realPath, String authorUsername, String targetUsername);
-
 
 }
