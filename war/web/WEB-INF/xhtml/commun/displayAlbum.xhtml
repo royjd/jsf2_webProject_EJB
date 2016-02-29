@@ -8,12 +8,11 @@
 
 
     <img src="#{request.contextPath}/images/#{link}" class="img-responsive"/>
-
     <div  style="text-align:center;">
         <h4>
             <h:commandLink value="#{title}" action="#{navigationBean.displayAlbum()}">
                 <f:param name="id" value="#{id}"/>
-                <f:param name="u" value="${param['u']}"/>
+                <f:param name="u" value="#{buttonView.targetUsername}"/>
             </h:commandLink>
         </h4>
         <p>#{body}</p>

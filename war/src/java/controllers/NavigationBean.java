@@ -128,7 +128,8 @@ public class NavigationBean implements Serializable {
     }
 
     private String wallSousPage(String page, String souspage, String username, Long id) {
-        if (username != null) {
+        System.err.println(page +" "+souspage+" "+username+" "+id);
+        if (username != null && !username.isEmpty()) {
             return "wall?faces-redirect=true&p=" + page + "&sp=" + souspage + "&id=" + id + "&u=" + username;
         }
         //return "wall?faces-redirect=true";
