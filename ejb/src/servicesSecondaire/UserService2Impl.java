@@ -5,9 +5,13 @@
  */
 package servicesSecondaire;
 
+import servicesTertiaire.PostService2;
 import dao.ExperienceDAO;
 import dao.FriendDAO;
 import dao.FriendEntity;
+import dao.MediaEntity;
+import dao.PhotoDAO;
+import dao.PhotoEntity;
 import dao.PhysicalDAO;
 import dao.PostDAO;
 import dao.ProfileDAO;
@@ -29,21 +33,20 @@ import javax.ejb.Stateless;
 @Stateless
 public class UserService2Impl implements UserService2 {
 
+    
+    @EJB
+    PostService2 postService2;
     @EJB
     UserDAO userDao;
 
     @EJB
     PostDAO postDao;
 
-    @EJB
-    PhotoService photoService;
-
-    @EJB
-    servicesSecondaire.PostService2 postService;
 
     @EJB
     FriendDAO friendDao;
-
+    @EJB
+    PhotoDAO photoDao;
     @EJB
     ProfileDAO profileDao;
 
@@ -59,18 +62,39 @@ public class UserService2Impl implements UserService2 {
      * @return
      */
     @Override
-    public UserEntity create(UserEntity u) {
-        if (!existUser(u.getEmail(), u.getUsername())) {
+    public UserEntity create(String email, String username, String password, String firstName, String lastName) {
+        if (!existUser(email, username)) {
+            UserEntity u = new UserEntity(email, username, password, firstName, lastName);
             Long userId = userDao.save(u);
             u.setId(userId);
             u = userDao.findByID(u.getId());
-            photoService.createDefaultProfilePhotos(u);
+            this.createDefaultProfilePhotos(u);
             profileDao.update(u.getProfile());
+            postService2.createDefaultAlbums(u);
             return u;
         }
         return null;
     }
+ 
+    private void createDefaultProfilePhotos(UserEntity u) {
 
+        //Profile picture
+        PhotoEntity photo = new PhotoEntity("Profile Picture", "/Medias/defaulProfile.jpg");
+        this.photoDao.save(photo);
+        MediaEntity m = new MediaEntity("Default Profile Picture", "", u);
+        m.setMediaType(photo);
+        postService2.createPost(m, u, u, false);
+        u.getProfile().setPictureProfile(m);
+
+        //Profile cover picture
+        PhotoEntity photo2 = new PhotoEntity("Cover Picture", "/Medias/defaulProfile.jpg");
+        this.photoDao.save(photo2);
+        MediaEntity m2 = new MediaEntity("Default Cover Picture", "", u);
+        m2.setMediaType(photo2);
+        postService2.createPost(m2, u, u, false);
+        u.getProfile().setPictureCover(m2);
+
+    }
     /**
      *
      * @param id
@@ -118,26 +142,13 @@ public class UserService2Impl implements UserService2 {
 
     /**
      *
-     * @param email
+     * @param identifiant
      * @param password
      * @return
      */
     @Override
-    public UserEntity isValidUser(String email, String password) {
-        UserEntity ue = this.userDao.findByEmail(email);
-        if (ue != null) {
-            try {
-                if (ue.isValidPassword(password)) {
-                    return ue;
-                }
-                return null;
-            } catch (NoSuchAlgorithmException | InvalidKeySpecException ex) {
-                Logger.getLogger(UserService2Impl.class.getName()).log(Level.SEVERE, null, ex);
-                return null;
-            }
-        } else {
-            return null;
-        }
+    public UserEntity isValidUser(String identifiant, String password) {
+        return this.userDao.connect(identifiant, password);
     }
 
     /**
@@ -189,13 +200,16 @@ public class UserService2Impl implements UserService2 {
      */
     @Override
     public boolean isFriend(String username1, String username2) {
+        if (username1 == null || username1.isEmpty() || username2 == null || username2.isEmpty()) {
+            return false;
+        }
         if (username1.equals(username2)) {
             return false;
         }
         UserEntity friend = this.userDao.findByUsername(username1);
         UserEntity owner = this.userDao.findByUsername(username2);
         FriendEntity fe = this.friendDao.findByFriendShip(friend.getId(), owner.getId());//Variables have bad Name the order doesn't matter for the find
-        return friend != null && owner != null && fe != null;
+        return friend != null && owner != null && fe != null && fe.getAccepted();
     }
 
     /**
@@ -229,48 +243,9 @@ public class UserService2Impl implements UserService2 {
      * @return
      */
     @Override
-    public List<FriendEntity> getFriendToAccept(Long userId) {
+    public List<FriendEntity> findFriendToAccept(Long userId) {
 
         return friendDao.findFriendToAcceptFromUserID(userId);
-    }
-
-    /**
-     *
-     * @param acceptedBy
-     * @param acceptedFrom
-     * @return
-     */
-    @Override
-    public boolean acceptFriendship(Long acceptedBy, Long acceptedFrom) {
-        if (acceptedBy.equals(acceptedFrom)) {
-            return false;
-        }
-        FriendEntity fe = this.friendDao.findByFriendShip(acceptedBy, acceptedFrom);
-        if (fe != null) {
-            fe.setAccepted(Boolean.TRUE);
-            this.friendDao.update(fe);
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     *
-     * @param deniedBy
-     * @param deniedFrom
-     * @return
-     */
-    @Override
-    public boolean deniedFriendship(Long deniedBy, Long deniedFrom) {
-        if (deniedBy.equals(deniedFrom)) {
-            return false;
-        }
-        FriendEntity fe = this.friendDao.findByFriendShip(deniedBy, deniedFrom);
-        if (fe != null) {
-            this.friendDao.delete(fe);
-        }
-        return false;
-
     }
 
     /**
@@ -279,11 +254,12 @@ public class UserService2Impl implements UserService2 {
      * @return
      */
     @Override
-    public List<FriendEntity> getFriendsListFriendByUserID(Long userID) {
+    public List<FriendEntity> findFriendsListFriendByUserID(Long userID) {
         return this.friendDao.findFriendsByUserID(userID);
     }
+
     @Override
-    public List<FriendEntity> getFriendsListFriendByUserUsername(String username) {
+    public List<FriendEntity> findFriendsListFriendByUserUsername(String username) {
         return this.friendDao.findFriendsByUserUsername(username);
     }
 
@@ -293,7 +269,7 @@ public class UserService2Impl implements UserService2 {
      * @return
      */
     @Override
-    public List<UserEntity> getFriendsListUserByUserID(Long userID) {
+    public List<UserEntity> findFriendsListUserByUserID(Long userID) {
         List<UserEntity> lue = new ArrayList<>();
         List<FriendEntity> lfe = this.friendDao.findFriendsByUserID(userID);
         for (FriendEntity fe : lfe) {
@@ -307,41 +283,68 @@ public class UserService2Impl implements UserService2 {
 
     }
 
-    /**
-     *
-     * @param ue
-     * @return
-     */
-    @Override
-    public List<UserEntity> getFriendToAccept(UserEntity ue) {
-        ue.getFriendToAccept().size();
-        if (ue.getId() != null && ue.getFriendToAccept() != null) {
-
-            return ue.getFriendToAccept();
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     *
-     * @param ue
-     * @return
-     */
-    @Override
-    public List<FriendEntity> getFriends(UserEntity ue) {
-        if (ue.getId() != null) {
-            List<FriendEntity> friends = new ArrayList<>();
-            friends.addAll(ue.getFriends());
-            friends.addAll(ue.getFriendedBy());
-            return friends;
-        }
-        return null;
-    }
-
     @Override
     public boolean existUser(String email, String username) {
         return (this.userDao.findByEmail(email) != null) || (this.userDao.findByUsername(username) != null);
+    }
+
+    @Override
+    public List<Long> findUsersIdOfFriends(Long userID) {
+        return friendDao.findUsersIdOfFriends(userID);
+    } 
+
+    @Override
+    public FriendEntity findByFriendShip(Long friendId, Long ownerId) {
+        return friendDao.findByFriendShip(friendId, ownerId);
+    }
+    // Add business logic below. (Right-click in editor and choose
+    // "Insert Code > Add Business Method")
+
+    @Override
+    public boolean save(FriendEntity fe, UserEntity owner, UserEntity friend) {
+        if (friend != null && owner != null && fe == null) {
+            fe = new FriendEntity(owner, friend);
+            friendDao.save(fe);
+            //fe = this.friendDao.findByID(fe.getId());//TODO HERE NOT SURE THAT THIS IS NEEDED
+            //this.userDao.addFriend(friend, owner, fe);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public FriendEntity findFriendByID(Long friendId) {
+        return friendDao.findByID(friendId);
+    }
+
+    @Override
+    public boolean updateFriendShip(FriendEntity fe) {
+        if (fe != null) {
+            fe.setAccepted(Boolean.TRUE);
+            friendDao.update(fe);
+            return true;
+        }
+        System.err.println("accept Friendship fe==null");
+        return false;
+    }
+
+    @Override
+    public boolean removeFriend(FriendEntity fe) {
+        if (fe != null) {
+            friendDao.delete(fe);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public List<FriendEntity> findFriendsByUserID(Long userID) {
+        return this.friendDao.findFriendsByUserID(userID);
+    }
+
+    @Override
+    public List<FriendEntity> findFriendsByUsername(String username) {
+        return this.friendDao.findFriendsByUserUsername(username);
     }
 
 }

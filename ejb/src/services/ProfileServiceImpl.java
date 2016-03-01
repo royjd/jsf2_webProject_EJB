@@ -7,21 +7,21 @@ package services;
 
 import dao.AlbumEntity;
 import dao.ExperienceEntity;
+import dao.LocalisationEntity;
 import dao.MediaEntity;
 import dao.PhysicalEntity;
 import dao.PostEntity;
 import dao.ProfileDAO;
 import dao.ProfileEntity;
 import dao.UserEntity;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.servlet.http.Part;
-import servicesSecondaire.ExperienceService;
-import servicesSecondaire.LocalisationService;
 import servicesSecondaire.PhotoService;
-import servicesSecondaire.PhysicalService;
-import servicesSecondaire.PostService2;
+import servicesTertiaire.PostService2;
+import servicesSecondaire.ProfileElementaire;
 import servicesSecondaire.UserService2;
 
 /**
@@ -35,106 +35,22 @@ public class ProfileServiceImpl implements ProfileService {
     PhotoService photoService2;
 
     @EJB
-    LocalisationService localisationService;
-
-    @EJB
-    ExperienceService experienceService;
-
-    @EJB
-    PhysicalService physicalService;
-
-    @EJB
     PostService2 postService2;
 
     @EJB
     UserService2 userService2;
 
     @EJB
-    ProfileDAO profileDao;
-
-    /**
-     *
-     * @param p
-     * @return
-     */
-    @Override
-    public Boolean save(ProfileEntity p) {
-        if (p == null) {
-            return false;
-        }
-
-        Long id = profileDao.save(p);
-
-        if (id == null) {
-            return false;
-        }
-
-        p.setId(id);
-
-        return true;
-    }
-
-    /**
-     *
-     * @param p
-     */
-    @Override
-    public void update(ProfileEntity p) {
-        profileDao.update(p);
-    }
-
-    /**
-     *
-     * @param p
-     */
-    @Override
-    public void delete(ProfileEntity p) {
-        profileDao.delete(p);
-    }
-
-    /**
-     *
-     * @param userID
-     * @return
-     */
-    @Override
-    public ExperienceEntity getLastExperienceByUser(Long userID) {
-        return experienceService.findLastExperienceForUser(userID);
-    }
-
-    /**
-     *
-     * @param profileID
-     * @return
-     */
-    @Override
-    public ExperienceEntity getLastExperienceByProfile(Long profileID) {
-        return experienceService.findLastExperienceForProfile(profileID);
-    }
-
-    @Override
-    public Boolean createProfile(ProfileEntity profile) {
-        return physicalService.save(profile.getPhysical()) && this.save(profile);
-    }
-
-    @Override
-    public List<ExperienceEntity> getProfileExperiences(Long profileID, int limit) {
-        return experienceService.findExperiencesForProfil(profileID, limit);
-    }
-
-    @Override
-    public List<ExperienceEntity> getProfileExperiences(Long profileID) {
-        return experienceService.findExperiencesForProfil(profileID);
-    }
+    ProfileElementaire profileElementaire;
 
     @Override
     public boolean defineProfilePicture(Part file, Long userId, String context) {
-        return  this.definePicture(file, userId, context, "profile");
+        return this.definePicture(file, userId, context, "profile");
     }
 
     @Override
     public boolean defineCoverPicture(Part file, Long userId, String context) {
-        return  this.definePicture(file, userId, context, "cover");
+        return this.definePicture(file, userId, context, "cover");
     }
 
     private boolean definePicture(Part file, Long userId, String context, String type) {
@@ -150,6 +66,7 @@ public class ProfileServiceImpl implements ProfileService {
         if (post == null) {
             return false;
         }
+
         ProfileEntity p = u.getProfile();
         switch (type) {
             case "cover":
@@ -159,17 +76,79 @@ public class ProfileServiceImpl implements ProfileService {
                 p.setPictureProfile((MediaEntity) post);
                 break;
         }
-        profileDao.update(p);
+        profileElementaire.update(p);
         return true;
     }
 
     @Override
-    public String coverUrl(String username) {
+    public String coverUrltmp(String username) {
         UserEntity u = userService2.findByUsername(username);
-        if(u == null){
+        if (u == null) {
             return "";
         }
         return u.getProfile().getPictureCover().getMediaType().getLink();
+    }
+
+    @Override
+    public void editProfile(String firstName, String lastName, String phone, String city, String country, String description, Date birthDay, Double height, Double weight, String gender, Long userId) {
+        UserEntity u = userService2.findByID(userId);
+        if (u != null) {
+
+            ProfileEntity profile = u.getProfile();
+
+            profile.setLastName(lastName);
+            profile.setFirstName(firstName);
+            profile.setDescription(description);
+            profile.setPhone(phone);
+            profile.setCity(city);
+            profile.setCountry(country);
+            profile.setBirthDay(birthDay);
+            
+            PhysicalEntity physical = profile.getPhysical();
+            physical.setGender(gender);
+            physical.setHeight(height);
+            physical.setWeight(weight);
+
+            profileElementaire.update(profile);
+        }
+    }
+
+    @Override
+    public void createExperience(Long userID, String title, String description, Date realisationDate, String experienceCity, String experienceCityStat, String experienceCityStreet, Integer experienceCityZipcode) {
+
+        ExperienceEntity e = new ExperienceEntity(title, description, realisationDate);
+        LocalisationEntity l = new LocalisationEntity(experienceCity, experienceCityStat, experienceCityStreet, experienceCityZipcode);
+        e.setProfile(userService2.findByID(userID).getProfile()); // Set the profile 
+        e.setLocalisation(l);
+        profileElementaire.saveExperience(e);
+
+    }
+
+    @Override
+    public void editExperience(Long experienceID, Long userID, String title, String description, Date realisationDate, String experienceCity, String experienceCityStat, String experienceCityStreet, Integer experienceCityZipcode) {
+        ExperienceEntity e = profileElementaire.findExperienceByID(experienceID);
+        if(e==null)
+            return;
+        e.setTitle(title);
+        e.setDescription(description);
+        e.setRealisationDate(realisationDate);
+        LocalisationEntity l = e.getLocalisation();
+        l.setCity(experienceCity);
+        l.setStat(experienceCityStat);
+        l.setStreet(experienceCityStreet);
+        l.setZipcode(experienceCityZipcode);
+
+        profileElementaire.updateExperience(e);
+    }
+
+    @Override
+    public void deleteExperience(Long id, Long experienceId) {
+        UserEntity ue = userService2.findByID(id);
+        ExperienceEntity e = profileElementaire.findExperienceByID(experienceId);
+        if (e != null && ue.getProfile().getId().equals(e.getProfile().getId())) {
+            profileElementaire.deleteExperience(e);
+        }
+
     }
 
 }

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package servicesSecondaire;
+package servicesTertiaire;
 
 import services.*;
 import dao.AlbumEntity;
@@ -20,26 +20,25 @@ import java.util.Calendar;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import servicesSecondaire.MessageElementaire;
 
 /**
  *
  * @author Karl Lauret
  */
 @Stateless
-public class PostService2Impl implements servicesSecondaire.PostService2 {
+public class PostService2Impl implements servicesTertiaire.PostService2 {
 
     @EJB
     PostDAO postDao;
 
     @EJB
-    PhotoService photoService;
-
-    @EJB
     FriendDAO friendDAO;
 
     @EJB
-    MessageService messageService;
-
+    MessageElementaire messageElementaire;
+    @EJB
+    MessageService messageService;//TODO COMPISIT HERE WTF
     @EJB
     UserDAO userDao;
 
@@ -54,7 +53,7 @@ public class PostService2Impl implements servicesSecondaire.PostService2 {
 
         Long id = postDao.save(p);
         p.setId(id);
-        NotificationEntity not = messageService.addNotification(p, "notification", ue);
+        NotificationEntity not = messageElementaire.addNotification(p, "notification", ue);
         List<FriendEntity> fe = friendDAO.findFriendsByUserID(ue.getId());
         messageService.sendNotifToFriends(not, fe);
         return p;
@@ -97,11 +96,13 @@ public class PostService2Impl implements servicesSecondaire.PostService2 {
 
     @Override
     public AlbumEntity findAlbum(Long id, String type) {
+        System.err.println(" userID = " + id + "; type" + type);
         PostEntity post = postDao.findAlbum(id, type);
-        AlbumEntity album = new AlbumEntity();
-        album.setId(post.getId());
-        album.setTitle(type);
-        return album;
+        System.err.println(" poste = " + post);
+        /*AlbumEntity album = new AlbumEntity();
+         album.setId(post.getId());
+         album.setTitle(type);*/
+        return (AlbumEntity) post;
     }
 
     @Override
@@ -110,13 +111,13 @@ public class PostService2Impl implements servicesSecondaire.PostService2 {
     }
 
     @Override
-    public PostEntity findAlbum(Long id, Long albumId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<PostEntity> loadMedias(String username) {
+        return postDao.loadMedias(username);
     }
 
     @Override
-    public void update(PostEntity postEntity) {
-        this.postDao.update(postEntity);  
+    public PostEntity findAlbum(Long id, Long albumId) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

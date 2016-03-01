@@ -5,11 +5,12 @@
  */
 package servicesSecondaire;
 
-import commun.Files;
+import servicesTertiaire.PostService2;
 import dao.AlbumEntity;
 import dao.MediaEntity;
 import dao.PhotoDAO;
 import dao.PhotoEntity;
+import dao.PostDAO;
 import dao.PostEntity;
 import dao.UserEntity;
 import java.io.FileNotFoundException;
@@ -20,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -38,10 +40,10 @@ public class PhotoServiceImpl implements PhotoService {
     PhotoDAO photoDao;
 
     @EJB
-    PostService2 postService2;
+    PostDAO postDao;
 
     @EJB
-    UserService2 userService;
+    PostService2 postService2;
 
     /**
      *
@@ -94,9 +96,7 @@ public class PhotoServiceImpl implements PhotoService {
      * @throws IOException
      */
     @Override
-    public PhotoEntity upload(Files file, String username, AlbumEntity album, String contextPath) throws FileNotFoundException, IOException {
-
-        String fileName = file.getName();
+    public PhotoEntity upload(String fileName, InputStream inputstream, String username, AlbumEntity album, String contextPath) throws FileNotFoundException, IOException {
 
         if (!isValidExtension(fileName)) {
             return null;
@@ -117,7 +117,7 @@ public class PhotoServiceImpl implements PhotoService {
         if (dir.canWrite()) {
             OutputStream out = new FileOutputStream(path + File.separator + fileName);
 
-            InputStream filecontent = file.getContent();
+            InputStream filecontent = inputstream;
             int read;
             final byte[] bytes = new byte[1024];
             while ((read = filecontent.read(bytes)) != -1) {
@@ -163,31 +163,10 @@ public class PhotoServiceImpl implements PhotoService {
     }
 
     @Override
-    public void createDefaultProfilePhotos(UserEntity u) {
-
-        //Profile picture
-        PhotoEntity photo = new PhotoEntity("Profile Picture", "/Medias/defaulProfile.jpg");
-        this.add(photo);
-        MediaEntity m = new MediaEntity("Default Profile Picture", "", u);
-        m.setMediaType(photo);
-        postService2.createPost(m, u, u, false);
-        u.getProfile().setPictureProfile(m);
-
-        //Profile cover picture
-        PhotoEntity photo2 = new PhotoEntity("Cover Picture", "/Medias/defaulProfile.jpg");
-        this.add(photo2);
-        MediaEntity m2 = new MediaEntity("Default Cover Picture", "", u);
-        m2.setMediaType(photo2);
-        postService2.createPost(m2, u, u, false);
-        u.getProfile().setPictureCover(m2);
-
-    }
-
-    @Override
-    public PostEntity createPhoto(AlbumEntity album, UserEntity author, Files file, String contextPath, Boolean display) {
+    public PostEntity createPhoto(AlbumEntity album, UserEntity author, String fileName, InputStream inputstream, String contextPath, Boolean display) {
         PostEntity post = null;
         try {
-            PhotoEntity photo = this.upload(file, author.getUsername(), album, contextPath);
+            PhotoEntity photo = this.upload(fileName, inputstream, author.getUsername(), album, contextPath);
             if (photo != null) {
                 MediaEntity media = new MediaEntity();
                 if ("DefaulAlbum".equals(album.getTitle())) {
@@ -196,6 +175,7 @@ public class PhotoServiceImpl implements PhotoService {
                 media.setMediaType(photo);
                 media.setAlbum(album);
                 post = postService2.createPost(media, author, author, display);
+                this.setAlbumCover(album, post);
             }
         } catch (IOException ex) {
             Logger.getLogger(PostServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -204,35 +184,36 @@ public class PhotoServiceImpl implements PhotoService {
     }
 
     @Override
-    public PostEntity createPhoto(AlbumEntity album, UserEntity author, List<Files> files, String contextPath, Boolean display) {
+    public PostEntity createPhoto(AlbumEntity album, UserEntity author, Map<String, InputStream> files, String contextPath, Boolean display) {
         if (author == null) {
             return null;
         }
         PostEntity post = null;
-        for (Files file : files) {
-            post = this.createPhoto(album, author, file, contextPath, display);
+        for (Map.Entry<String, InputStream> entry : files.entrySet()) {
+            String fileName = entry.getKey();
+            InputStream inputStream = entry.getValue();
+            post = this.createPhoto(album, author, fileName,inputStream, contextPath, display);
         }
-        this.setAlbumCover(album, post);
         return post;
-    }
+    } 
 
     @Override
     public PostEntity createPhoto(AlbumEntity album, UserEntity author, Part file, String contextPath, boolean b) {
         try {
-            Files f = new Files(this.getFileName(file), file.getInputStream());
-            PostEntity p = this.createPhoto(album, author, f, contextPath, b);
+            PostEntity p = this.createPhoto(album, author, this.getFileName(file),file.getInputStream(), contextPath, b);
             this.setAlbumCover(album, p);
             return p;
         } catch (IOException ex) {
             return null;
         }
     }
-    
-    private void setAlbumCover(AlbumEntity album, PostEntity p){
-        if(album==null || p==null)
+
+    private void setAlbumCover(AlbumEntity album, PostEntity p) {
+        if (album == null || p == null) {
             return;
-        album.setCover((MediaEntity)p);
-        postService2.update(album);
+        }
+        album.setCover((MediaEntity) p);
+        postDao.update(album);
     }
 
 }

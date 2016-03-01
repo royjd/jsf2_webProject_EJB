@@ -7,61 +7,35 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <div class="col-sm-7 padding-25">
-
         <!-- Search all experiences and stocks result in experiences variables  -->
         <c:set var="experiences" value="#{profileBean.getExperiences(param['u'])}" scope="request" />
 
         <!-- to know if the visiteur can modify information -->
         <c:set var="canModify" value="#{param['u'] eq username}" scope="request"/>
 
-        <c:if test="${empty experiences}">
-            <p class="well">
-                No experiences
-            </p>
-            <c:if test="${canModify}">
-                <h:form>
-                    <h:commandLink  value="Add experience" action="#{navigationBean.manageExperience()}" class="btn btn-info">
-                        <f:param name="u" value="#{param['u']}"/>
-                    </h:commandLink>
-                </h:form>
-            </c:if>
-        </c:if>
-
-        <c:forEach items="${experiences}" var="experience">
-            <div class="media">
-                <div class="media-body">
-                    <h4 class="media-heading">${experience.title}</h4>
-                    ${experience.description}
-                    <p class="text-muted">
-                        <small>
-                            On ${experience.realisationDate}<br/>
-
-                            <c:if test="${not empty experience.localisation.street}">
-                                ${experience.localisation.street}<br />
-                            </c:if>
-                            ${experience.localisation.zipcode} ${experience.localisation.city} - ${experience.localisation.stat} 
-                        </small>
-                    </p>
-                </div>
-                <c:if test="${canModify and not empty experiences}">
-                    <div class="pull-right">
-
-                        <h:form>
-                            <h:commandLink  class="btn btn-info" value="Edit" action="#{navigationBean.manageExperience()}">
-                                <f:param name="u" value="#{param['u']}"/>
-                                <f:param name="id" value="#{experience.id}"/>
-                            </h:commandLink>
-                            <h:commandLink  class="btn btn-danger" value="Remove" action="#{profileBean.removeExperience()}">
-                                <f:param name="u" value="#{param['u']}"/>
-                                <f:param name="id" value="#{experience.id}"/>
-                            </h:commandLink>
-                        </h:form>
-                    </div>
+        <c:choose>
+            <c:when test="${empty experiences}">
+                <p class="well">
+                    No experiences
+                </p>
+                <c:if test="${canModify}">
+                    <h:form>
+                        <h:commandLink  value="Add experience" action="#{navigationBean.manageExperience()}" class="btn btn-info">
+                            <f:param name="u" value="#{param['u']}"/>
+                        </h:commandLink>
+                    </h:form>
                 </c:if>
-                <div class="clearfix"></div><br/>
-            </div>
+            </c:when>
+            <c:otherwise>
+                <h3>All experiences<hr/></h3>
+            </c:otherwise>
+        </c:choose>
+        <ui:repeat value="${experiences}" var="experience">
+            <ui:include src="../../commun/displayExperience.xhtml" >   
+                <ui:param name="experience" value="#{experience}" />
+            </ui:include> 
             <hr/>
-        </c:forEach>
+        </ui:repeat>
         <br/>
     </div>
     <div class="col-sm-3 padding-70">

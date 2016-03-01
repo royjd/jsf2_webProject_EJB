@@ -5,24 +5,32 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:composition>
-        <div class="row sideBarBlock">
-            <div class="col-sm-12">
-                <div class="border-bot">
-                    <h2>
+        <div class="row">
+            <h:panelGroup class="col-xs-12">
+                <div class = "panel panel-default">
+                    <div class ="panel-heading">
                         <h:form>
                             <h:commandLink value="Experience" action="#{navigationBean.profile()}">
                                 <f:param name="u" value="#{username}"/>
                             </h:commandLink>
                         </h:form>
-                    </h2>  
-                    <h4>Title:<small>#{experience.title}</small></h4>
-                    <h4>Description:<small>#{experience.description}</small></h4>
-                    <h4>When: <small>#{experience.realisationDate}</small></h4>
+                    </div>
+                    <div class="panel-content">
+                        <div class="row sideBarBlock">
+                            <div class="col-sm-12">
+                                <div class="border-bot">
+
+                                    <h4>Title:<small>#{profileBean.title}</small></h4>
+                                    <h4>Description:<small>#{profileBean.description}</small></h4>
+                                   <!-- <h4>When: <small>#{profileBean.realisationDate}</small></h4>-->
+                                </div>
+
+                            </div>
+                        </div> 
+                    </div>
                 </div>
-
-            </div>
+            </h:panelGroup>
         </div>
-
     </ui:composition>
 </html>
 

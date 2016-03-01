@@ -4,27 +4,41 @@
       xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:composition> 
+        <f:loadBundle basename="bundle.messages" var="msg"/>
         <div class="row">
             <div class="col-sm-offset-2 col-sm-6 col-sm-offset-4">
                 <h2 >Create new album</h2>
                 <h:form class="form-horizontal" role="form" enctype="multipart/form-data">
 
-                    <h:inputText class="form-control" value="#{postsBean.title}" pt:placeholder="Title">
-                    </h:inputText>
+                    <div class="form-group">
+                        <h:inputText class="form-control" id = "title" value="#{postsBean.title}" pt:placeholder="Title" required="true" validatorMessage="#{msg['title']}"> 
+                            <f:ajax event="blur" render="titleMessage" />
+                        </h:inputText>
+                        <h:message id="titleMessage" for="title" class="control-label text-danger"/>
+                    </div>
 
-                    <p:fileUpload fileUploadListener="#{postsBean.saveFiles}" mode="advanced" dragDropSupport="false" multiple="true"
-                                  auto="true" update="messages" sizeLimit="100000" fileLimit="10" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+                    <div class="form-group">
+                        <p:fileUpload fileUploadListener="#{postsBean.saveFiles}" mode="advanced" dragDropSupport="false" multiple="true"
+                                      auto="true"  sizeLimit="100000000" fileLimit="10" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
 
-                    <p:growl id="messages" showDetail="true" />
+                    </div>
 
-                    <h:inputText class="form-control" value="#{postsBean.localisation}" pt:placeholder="Localisation">
-                    </h:inputText>
-                    <h:inputTextarea class="form-control" value="#{postsBean.message}" pt:placeholder="Description">
-                    </h:inputTextarea>
-                    <h:commandButton action="#{postsBean.createAlbum()}" value="Create" class="btn btn-success pull-right"/>
-
+                    <div class="form-group">
+                        <h:inputText class="form-control" value="#{postsBean.localisation}" pt:placeholder="Localisation">
+                        </h:inputText>
+                    </div>
+                    <div class="form-group">
+                        <h:inputTextarea class="form-control" value="#{postsBean.message}" pt:placeholder="Description">
+                        </h:inputTextarea>
+                    </div>
+                    <div class="form-group">
+                        <h:commandButton action="#{postsBean.createAlbum()}" value="Create" class="btn btn-success pull-right">
+                            <f:ajax execute="@form" />
+                        </h:commandButton>
+                    </div>
                 </h:form>
             </div>
         </div>

@@ -4,14 +4,19 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:c="http://java.sun.com/jsp/jstl/core"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
     <ui:composition>
+        <!-- set the active button in the nav -->
+        <script>
+            $(".target-active.medias").addClass("active");
+        </script>
         <div class = "panel panel-default">
             <div class ="panel-heading">
                 Medias
             </div>
             <div class="panel-content">
-
+                <br/>
                 <div class="row">
 
                     <div class="col-sm-2">              
@@ -20,53 +25,59 @@
                                 <h:commandLink  class="list-group-item" value="Albums" action="#{navigationBean.album()}">
                                     <f:param name="u" value="#{param['u']}"/>
                                 </h:commandLink>
+
+                                <h:commandLink  class="list-group-item" value="Photos" action="#{navigationBean.photo()}">
+                                    <f:param name="u" value="#{param['u']}"/>
+                                </h:commandLink>
+
+                                <a href="${pageContext.request.contextPath}/${username}/media/video.htm" class="list-group-item">Videos</a>
                             </h:form>
-                            <a href="${pageContext.request.contextPath}/${username}/media/photo.htm" class="list-group-item">Photos</a> 
-                            <a href="${pageContext.request.contextPath}/${username}/media/video.htm" class="list-group-item">Videos</a>
                         </div>
                     </div>
                     <div   class="col-sm-10 padding-25">
                         <div class="pull-right">
-                            <h:form>
+                            <h:form rendered="#{postsBean.getCanModify(paramViewBean.targetUsername)}" class="panel-heading">
                                 <h:commandLink  value="+ Create album" action="#{navigationBean.createAlbum()}">
                                     <f:param name="u" value="#{param['u']}"/>
                                 </h:commandLink>
                                 |
-                                <h:commandLink  value="+ Add photo" action="#{navigationBean.addPhoto()}">
-                                    <f:param name="u" value="${param['u']}"/>
+                                <h:commandLink  value="+ Add photo" action="#{postsBean.searchDefaultAlbum()}">
                                 </h:commandLink>
                             </h:form>
                         </div>
 
-
+                        <div class="clearfix"></div>
                         <div>  
-                            <ui:fragment rendered="#{buttonView.sousPage == 'createAlbum'}"> 
+                            <ui:fragment rendered="#{paramViewBean.sousPage == 'createAlbum'}"> 
                                 <ui:include src="createAlbum.xhtml" />  
                             </ui:fragment>
                         </div>
 
                         <div>
-                            <ui:fragment rendered="#{buttonView.sousPage == 'album'}"> 
+                            <ui:fragment rendered="#{paramViewBean.sousPage == 'album'}"> 
                                 <ui:include src="album.xhtml" /> 
                             </ui:fragment>
                         </div>
 
                         <div>
-                            <ui:fragment rendered="#{buttonView.sousPage == 'displayAlbum'}"> 
+                            <ui:fragment rendered="#{paramViewBean.sousPage == 'displayAlbum'}"> 
                                 <ui:include src="displayAlbum.xhtml" /> 
                             </ui:fragment>
                         </div>
 
+
                         <div>
-                            <ui:fragment rendered="#{buttonView.sousPage == 'addPhoto'}"> 
-                                <ui:include src="addPhoto.xhtml" /> 
+                            <ui:fragment rendered="#{paramViewBean.sousPage == 'photo'}"> 
+                                <ui:include src="photo.xhtml" /> 
                             </ui:fragment>
                         </div>
+
                     </div>
 
                 </div>
             </div>
         </div>
+        
     </ui:composition>
 </html>
 

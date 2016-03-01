@@ -13,24 +13,15 @@
 
     <ui:component>
         <f:metadata>
-            <f:event type="preRenderView" listener="#{buttonView.setTargetUsername(param['u'])}"/>
+            <f:event type="preRenderView" listener="#{paramViewBean.setTargetUsername(param['u'])}"/>
         </f:metadata>
-        #{profileBean.loadProfil(buttonView.targetUsername)}
+        #{profileBean.loadProfil(paramViewBean.targetUsername)}
         <f:loadBundle basename="bundle.messages" var="msg"/>
 
         <div class="col-sm-7">
-            <div class="page-header ">
-                <h1><small>Edit your profile</small></h1>
-            </div>
+            <h2><small>Edit your profile</small></h2>
 
             <h:form class="form-horizontal" role="form">
-
-                <!--<div class="alert alert-danger alert-dismissible" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <strong>Message</strong>
-                </div>-->
 
                 <div class="row">
                     <div class="col-sm-6">
@@ -73,6 +64,9 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <div class="col-sm-12">
+                                <h:inputText class="form-control" value="#{profileBean.birthDay}" pt:placeholder="Birth day (yyyy-MM-dd)">  
+                                    <f:convertDateTime pattern="yyyy-MM-dd"/>  
+                                </h:inputText>
                             </div>
                         </div>
                     </div>
@@ -146,15 +140,15 @@
                         </h:inputTextarea>
                     </div>
                 </div>
-                
+
                 <div class="form-group">
                     <div class="col-sm-offset-8 col-sm-4">
-                        <h:commandLink action="#{navigationBean.profile(buttonView.targetUsername)}" value="Cancel" class="btn btn-primary pull-right">
+                        <h:commandLink action="#{navigationBean.profile(paramViewBean.targetUsername)}" value="Cancel" class="btn btn-primary pull-right">
                         </h:commandLink>
-                        
+
 
                         <h:commandButton action="#{profileBean.editProfile()}" value="Save Changes" class="btn btn-success " disabled="#{facesContext.validationFailed}">
-                            <f:ajax execute="@form" render="@form" />
+                            <f:ajax execute="@form" />
                         </h:commandButton>
                     </div>
                 </div>

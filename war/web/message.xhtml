@@ -21,96 +21,104 @@
             <ui:insert name="header" >
                 <ui:include src="WEB-INF/xhtml/commun/header.xhtml" />
             </ui:insert>
+            <!-- set the active button in the nav -->
+            <script>
+                $(".target-active.message").addClass("active");
+            </script>
         </div>
         <div class="container">
             <div class="row"> 
-                <h:form class="form-horizontal" role="form">  
-                    <h:panelGrid columns="1" cellpadding="5">
-                        <p:commandButton value="New Message" type="button" onclick="PF('dlg').show();" />
-                    </h:panelGrid>
+                <h:form class="col-sm-6 form-horizontal" role="form">  
+
+                    <p:commandButton value="New Message +" type="button"  class="pull-left btn-success" onclick="PF('newMessage').show();" />
+
                 </h:form>
-                <p:dialog header="Modal Dialog" widgetVar="dlg" modal="true" height="300" width="500"> 
-                    <h:form class="form-horizontal" role="form">  
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="form-group">
-                                    <div class="col-sm-12">
-                                        <p:outputLabel value="Multiple:" for="themes" />
-                                        <p:autoComplete id="themes" multiple="true" value="#{sendMessageBean.targets}" completeMethod="#{sendMessageBean.completeText}"
-                                                        var="user" itemLabel="#{user.username}" itemValue="#{user.email}"  forceSelection="true">
-                                            <p:column style="width:15%"> 
-                                                <h:graphicImage width="100%" value="images/#{user.profile.pictureProfile.mediaType.link}" />
-                                            </p:column>
 
-                                            <p:column>
-                                                <h:outputText value="#{user.username}" />
-                                                <br></br>
-                                                <h:outputText value="#{user.email}" />
-                                            </p:column>
-                                        </p:autoComplete>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-sm-12">      
-                                        <h:inputTextarea id="message" value="#{sendMessageBean.message}" required="true" class="form-control" pt:type="TEXT" pt:placeholder="Type your message here" /> 
-                                    </div>
-                                </div>  
-                                <div class="form-group">        
-                                    <div class="col-sm-offset-2 col-sm-10">
-                                        <p:commandButton id="newsFormSubmit" value="Send" class="btn btn-success pull-right"
-                                                         actionListener="#{sendMessageBean.send()}" 
-                                                         action="#{navigationBean.message()}" 
-                                                         oncomplete="PF('dlg').hide();">
-                                        </p:commandButton>
-                                    </div> 
-                                </div>
-
-                            </div>
-                        </div> 
-                    </h:form>
-                </p:dialog>
-
-                <div class="col-xs-4 bg-success">
-
-
-
-                </div>
             </div>
-            <div class="col-sm-4">
-                <h:form id="formGroupMessage">
-                    <p:dataTable id="groupMessage" 
+
+            <p:dialog header="Modal Dialog" widgetVar="newMessage" modal="true" height="300" width="500"> 
+                <h:form class="form-horizontal" role="form">  
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <p:outputLabel value="Multiple:" for="newMessageID" />
+                                    <p:autoComplete id="newMessageID" multiple="true" value="#{sendMessageBean.targets}" completeMethod="#{sendMessageBean.completeText}"
+                                                    var="user" itemLabel="#{user.username}" itemValue="#{user.email}"  forceSelection="true">
+                                        <p:column style="width:15%"> 
+                                            <h:graphicImage width="100%" value="images/#{user.profile.pictureProfile.mediaType.link}" />
+                                        </p:column>
+
+                                        <p:column>
+                                            <h:outputText value="#{user.username}" />
+                                            <br></br>
+                                            <h:outputText value="#{user.email}" />
+                                        </p:column>
+                                    </p:autoComplete>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-12">      
+                                    <h:inputTextarea id="message" value="#{sendMessageBean.message}" required="true" class="form-control" pt:type="TEXT" pt:placeholder="Type your message here" /> 
+                                </div>
+                            </div>  
+                            <div class="form-group">        
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <p:commandButton id="newsFormSubmit" value="Send" class="btn btn-success pull-right"
+                                                     actionListener="#{sendMessageBean.send()}" 
+                                                     action="#{navigationBean.message()}" 
+                                                     oncomplete="PF('dlg').hide();">
+                                    </p:commandButton>
+                                </div> 
+                            </div>
+
+                        </div>
+                    </div> 
+                </h:form>
+            </p:dialog>
+
+            <div class="row"> 
+                <div class="col-sm-4">
+                    <h:form id="formGroupMessage">
+                        <p:dataTable id="groupMessage" 
+                                     editable="true" 
+                                     var="group" value="#{messageBean.groupMessage}" 
+                                     rowIndexVar="rowIndex" 
+                                     selectionMode="single" selection="#{messageBean.selectedGroupName}"
+                                     rowKey="#{group}"
+                                     > 
+                            <p:ajax event="rowSelect" listener="#{messageBean.onRowSelect}"  update=":messages groupMessage" /> 
+                            <p:column  headerText="Groups">
+
+
+                                <ui:repeat value="#{messageBean.getListOfTarget(group)}" var="groupUser">
+                                    <strong> @#{groupUser}</strong>
+                                </ui:repeat>  
+                            </p:column>
+                            <p:column width="20" headerText="!">
+                                #{messageBean.getNbOfNewMessage(group)}
+                            </p:column>
+                        </p:dataTable>
+                    </h:form>
+                </div>
+                <div class="col-sm-8">
+                    <p:dataTable id="messages" 
                                  editable="true" 
-                                 var="group" value="#{messageBean.groupMessage}" 
-                                 rowIndexVar="rowIndex" 
-                                 selectionMode="single" selection="#{messageBean.selectedGroupName}"
-                                 rowKey="#{group.groupName}"
-                                 > 
-                        <p:ajax event="rowSelect" listener="#{messageBean.onRowSelect}"  update=":messages groupMessage" /> 
-                        <p:column  headerText="Participants">
+                                 var="message" value="#{messageBean.messageForGroup}" 
+                                 rowIndexVar="rowIndex">
 
+                        <p:column  headerText="Messages">
+                            <h:panelGroup layout="block" class="row" >
+                                <img  src="#{request.contextPath}/images/#{message.message.sendBy.profile.pictureProfile.mediaType.link}" class="col-xs-1 img-responsive" />
+                                <h:panelGroup class="col-xs-11" >        
+                                    <p> <strong>@#{message.message.sendBy.username} :</strong>  #{message.message.content} </p>
+                                </h:panelGroup>
 
-                            <ui:repeat value="#{group.usernames}" var="groupUser">
-                                @#{groupUser}
-                            </ui:repeat>  
-                        </p:column>
-                        <p:column width="20" headerText="!">
-                            #{group.nbNewsMessages}
+                            </h:panelGroup> 
                         </p:column>
                     </p:dataTable>
-                </h:form>
-            </div>
-            <div class="col-sm-8">
-                <p:dataTable id="messages" 
-                             editable="true" 
-                             var="message" value="#{messageBean.messageForGroup}" 
-                             rowIndexVar="rowIndex">
- 
-                    <p:column  headerText="Messages">
-                        #{message.message.sendBy.username} :  #{message.message.content} 
 
-                    </p:column>
-                </p:dataTable>
-
+                </div>
             </div>
         </div>
     </h:body>

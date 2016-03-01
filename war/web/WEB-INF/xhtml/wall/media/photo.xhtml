@@ -1,9 +1,23 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
-    Photo
-    
+    <ui:component>
+        
+
+        <ui:repeat value="#{postsBean.loadMediasForUser(paramViewBean.targetUsername)}" var="photo" >
+            <div class="col-sm-4">
+                <h:form>
+                    <ui:include src="../../commun/displayPhoto.xhtml" >   
+                        <ui:param name="link" value="#{photo.mediaType.link}" />
+                        <ui:param name="title" value="#{photo.title}" />
+                        <ui:param name="body" value="#{photo.body}" />
+                    </ui:include> 
+                </h:form>
+            </div>
+        </ui:repeat> 
+    </ui:component>    
 </html>
 

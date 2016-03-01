@@ -8,5 +8,5 @@
     </property>
     
   </jsp-config>
-  <property name="alternatedocroot_1" value="from=/images/* dir=/home/SP2MI/zdiawara/Bureau/"/> 
+  <property name="alternatedocroot_1" value="from=/images/* dir=/home/SP2MI/zdiawara/Bureau"/> 
 </glassfish-web-app> 

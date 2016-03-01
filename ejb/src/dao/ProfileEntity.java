@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -43,6 +44,7 @@ public class ProfileEntity implements Serializable {
 
     private String phone;
 
+    @Lob //Force to set the type of the column to clob in java db => TEXT in mysql
     private String description;
 
     private String country;
@@ -52,7 +54,7 @@ public class ProfileEntity implements Serializable {
     @OneToOne
     @JoinColumn(name = "pictureProfile_id")
     private MediaEntity pictureProfile;
-    
+
     @OneToOne
     @JoinColumn(name = "pictureCover_id")
     private MediaEntity pictureCover;
@@ -61,38 +63,25 @@ public class ProfileEntity implements Serializable {
     private List<ExperienceEntity> experiences = new ArrayList<>();
 
     @OneToOne
-    @JoinColumn(name="physical_id")
+    @JoinColumn(name = "physical_id")
     private PhysicalEntity physical;
 
     /**
-     * 
+     *
      */
-    public ProfileEntity(){
-        
+    public ProfileEntity() {
+
     }
-    
+
     /**
-     * 
+     *
      * @param lastName
-     * @param firstName 
+     * @param firstName
      */
-    public ProfileEntity(String lastName, String firstName){
+    public ProfileEntity(String lastName, String firstName) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.physical = new PhysicalEntity();
-    }
-    /**
-     *
-     * @param p
-     */
-    public void setData(ProfileEntity p) {
-        this.description = p.getDescription();
-        this.firstName = p.getFirstName();
-        this.lastName = p.getLastName();
-        this.phone = p.getPhone();
-        this.country = p.getCountry();
-        this.city = p.getCity();
-        this.birthDay = p.getBirthDay();
     }
 
     /**
@@ -327,7 +316,5 @@ public class ProfileEntity implements Serializable {
     public void setPictureCover(MediaEntity pictureCover) {
         this.pictureCover = pictureCover;
     }
-    
-    
 
 }

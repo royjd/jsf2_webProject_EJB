@@ -5,7 +5,6 @@
  */
 package controllers;
 
-import commun.FriendOrNot;
 import dao.UserEntity;
 import java.util.List;
 import javax.ejb.EJB;
@@ -19,21 +18,25 @@ import java.util.Map.Entry;
 import java.util.Set;
 import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
+import servicesSecondaire.UserService2;
 
 /**
  *
  * @author Karl Lauret
  */
 @ManagedBean(name = "searchBean")
-@RequestScoped 
+@RequestScoped
 public class SearchBean {
 
     private String param;
 
-    private List<FriendOrNot> results;
-
     @EJB
     UserService userService;
+    @EJB
+    UserService2 userElementaire;
+
+    @ManagedProperty(value = "#{navigationBean}")
+    private NavigationBean navigationBean;
 
     /**
      * Creates a new instance of SearchBean
@@ -45,8 +48,8 @@ public class SearchBean {
      *
      * @return
      */
-    public String search() { 
-        return "search.xhtml";//  ?? 
+    public String search() {
+        return navigationBean.search();
     }
 
     public String getParam() {
@@ -57,9 +60,18 @@ public class SearchBean {
         this.param = param;
     }
 
-
-    public List<FriendOrNot> searchPram(String param) {
-        return userService.search(param, SessionBean.getUserId());
+    public List<UserEntity> searchPram(String param) {
+        return userElementaire.search(param);
     }
+
+    public NavigationBean getNavigationBean() {
+        return navigationBean;
+    }
+
+    public void setNavigationBean(NavigationBean navigationBean) {
+        this.navigationBean = navigationBean;
+    }
+    
+    
 
 }

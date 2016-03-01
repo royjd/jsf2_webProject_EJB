@@ -10,12 +10,12 @@
 
         <!-- Parcours la liste d'album-->
           
-        <ui:repeat value="#{postsBean.loadAllAlbums(buttonView.targetUsername)}" var="album" varStatus="loop">
+        <ui:repeat value="#{postsBean.loadAllAlbums(paramViewBean.targetUsername)}" var="album" varStatus="loop">
             
             <div class="col-xs-12 col-sm-6 col-md-3">
                 <h:form>
                     
-                    <h:commandLink action="#{navigationBean.displayAlbum(param['u'],album.id)}">
+                    <h:commandLink action="#{navigationBean.displayAlbum(paramViewBean.targetUsername,album.id)}">
                      
                         <ui:include src="../../commun/displayAlbum.xhtml" >   
                             <ui:param name="link" value="#{album.cover.mediaType.link}" />

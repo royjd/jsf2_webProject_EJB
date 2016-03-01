@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package servicesSecondaire;
+package servicesTertiaire;
 
 import dao.AlbumEntity;
 import dao.PostEntity;
@@ -31,7 +31,6 @@ public interface PostService2 {
     
     public PostEntity findByID(Long postID);
 
-    public void update(PostEntity postEntity);
 
     public List<PostEntity> getRecentPostFromUsersID(List<Long> l);
 
@@ -47,6 +46,8 @@ public interface PostService2 {
     
     public List<PostEntity> loadMedias(Long albumId);
 
+    public List<PostEntity> loadMedias(String username);
+    
     public List<PostEntity> findByUsernameAndType(String username, String type);
 
     public void createDefaultAlbums(UserEntity u);

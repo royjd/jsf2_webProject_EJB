@@ -18,9 +18,9 @@
     </h:head>
     <h:body style="padding-top: 70px"> 
         <f:metadata>
-            <f:viewAction action="#{buttonView.doSomething(param['p'], param['u'])}"/>
-            <f:viewAction action="#{buttonView.setSousPage(param['sp'])}"/>
-            <f:viewAction  action="#{evNewsBlogsBean.setTargetUsername(param['u'])}"/> 
+            <f:viewAction action="#{paramViewBean.doSomething(param['p'], param['u'])}"/>
+            <f:viewAction action="#{paramViewBean.setSousPage(param['sp'])}"/>
+            <f:viewAction  action="#{listPostAjaxBean.setTargetUsername(param['u'])}"/> 
             <f:viewAction   action="#{postsBean.onPostLoad(param['u'])}"/> 
 
         </f:metadata>
@@ -28,6 +28,10 @@
             <ui:insert name="header" >
                 <ui:include src="WEB-INF/xhtml/commun/header.xhtml" />
             </ui:insert>
+            <!-- set the active button in the nav -->
+            <script>
+                $(".target-active.notification").addClass("active");
+            </script>
         </div>
         <div class="container">
             <div class="row "> 
@@ -42,20 +46,26 @@
                                      > 
                             <p:ajax event="rowSelect" listener="#{notificationBean.onRowSelect}"  update=":postDisplay notification" /> 
                             <p:column  headerText="Notifications" width="80%">
+                                <h:panelGroup layout="block" class="row" >
+                                    <img  src="#{request.contextPath}/images/#{notif.message.post.author.profile.pictureProfile.mediaType.link}" class="col-xs-2 img-responsive" />
+                                    <h:panelGroup class="col-xs-10" rendered="#{notif.message.post.getClass().simpleName == 'CommentEntity' }">#{notif.message.post.author.username} has commented the post of #{notif.message.post.postParent.author.username}</h:panelGroup>
+                                    <h:panelGroup class="col-xs-10" rendered="#{notif.message.post.getClass().simpleName == 'AlbumEntity'}"> #{notif.message.post.author.username} Created an Album </h:panelGroup>
+                                    <h:panelGroup class="col-xs-10" rendered="#{notif.message.post.getClass().simpleName == 'NewsEntity'}">#{notif.message.post.author.username}  added a News</h:panelGroup>
+                                    <h:panelGroup class="col-xs-10" rendered="#{notif.message.post.getClass().simpleName == 'RecomendationEntity'}">#{notif.message.post.target.username} has been recommended by #{notif.message.post.author.username}</h:panelGroup>
+                                    <h:panelGroup class="col-xs-10" rendered="#{notif.message.post.getClass().simpleName == 'MediaEntity'}">Media added by #{notif.message.post.author.username}</h:panelGroup>
+                                </h:panelGroup>
 
-                                #{notif.message.post.getClass().simpleName} -- 
-                                #{notif.message.post.body} -- 
-                                to:#{notif.message.post.target.username} -- 
-                                by: #{notif.message.post.author.username} --
+
                             </p:column>
                             <p:column width="20%" headerText="!" >
-                                <p:outputPanel class="bg-primary" rendered="#{!notif.newMessage}"> 
-                                    <div class="row bg-success" >_</div>
-                                </p:outputPanel>
-                                <p:outputPanel class="bg-success" rendered="#{notif.newMessage}">
-                                    <div class="row bg-danger" >_</div>
-                                </p:outputPanel>
-
+                                <h:panelGroup layout="block" class="row" >
+                                    <h:panelGroup class=" col-sm-12 bg-success" rendered="#{!notif.newMessage}"> 
+                                        .
+                                    </h:panelGroup> 
+                                    <h:panelGroup class=" col-sm-12 bg-danger" rendered="#{notif.newMessage}">
+                                        .
+                                    </h:panelGroup>
+                                </h:panelGroup>
                             </p:column>
                         </p:dataTable>
                     </h:form>
@@ -64,7 +74,7 @@
                     <div id="postDisplayPanel" class="fixed" >
                         <p:panel id="postDisplay">  
                             <ui:include  src="WEB-INF/xhtml/commun/post/posts.xhtml" >  
-                                <ui:param name="posts" value="#{evNewsBlogsBean.notification(buttonView.targetUsername, notificationBean.postOfNotification.id)}" />
+                                <ui:param name="posts" value="#{listPostAjaxBean.notification(paramViewBean.targetUsername, notificationBean.postOfNotification.id)}" />
                                 <ui:param name="dataTableID" value="#{notificationBean.postOfNotification.id}"/>
                             </ui:include>
                         </p:panel>

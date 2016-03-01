@@ -13,11 +13,20 @@ body{
 }
 .post-container{
     padding: 5px;
-    background-color: #F9F9F9;
+    
+    /*background-color: #F9F9F9;*/
 }
-
+.header-body-container{
+    border: 1px solid rgb(213, 204, 204);
+}
 .post-container h2{
     font-size: 18px;
     color: #337AB7;
     margin-top: 10px;
+}
+
+.ui-commandlink.ui-widget.btn.btn-xs.btn-danger.glyphicon.glyphicon-remove.pull-right,
+.ui-commandlink.ui-widget.btn.btn-xs.btn-danger.glyphicon.glyphicon-remove,
+.ui-commandlink.ui-widget.btn.btn-xs.btn-success.glyphicon.glyphicon-ok{
+    font-family : 'Glyphicons Halflings';
 }

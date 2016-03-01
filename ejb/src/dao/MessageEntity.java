@@ -21,6 +21,7 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -42,6 +43,7 @@ public class MessageEntity implements Serializable {
     private Long id;
 
     @Column
+    @Lob //Force to set the type of the column to clob in java db => TEXT in mysql
     private String content;
 
     @Column
@@ -67,7 +69,7 @@ public class MessageEntity implements Serializable {
     /**
      *
      * @param content the content of the message
-     * @param subject the subject of the message 
+     * @param subject the subject of the message
      * @param sendBy the author of the message
      */
     public MessageEntity(String content, String subject, UserEntity sendBy) {
