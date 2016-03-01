@@ -96,12 +96,7 @@ public class PostService2Impl implements servicesTertiaire.PostService2 {
 
     @Override
     public AlbumEntity findAlbum(Long id, String type) {
-        System.err.println(" userID = " + id + "; type" + type);
         PostEntity post = postDao.findAlbum(id, type);
-        System.err.println(" poste = " + post);
-        /*AlbumEntity album = new AlbumEntity();
-         album.setId(post.getId());
-         album.setTitle(type);*/
         return (AlbumEntity) post;
     }
 
@@ -119,6 +114,7 @@ public class PostService2Impl implements servicesTertiaire.PostService2 {
     public PostEntity findAlbum(Long id, Long albumId) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
 
     @Override
     public void createDefaultAlbums(UserEntity u) {

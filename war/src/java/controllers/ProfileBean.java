@@ -183,7 +183,6 @@ public class ProfileBean implements Serializable {
         if (SessionBean.isConnect()) {
             Long id = SessionBean.getUserId();
             profileService.deleteExperience(id, expID);
-
             return navigationBean.experience(SessionBean.getUsername());
         }
         return ""; // error page

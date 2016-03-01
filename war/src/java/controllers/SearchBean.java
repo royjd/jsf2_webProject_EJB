@@ -70,8 +70,5 @@ public class SearchBean {
 
     public void setNavigationBean(NavigationBean navigationBean) {
         this.navigationBean = navigationBean;
-    }
-    
-    
-
+    }  
 }

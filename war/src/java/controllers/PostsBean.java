@@ -48,6 +48,7 @@ public class PostsBean implements Serializable {
     private boolean canComment;
     private String localisation;
     private Map<String, InputStream> files;
+
     private List<PostEntity> photoList;
 
     @EJB
@@ -230,7 +231,6 @@ public class PostsBean implements Serializable {
      }
      return ""; // Error page
      }*/
-
     //TODO LATER WITH A REAL targetID
 
     public void onPostLoad(String targetUsername) {

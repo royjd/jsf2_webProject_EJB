@@ -110,7 +110,6 @@ public class ProfileElementaireImpl implements ProfileElementaire {
     @Override
     public void deleteExperience(ExperienceEntity e) {
         experienceDao.delete(e);
-
     }
 
     @Override

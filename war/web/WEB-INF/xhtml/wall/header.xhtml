@@ -6,14 +6,13 @@
         <h:panelGroup rendered="#{postsBean.getCanModify(paramViewBean.targetUsername)}">
             <h4 class="col-sm-offset-1"> Define profile picture Cover<button id="addCover" class="btn btn-primary btn-sm glyphicon glyphicon-plus"></button></h4>
 
-            <div id="addCoverDiv" style="display:none" class="col-sm-offset-1">
-                <h:form enctype="multipart/form-data">
-                    <div id="addPictureCovDiv" style="" class="form-group">
-                        <span class="btn btn-default btn-file">
-                            Choose profile picture <h:inputFile id="file" value="#{profileBean.file}"  class="form-control">
+                <div id="addCoverDiv" style="display:none" class="col-sm-offset-1">
+                    <h:form enctype="multipart/form-data">
+                        <div id="addPictureCovDiv" style="" class="form-group">
+                            <span class="btn btn-default btn-file">
+                                Choose profile picture <h:inputFile id="file" value="#{profileBean.file}"  class="form-control">
 
-                            </h:inputFile>
-
+                                </h:inputFile>
                             <h:message id="fileMessage" for="file" errorClass="erreur"  class="control-label text-danger"/>
                         </span>
                     </div>
