@@ -125,7 +125,7 @@ public class ListPostAjaxBean implements java.io.Serializable {
         this.targetUsername = username;
         System.err.println("loadMore username + " + this.targetUsername);
         System.err.println("loadMore = + " + this.moreData);
-        if (this.list.size() >= 5 && moreData) {
+        if (this.list != null &&  this.list.size() >= 5 && moreData) {
             if (this.targetUsername == null || this.targetUsername.isEmpty()) {
 
                 listtmp = postService.getNextPostFromFriendAndMe(SessionBean.getUserId(), this.list.get(this.list.size() - 1).getId());

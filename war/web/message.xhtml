@@ -67,7 +67,8 @@
                                     <p:commandButton id="newsFormSubmit" value="Send" class="btn btn-success pull-right"
                                                      actionListener="#{sendMessageBean.send()}" 
                                                      action="#{navigationBean.message()}" 
-                                                     oncomplete="PF('dlg').hide();">
+                                                     oncomplete="PF('dlg').hide();"> 
+                                        <f:param name="u" value="#{param['u']}" />
                                     </p:commandButton>
                                 </div> 
                             </div>
