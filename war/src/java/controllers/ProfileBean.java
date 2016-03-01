@@ -10,6 +10,7 @@ import dao.LocalisationEntity;
 import dao.ProfileEntity;
 import dao.UserEntity;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
@@ -56,7 +57,6 @@ public class ProfileBean implements Serializable {
     private Date realisationDate;
 
     //localisation Experience
-    private Long localisationId;
     private String experienceCity;
     private String experienceCityStat;
     private String experienceCityStreet;
@@ -66,9 +66,9 @@ public class ProfileBean implements Serializable {
 
     private Part file;
 
-    //private static final String realPath = "/home/SP2MI/zdiawara/Bureau/images";
+    private static final String realPath = "/home/SP2MI/zdiawara/Bureau/images";
     //private static final String realPath = "/home/zakaridia/Documents/Depot_Git/File/image";
-    private static final String realPath = "C:/Users/Karl Lauret/AppData/Roaming/NetBeans/8.1/config/GF_4.1.1/domain1/applications/images";
+    //private static final String realPath = "C:/Users/Karl Lauret/AppData/Roaming/NetBeans/8.1/config/GF_4.1.1/domain1/applications/images";
 
     @EJB
     ProfileService profileService;
@@ -90,13 +90,12 @@ public class ProfileBean implements Serializable {
      */
     public ProfileBean() {
         this.experienceId = 0L;
-        this.localisationId = 0L;
     }
 
     public String editProfile() {
         Long id = SessionBean.getUserId();
         if (id != null) {
-            profileService.editProfile(firstName, lastName, phone, city, country, briefDescription, height, weight, gender, id);
+            profileService.editProfile(firstName, lastName, phone, city, country, briefDescription, birthDay, height, weight, gender, id);
             return navigationBean.profile(SessionBean.getUsername());
         }
 
@@ -136,6 +135,7 @@ public class ProfileBean implements Serializable {
             this.username = u.getUsername();
             this.phone = p.getPhone();
             this.briefDescription = p.getDescription();
+            this.birthDay = p.getBirthDay();
             //Physical
             this.gender = p.getPhysical().getGender();
             this.height = p.getPhysical().getHeight();
@@ -182,9 +182,7 @@ public class ProfileBean implements Serializable {
 
         if (SessionBean.isConnect()) {
             Long id = SessionBean.getUserId();
-            System.err.println("DELETE " + expID);
             profileService.deleteExperience(id, expID);
-
             return navigationBean.experience(SessionBean.getUsername());
         }
         return ""; // error page
@@ -201,7 +199,6 @@ public class ProfileBean implements Serializable {
                 this.realisationDate = e.getRealisationDate();
                 LocalisationEntity l = e.getLocalisation();
                 if (l != null) {
-                    this.localisationId = l.getId();
                     this.experienceCity = l.getCity();
                     this.experienceCityStat = l.getStat();
                     this.experienceCityStreet = l.getStreet();
@@ -325,7 +322,7 @@ public class ProfileBean implements Serializable {
     }
 
     public Date getRealisationDate() {
-        return realisationDate;
+        return this.realisationDate;
     }
 
     public void setRealisationDate(Date realisationDate) {
@@ -413,7 +410,7 @@ public class ProfileBean implements Serializable {
     }
 
     public Date getBirthDay() {
-        return birthDay;
+        return this.birthDay;
     }
 
     public void setBirthDay(Date birthDay) {
@@ -440,4 +437,21 @@ public class ProfileBean implements Serializable {
         this.file = file;
     }
 
+    public String getFormatBirthDay(){
+        return this.getFormatDate(this.birthDay);
+    }
+    
+    public String getFormatDateRealisation(){
+        return this.getFormatDate(this.realisationDate);
+    }
+    
+    public String getFormatDate(Date date){
+        
+        if(date==null)
+            return "";
+        
+        String DATE_FORMAT = "yyyy-dd-MM";
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
+        return sdf.format(date);
+    }    
 }

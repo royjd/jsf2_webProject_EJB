@@ -108,7 +108,7 @@ public class PostDAOImpl implements PostDAO {
      */
     @Override
     public List<PostEntity> findByUsernameAndType(String username, String type) {
-            System.err.println("Find type = "+type+" : username => " + username );
+        System.err.println("Find type = " + type + " : username => " + username);
 
         try {
             switch (type) {
@@ -133,16 +133,16 @@ public class PostDAOImpl implements PostDAO {
                 }
                 case "album": {
                     List<PostEntity> postEntities = this.em.createQuery("SELECT t FROM PostEntity t where TYPE(t) = AlbumEntity AND t.author.username = :value1 order by t.id desc")//target or author
-                            .setParameter("value1", username).getResultList();   
-                    if(postEntities!= null){
-                        
-                    System.err.println("Find type = album : username => " + username + "  size of result => " + ((AlbumEntity)postEntities.get(0)).getMedias().size() );
+                            .setParameter("value1", username).getResultList();
+                    if (postEntities != null) {
 
-                    }else{
-                        
-                    System.err.println("Find type = album : username => " + username + "  size of result => NULL" );
+                        System.err.println("Find type = album : username => " + username + "  size of result => " + ((AlbumEntity) postEntities.get(0)).getMedias().size());
 
-                    } 
+                    } else {
+
+                        System.err.println("Find type = album : username => " + username + "  size of result => NULL");
+
+                    }
                     return postEntities;
                 }
                 default: {
@@ -283,6 +283,17 @@ public class PostDAOImpl implements PostDAO {
         try {
             Query q = this.em.createQuery("SELECT m FROM MediaEntity m  where m.album.id = :albumId order by m.id desc");
             q.setParameter("albumId", albumId);
+            return q.getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public List<PostEntity> loadMedias(String username) {
+        try {
+            Query q = this.em.createQuery("SELECT m FROM MediaEntity m  where m.author.username = :username order by m.id desc");
+            q.setParameter("username", username);
             return q.getResultList();
         } catch (NoResultException e) {
             return null;

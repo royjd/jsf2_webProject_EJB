@@ -18,12 +18,15 @@ import javax.ejb.Local;
 public interface UserService2 {
 
     /**
-     * create the given user
-     *
-     * @param u
-     * @return true if it was ok else fale
+     * 
+     * @param email
+     * @param username
+     * @param password
+     * @param firstName
+     * @param lastName
+     * @return 
      */
-    public UserEntity create(UserEntity u);
+    public UserEntity create(String email, String username, String password, String firstName, String lastName);
 
     /**
      * delete the given user
@@ -36,6 +39,7 @@ public interface UserService2 {
     /**
      * return the user if we find a user with the same email and password
      *
+     * @param identifiant
      * @param email
      * @param password
      * @return UserEntity if found null otherwise

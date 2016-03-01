@@ -1,9 +1,9 @@
-<?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
     <!-- Load profile -->
     #{profileBean.loadProfil(paramViewBean.targetUsername)}
@@ -46,17 +46,15 @@
                     Gender :  
 
                     <small>
-      
-                            <h:panelGroup rendered="#{profileBean.gender eq 'F'}">
-                                Female
-                            </h:panelGroup>
-                            <h:panelGroup rendered="#{profileBean.gender eq 'M'}">
-                                Male 
-                            </h:panelGroup>
-                            <h:panelGroup rendered="#{!(profileBean.gender eq 'M' or profileBean.gender eq 'F')}">
-                                Not define 
-                            </h:panelGroup>
-                        
+                        <h:panelGroup rendered="#{profileBean.gender eq 'F'}">
+                            Female
+                        </h:panelGroup>
+                        <h:panelGroup rendered="#{profileBean.gender eq 'M'}">
+                            Male 
+                        </h:panelGroup>
+                        <h:panelGroup rendered="#{!(profileBean.gender eq 'M' or profileBean.gender eq 'F')}">
+                            Not define 
+                        </h:panelGroup>
                     </small>   
                 </h3>
 
@@ -109,38 +107,9 @@
         <hr />
 
         <c:forEach items="${experiences}" var="experience">
-            <div class="media">
-                <div class="media-body">
-                    <h4 class="media-heading">${experience.title}</h4>
-                    ${experience.description}
-                    <p class="text-muted">
-                        <small>
-                            On ${experience.realisationDate}<br/>
-
-                            <c:if test="${not empty experience.localisation.street}">
-                                ${experience.localisation.street}<br />
-                            </c:if>
-                            ${experience.localisation.zipcode} ${experience.localisation.city} - ${experience.localisation.stat} 
-                        </small>
-                    </p>
-                </div>
-                <c:if test="${canModify}">
-                    <div class="pull-right">
-
-                        <h:form>
-                            <h:commandLink  class="btn btn-info" value="Edit" action="#{navigationBean.manageExperience()}">
-                                <f:param name="u" value="#{paramViewBean.targetUsername}"/>
-                                <f:param name="id" value="#{experience.id}"/>
-                            </h:commandLink>
-                            <h:commandLink  class="btn btn-danger" value="Remove" action="#{profileBean.removeExperience()}">
-                                <f:param name="u" value="#{paramViewBean.targetUsername}"/>
-                                <f:param name="id" value="#{experience.id}"/>
-                            </h:commandLink>
-                        </h:form>
-                    </div>
-                </c:if>
-                <div class="clearfix"></div>
-            </div>
+            <ui:include src="../../commun/displayExperience.xhtml" >   
+                <ui:param name="experience" value="#{experience}" />
+            </ui:include> 
             <hr/>
         </c:forEach>
 
@@ -181,19 +150,20 @@
         <h4>
             Mobile Number : 
             <small>
-                <c:choose>
-                    <c:when test="#{profileBean.phone eq ''}">
-                        Not define                        
-                    </c:when>
-                    <c:otherwise>
-                        #{profileBean.phone}
-                    </c:otherwise>
-                </c:choose>
+
+                #{profileBean.phone}
+
             </small>
         </h4>
 
         <hr />
-        <h4>Birth day : <small>Not define</small></h4>
+        <h4>Birth day : 
+
+            <small>
+                #{profileBean.formatBirthDay}
+            </small>
+
+        </h4>
 
     </div> 
 

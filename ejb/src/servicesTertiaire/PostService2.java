@@ -46,6 +46,8 @@ public interface PostService2 {
     
     public List<PostEntity> loadMedias(Long albumId);
 
+    public List<PostEntity> loadMedias(String username);
+    
     public List<PostEntity> findByUsernameAndType(String username, String type);
 
     public void createDefaultAlbums(UserEntity u);

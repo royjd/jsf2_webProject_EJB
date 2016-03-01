@@ -55,7 +55,7 @@
                                 <div class="col-sm-offset-2 col-sm-10">
                                     <h:commandButton id="newsFormSubmit" value="Submit" class="btn btn-success pull-right"
                                                      action="#{navigationBean.wall(paramViewBean.targetUsername)}" actionListener="#{postsBean.saveNews(paramViewBean.targetUsername)}" disabled="#{facesContext.validationFailed}">
-
+                                        <f:ajax execute="@form" />
                                     </h:commandButton> 
                                 </div>
                             </div>

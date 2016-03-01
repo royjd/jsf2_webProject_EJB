@@ -175,6 +175,7 @@ public class PhotoServiceImpl implements PhotoService {
                 media.setMediaType(photo);
                 media.setAlbum(album);
                 post = postService2.createPost(media, author, author, display);
+                this.setAlbumCover(album, post);
             }
         } catch (IOException ex) {
             Logger.getLogger(PostServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -193,7 +194,6 @@ public class PhotoServiceImpl implements PhotoService {
             InputStream inputStream = entry.getValue();
             post = this.createPhoto(album, author, fileName,inputStream, contextPath, display);
         }
-        this.setAlbumCover(album, post);
         return post;
     } 
 

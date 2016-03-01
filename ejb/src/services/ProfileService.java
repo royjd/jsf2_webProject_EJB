@@ -28,7 +28,7 @@ public interface ProfileService {
 
     public String coverUrltmp(String username);
     
-    public void editProfile(String firstName, String lastName, String phone, String city, String country, String briefDescription, Double height, Double weight, String gender, Long userId);
+    public void editProfile(String firstName, String lastName, String phone, String city, String country, String briefDescription, Date birthDay, Double height, Double weight, String gender, Long userId);
 
     public void createExperience(Long userID,String title, String description, Date realisationDate, String experienceCity, String experienceCityStat, String experienceCityStreet, Integer experienceCityZipcode);
     public void editExperience(Long experienceID,Long userID, String title, String description, Date realisationDate, String experienceCity, String experienceCityStat, String experienceCityStreet, Integer experienceCityZipcode);

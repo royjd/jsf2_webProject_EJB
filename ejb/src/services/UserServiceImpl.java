@@ -46,11 +46,12 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public Long add(String email, String username, String password, String firstName, String lastName) {
-        UserEntity user = new UserEntity(email, username, password, firstName, lastName);
-        user = userService.create(user);
+        UserEntity user = userService.create(email, username, password, firstName, lastName);
+        
         if (user == null) {
             return null;
         }
+        
         return user.getId();
     }
 

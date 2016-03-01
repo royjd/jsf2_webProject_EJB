@@ -96,18 +96,18 @@ public class PostService2Impl implements servicesTertiaire.PostService2 {
 
     @Override
     public AlbumEntity findAlbum(Long id, String type) {
-        System.err.println(" userID = " +id +"; type"+type  );
         PostEntity post = postDao.findAlbum(id, type);
-        System.err.println(" poste = " +post );
-        /*AlbumEntity album = new AlbumEntity();
-        album.setId(post.getId());
-        album.setTitle(type);*/
-        return (AlbumEntity)post;
+        return (AlbumEntity) post;
     }
 
     @Override
     public List<PostEntity> loadMedias(Long albumId) {
         return postDao.loadMedias(albumId);
+    }
+
+    @Override
+    public List<PostEntity> loadMedias(String username) {
+        return postDao.loadMedias(username);
     }
 
     @Override

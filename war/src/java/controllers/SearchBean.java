@@ -25,7 +25,7 @@ import servicesSecondaire.UserService2;
  * @author Karl Lauret
  */
 @ManagedBean(name = "searchBean")
-@RequestScoped 
+@RequestScoped
 public class SearchBean {
 
     private String param;
@@ -34,6 +34,10 @@ public class SearchBean {
     UserService userService;
     @EJB
     UserService2 userElementaire;
+
+    @ManagedProperty(value = "#{navigationBean}")
+    private NavigationBean navigationBean;
+
     /**
      * Creates a new instance of SearchBean
      */
@@ -44,8 +48,8 @@ public class SearchBean {
      *
      * @return
      */
-    public String search() { 
-        return "search.xhtml";//  ?? 
+    public String search() {
+        return navigationBean.search();
     }
 
     public String getParam() {
@@ -56,9 +60,15 @@ public class SearchBean {
         this.param = param;
     }
 
-
     public List<UserEntity> searchPram(String param) {
         return userElementaire.search(param);
     }
 
+    public NavigationBean getNavigationBean() {
+        return navigationBean;
+    }
+
+    public void setNavigationBean(NavigationBean navigationBean) {
+        this.navigationBean = navigationBean;
+    }  
 }

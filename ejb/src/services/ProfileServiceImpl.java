@@ -90,7 +90,7 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public void editProfile(String firstName, String lastName, String phone, String city, String country, String description, Double height, Double weight, String gender, Long userId) {
+    public void editProfile(String firstName, String lastName, String phone, String city, String country, String description, Date birthDay, Double height, Double weight, String gender, Long userId) {
         UserEntity u = userService2.findByID(userId);
         if (u != null) {
 
@@ -100,7 +100,10 @@ public class ProfileServiceImpl implements ProfileService {
             profile.setFirstName(firstName);
             profile.setDescription(description);
             profile.setPhone(phone);
-
+            profile.setCity(city);
+            profile.setCountry(country);
+            profile.setBirthDay(birthDay);
+            
             PhysicalEntity physical = profile.getPhysical();
             physical.setGender(gender);
             physical.setHeight(height);
@@ -124,13 +127,15 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public void editExperience(Long experienceID, Long userID, String title, String description, Date realisationDate, String experienceCity, String experienceCityStat, String experienceCityStreet, Integer experienceCityZipcode) {
         ExperienceEntity e = profileElementaire.findExperienceByID(experienceID);
+        if(e==null)
+            return;
         e.setTitle(title);
         e.setDescription(description);
         e.setRealisationDate(realisationDate);
         LocalisationEntity l = e.getLocalisation();
         l.setCity(experienceCity);
         l.setStat(experienceCityStat);
-        l.setStat(experienceCityStreet);
+        l.setStreet(experienceCityStreet);
         l.setZipcode(experienceCityZipcode);
 
         profileElementaire.updateExperience(e);

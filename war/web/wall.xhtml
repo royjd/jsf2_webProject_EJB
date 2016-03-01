@@ -6,20 +6,21 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
+    <f:metadata>
+        <f:viewAction action="#{paramViewBean.doSomething(param['p'], param['u'])}"/>
+        <f:viewAction action="#{paramViewBean.setSousPage(param['sp'])}"/>
+
+    </f:metadata>
     <h:head>
         <ui:insert name="header" >
             <ui:include src="WEB-INF/xhtml/commun/importCss.xhtml" />
 
         </ui:insert>
-        <title>Wall</title>
+        <title>Wall / #{paramViewBean.targetUsername} / #{paramViewBean.page}</title>
     </h:head>
 
     <h:body style="padding-top: 70px"> 
-        <f:metadata>
-            <f:viewAction action="#{paramViewBean.doSomething(param['p'], param['u'])}"/>
-            <f:viewAction action="#{paramViewBean.setSousPage(param['sp'])}"/>
 
-        </f:metadata>
         <div id="header">
             <ui:insert name="header" >
                 <ui:include src="WEB-INF/xhtml/commun/header.xhtml" />
@@ -32,26 +33,30 @@
         </div>
 
         <ui:insert name="header" >
-            <ui:include src="WEB-INF/xhtml/wall/header.xhtml" />
-            <ui:include src="WEB-INF/xhtml/wall/navBar.xhtml" />
+            <div class="container">
+
+            </div>
 
 
             <div class="container"> 
-                
+
+                <ui:include src="WEB-INF/xhtml/wall/header.xhtml" />
+                <ui:include src="WEB-INF/xhtml/wall/navBar.xhtml" />
+
                 <ui:fragment rendered="#{paramViewBean.page == 'default'}"> 
                     <ui:include src="WEB-INF/xhtml/wall/post.xhtml" >
                         <ui:param name="dataTableID" value="default"/>
                         <ui:param name="targetUserName" value="#{param['u']}"/> 
                     </ui:include>
                 </ui:fragment> 
-                
+
                 <ui:fragment rendered="#{paramViewBean.page == 'recommendation'}"> 
                     <ui:include src="WEB-INF/xhtml/wall/recommendation/recommendation.xhtml" >
                         <ui:param name="dataTableID" value="recommendation"/>
                         <ui:param name="targetUserName" value="#{param['u']}"/> 
                     </ui:include>
                 </ui:fragment> 
-                
+
                 <ui:fragment rendered="#{paramViewBean.page == 'friend'}"> 
                     <ui:include src="WEB-INF/xhtml/wall/friend/friend.xhtml" >
 

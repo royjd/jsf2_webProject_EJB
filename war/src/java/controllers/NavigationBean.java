@@ -23,95 +23,61 @@ public class NavigationBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public String getP() {
-        return p;
-    }
-
-    public void setP(String p) {
-        this.p = p;
-    }
-
-    private String p = "friend";
-
-    /*private String pageContent;
-     private String wallContent;*/
     public NavigationBean() {
     }
 
     public String index() {
-        return this.index(false);
-    }
-
-    public String index(boolean redirect) {
-        if (redirect) {
-            return "index?faces-redirect=true";
-        }
         return "index";
     }
 
-    private String page() {
-        return "page";
+    public String index(boolean redirect) {
+        return "index?faces-redirect=true";
     }
 
     public String home() {
         return "home?faces-redirect=true";
     }
 
+    private String page(String page) {
+        String username = this.getUsername();
+        if (username != null) {
+            return page + "?faces-redirect=true&u=" + username + "&p=default";
+        }
+        return ""; // Error page
+    }
 
     public String message() {
-        String username = this.getUsername();
-        System.err.println("Username = " + username);
-        if (username != null) {
-            return "message?faces-redirect=true&u=" + username + "&p=default";
-        }
-        return "message?faces-redirect=true";
+        return this.page("message");
     }
 
     public String notification() {
-        String username = this.getUsername();
-        System.err.println("Username = " + username);
-        if (username != null) {
-            return "notification?faces-redirect=true&u=" + username + "&p=notification";
-        }
-        return "notification?faces-redirect=true";
+        return this.page("notification");
+    }
+
+    public String search() {
+        return "search.xhtml";
+    }
+
+    public String wall() {
+        return this.page("wall");
     }
 
     public String wall(String username) {
-        System.err.println("Wall pad with username : " + username);
         if (username != null) {
             return "wall?faces-redirect=true&u=" + username + "&p=default";
         }
         return "wall?faces-redirect=true";
     }
 
-    public String wall() {
-        return this.wall(this.getUsername());
-    }
-
-    /**
-     *
-     * @param page
-     * @return
-     */
     private String wallPage(String page, String username) {
-
         if (username != null) {
             return "wall?faces-redirect=true&p=" + page + "&u=" + username;
         }
         return "wall?faces-redirect=true&p=default";
     }
-    
-    /**
-     *
-     * @param page
-     * @return
-     */
+
     private String wallPage(String page) {
         return this.wallPage(page, this.getUsername());
-    }
-
-    private String wallSousPage(String page, String souspage) {
-        return this.wallPage(page, souspage, this.getUsername());
     }
 
     private String wallPage(String page, String souspage, String username) {
@@ -121,17 +87,18 @@ public class NavigationBean implements Serializable {
         return "wall.xhtml?faces-redirect=true";  // Or error page 
     }
 
+    private String wallSousPage(String page, String souspage) {
+        return this.wallPage(page, souspage, this.getUsername());
+    }
 
     private String wallSousPage(String page, String souspage, Long id) {
-        String username = this.getUsername();
-        return this.wallSousPage(page, souspage, username, id);
+        return this.wallSousPage(page, souspage, this.getUsername(), id);
     }
 
     private String wallSousPage(String page, String souspage, String username, Long id) {
         if (username != null) {
             return "wall?faces-redirect=true&p=" + page + "&sp=" + souspage + "&id=" + id + "&u=" + username;
         }
-        //return "wall?faces-redirect=true";
         return "wall.xhtml?faces-redirect=true"; // Error page 
     }
 
@@ -151,27 +118,14 @@ public class NavigationBean implements Serializable {
         return Long.parseLong(params.get("id"));
     }
 
-    /**
-     *
-     * @return
-     */
     public String recommendation() {
         return this.wallPage("recommendation");
     }
 
-    /**
-     *
-     * @param username
-     * @return
-     */
     public String recommendation(String username) {
         return this.wallPage("recommendation", username);
     }
 
-    /**
-     *
-     * @return
-     */
     public String friend() {
         return this.wallPage("friend");
     }
@@ -181,47 +135,43 @@ public class NavigationBean implements Serializable {
     }
 
     public String media() {
-        return this.wallPage("media", this.getUsername());
+        return this.wallPage("media");
     }
 
     public String album() {
         return this.wallSousPage("media", "album");
     }
-    
+
     public String album(String username) {
-        return this.wallPage("media", "album" , username);
+        return this.wallPage("media", "album", username);
     }
-        
+
     public String createAlbum() {
         return this.wallSousPage("media", "createAlbum");
     }
 
     public String displayAlbum() {
-        return this.wallSousPage("media", "displayAlbum",this.getIdFromUrl());
+        return this.wallSousPage("media", "displayAlbum", this.getIdFromUrl());
     }
-    
-    public String displayAlbum(String username, Long id){
+
+    public String displayAlbum(String username, Long id) {
         return this.wallSousPage("media", "displayAlbum", username, id);
     }
 
-    public String addPhoto(){ 
-        System.err.println(this.getUsername()+" ++++ "+this.getIdFromUrl());
+    public String photo() {
+        return this.wallSousPage("media", "photo");
+    }
+
+    public String addPhoto() {
         return this.wallSousPage("media", "addPhoto", this.getIdFromUrl());
     }
-       
+
     public String profile() {
-        String username = this.getUsername();
-        if (username != null) {
-            return "wall.xhtml?faces-redirect=true&p=profile" + "&u=" + username;
-        }
-        return "";
+        return this.wallPage("profile");
     }
 
     public String profile(String username) {
-        if (username != null) {
-            return "wall.xhtml?faces-redirect=true&p=profile" + "&u=" + username;
-        }
-        return "";
+        return wallPage("profile", username);
     }
 
     public String editProfile() {
