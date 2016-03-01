@@ -28,7 +28,7 @@ import servicesTertiaire.PostService2;
 @ManagedBean
 @ViewScoped
 public class ListPostAjaxBean implements java.io.Serializable {
-
+ 
     @EJB
     PostService postService;
 

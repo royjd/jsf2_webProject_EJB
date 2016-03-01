@@ -110,5 +110,17 @@ public class MessageUserDAOImpl implements MessageUserDAO {
                 .setParameter("value1", userID).getResultList();
     }
 
+    @Override
+    public List<MessageUserEntity> findNewMessageForUser(Long userID) {
+        return this.em.createQuery("SELECT t FROM MessageUserEntity t where t.user.id = :value1 AND  TYPE(t.message) <> NotificationEntity AND t.newMessage = true ORDER BY t.id DESC")
+                .setParameter("value1", userID).getResultList();
+    }
+
+    @Override
+    public List<MessageUserEntity> findNewNotificationForUser(Long userID) {
+          return this.em.createQuery("SELECT t FROM MessageUserEntity t where t.user.id = :value1 AND  TYPE(t.message) = NotificationEntity AND t.newMessage = true ORDER BY t.id DESC")
+                .setParameter("value1", userID).getResultList();
+    }
+
 
 }

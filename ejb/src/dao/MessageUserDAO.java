@@ -58,5 +58,9 @@ public interface MessageUserDAO {
      */
     public List<MessageUserEntity> findAllMessageRByUserID(Long userID);
     public List<MessageUserEntity> findNewMessageForUserAndGroupMessage(Long userID, String groupMessage);
+
+    public List<MessageUserEntity> findNewMessageForUser(Long userID);
+
+    public List<MessageUserEntity> findNewNotificationForUser(Long userID);
     
 }

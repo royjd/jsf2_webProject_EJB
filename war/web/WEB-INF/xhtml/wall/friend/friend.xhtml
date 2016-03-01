@@ -55,7 +55,7 @@
                                                 </p:commandLink>   
 
                                             </h:form> 
-                                            <h:form rendered="#{friendBean.isFriend(user.username) == false &amp;&amp; user.id != id &amp;&amp; not empty id}" >      
+                                            <h:form rendered="#{friendBean.isFriendOrHasRequest(user.username) == false &amp;&amp; user.id != id &amp;&amp; not empty id}" >      
                                                 <p:commandLink value="Send Request" action="#{navigationBean.friend(paramViewBean.targetUsername)}"  
                                                                actionListener="#{friendBean.addFriend(user.id)}" 
                                                                onclick="$(this).hide()" 

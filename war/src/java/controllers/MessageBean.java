@@ -29,6 +29,8 @@ public class MessageBean implements Serializable {
 
     private String selectedGroupName;
 
+    private Integer nbOfNewMessagesTotal;
+
     @EJB
     UserService2 userService;
 
@@ -54,21 +56,27 @@ public class MessageBean implements Serializable {
         return this.messageElementaire.findGroupMessageByUserID(SessionBean.getUserId());
 
     }
-    
 
     public Integer getNbOfNewMessage(String groupName) {
 
-        return this.messageElementaire.findNbOfNewMessageForGroupName(SessionBean.getUserId(),groupName);
+        return this.messageElementaire.findNbOfNewMessageForGroupName(SessionBean.getUserId(), groupName);
 
-    } 
- 
+    }
+
+    public Integer getNbOfNewMessage() {
+        if (this.nbOfNewMessagesTotal == null) {
+            this.nbOfNewMessagesTotal = this.messageElementaire.findNbOfNewMessageForUserID(SessionBean.getUserId());
+        }
+        return this.nbOfNewMessagesTotal;
+    }
+
     public List<String> getListOfTarget(String groupName) {
         return this.messageElementaire.findTargetsOfMessagesByGroupName(groupName);
     }
 
     public List<MessageUserEntity> getMessageForGroup() {
         System.err.println("GETMESSAGES : " + this.selectedGroupName);
-        //TODO NEED TO MARK THEN AS READ
+        //TODO NEED TO MARK THEN AS READ 
         if (this.selectedGroupName != null) {
             this.messageElementaire.messageRead(SessionBean.getUserId(), this.selectedGroupName);
             return messageElementaire.findMessageUserByGroupName(SessionBean.getUserId(), this.selectedGroupName);
@@ -88,8 +96,12 @@ public class MessageBean implements Serializable {
     public void onRowSelect(SelectEvent event) {
         String tmp = ((String) event.getObject());
         //tmp.setNbNewsMessages(0);
-        this.selectedGroupName = tmp;
-
+        this.selectedGroupName = tmp; 
+        if(this.nbOfNewMessagesTotal!=0){
+          this.nbOfNewMessagesTotal = this.messageElementaire.findNbOfNewMessageForUserID(SessionBean.getUserId());
+  
+        }
+        
     }
 
 }

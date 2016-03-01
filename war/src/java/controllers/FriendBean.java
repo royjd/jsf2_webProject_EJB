@@ -70,10 +70,11 @@ public class FriendBean implements Serializable {
     }
 
     public List<FriendEntity> findFriendsToAccept() {
-        if(SessionBean.isConnect())
+        if (SessionBean.isConnect()) {
             return userService2.findFriendToAccept(SessionBean.getUserId());
-        else
+        } else {
             return new ArrayList<>();
+        }
     }
 
     public List<FriendEntity> findFriends(Long id) {
@@ -116,6 +117,17 @@ public class FriendBean implements Serializable {
 
         } else {
             return userService.isFriend(null, targetUsername);
+
+        }
+    }
+
+    public boolean isFriendOrHasRequest(String targetUsername) {
+        System.err.println(targetUsername + " targetusername getCanRecommend");
+        if (SessionBean.isConnect()) {
+            return userService.isFriendOrHasRequested(SessionBean.getUsername(), targetUsername);
+
+        } else {
+            return userService.isFriendOrHasRequested(null, targetUsername);
 
         }
     }
