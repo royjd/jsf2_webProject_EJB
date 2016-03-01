@@ -7,7 +7,6 @@ package controllers;
 
 import dao.ExperienceEntity;
 import dao.LocalisationEntity;
-import dao.PhysicalEntity;
 import dao.ProfileEntity;
 import dao.UserEntity;
 import java.io.Serializable;
@@ -17,14 +16,12 @@ import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.RequestScoped;
 import javax.faces.bean.ViewScoped;
 import javax.servlet.http.Part;
 import services.ProfileService;
 import services.UserService;
-import servicesSecondaire.ExperienceService;
-import servicesSecondaire.LocalisationService;
-import servicesSecondaire.PhysicalService;
+import servicesSecondaire.ProfileElementaire;
+import servicesSecondaire.UserService2;
 
 /**
  *
@@ -66,28 +63,24 @@ public class ProfileBean implements Serializable {
     private Integer experienceCityZipcode;
 
     private Long profileId;
-    
-    private Part file;
-    
-    private static final String realPath = "/home/SP2MI/zdiawara/Bureau/images";
-    //private static final String realPath = "/home/zakaridia/Documents/Depot_Git/File/image";
-    //private static final String realPath = "C:/Users/Karl Lauret/AppData/Roaming/NetBeans/8.1/config/GF_4.1.1/domain1/applications/images";
 
+    private Part file;
+
+    //private static final String realPath = "/home/SP2MI/zdiawara/Bureau/images";
+    private static final String realPath = "/home/zakaridia/Documents/Depot_Git/File/images";
+    //private static final String realPath = "C:/Users/Karl Lauret/AppData/Roaming/NetBeans/8.1/config/GF_4.1.1/domain1/applications/images";
 
     @EJB
     ProfileService profileService;
 
     @EJB
-    PhysicalService PhysicalService;
-
-    @EJB
-    ExperienceService experienceService;
-
-    @EJB
-    LocalisationService localisationService;
+    ProfileElementaire profileElementaire;
 
     @EJB
     UserService userService;
+
+    @EJB
+    UserService2 userElementaire;
 
     @ManagedProperty(value = "#{navigationBean}")
     private NavigationBean navigationBean;
@@ -103,28 +96,7 @@ public class ProfileBean implements Serializable {
     public String editProfile() {
         Long id = SessionBean.getUserId();
         if (id != null) {
-            UserEntity u = userService.findByID(id);
-            ProfileEntity p = u.getProfile();
-
-            // Set data about profile
-            p.setCountry(country);
-            p.setCity(city);
-            p.setLastName(lastName);
-            p.setFirstName(firstName);
-            p.setBirthDay(birthDay);
-            p.setPhone(phone);
-            p.setDescription(briefDescription);
-
-            profileService.update(p); // Update the profile
-
-            //Set data about physic
-            PhysicalEntity physic = p.getPhysical();
-            physic.setGender(gender);
-            physic.setHeight(height);
-            physic.setWeight(weight);
-
-            PhysicalService.update(physic); // Update the physic 
-
+            profileService.editProfile(firstName, lastName, phone, city, country, briefDescription, height, weight, gender, id);
             return navigationBean.profile(SessionBean.getUsername());
         }
 
@@ -133,10 +105,10 @@ public class ProfileBean implements Serializable {
 
     public void loadProfile(Long ID) {
 
-        load(userService.findByID(ID));
+        load(userElementaire.findByID(ID));
 
         //Experience
-        ExperienceEntity e = profileService.getLastExperienceByProfile(this.profileId);
+        ExperienceEntity e = profileElementaire.findLastExperienceByProfile(this.profileId);
         if (e != null) {
             this.title = e.getTitle();
             this.description = e.getDescription();
@@ -148,7 +120,7 @@ public class ProfileBean implements Serializable {
     }
 
     public void loadProfil(String username) {
-        load(userService.findByUsername(username));
+        load(userElementaire.findByUsername(username));
     }
 
     private void load(UserEntity u) {
@@ -179,29 +151,40 @@ public class ProfileBean implements Serializable {
         if (id == null) {
             // Not connected
         }
-        ExperienceEntity e = new ExperienceEntity(this.title, this.description, this.realisationDate);
-        LocalisationEntity l = new LocalisationEntity(this.experienceCity, this.experienceCityStat, this.experienceCityStreet, this.experienceCityZipcode);
-        e.setProfile(userService.findByID(id).getProfile()); // Set the profile 
+
         if (this.experienceId == 0) {
-            e.setLocalisation(l);
-            experienceService.save(e);
+            profileService.createExperience(id,
+                    this.title,
+                    this.description,
+                    this.realisationDate,
+                    this.experienceCity,
+                    this.experienceCityStat,
+                    this.experienceCityStreet,
+                    this.experienceCityZipcode);
+
         } else {
-            e.setId(this.experienceId);
-            l.setId(this.localisationId);
-            e.setLocalisation(l);
-            experienceService.update(e);
-            localisationService.update(l);
+            profileService.editExperience(this.experienceId,
+                    id,
+                    this.title,
+                    this.description,
+                    this.realisationDate,
+                    this.experienceCity,
+                    this.experienceCityStat,
+                    this.experienceCityStreet,
+                    this.experienceCityZipcode);
+
         }
+
         return navigationBean.experience(SessionBean.getUsername());
     }
 
-    public String removeExperience() {
-        Long id = SessionBean.getUserId();
-        if (id != null) {
-            ExperienceEntity e = experienceService.findById(this.experienceId);
-            if (e != null) {
-                experienceService.delete(e);
-            }
+    public String removeExperience(Long expID) {
+
+        if (SessionBean.isConnect()) {
+            Long id = SessionBean.getUserId();
+            System.err.println("DELETE " + expID);
+            profileService.deleteExperience(id, expID);
+
             return navigationBean.experience(SessionBean.getUsername());
         }
         return ""; // error page
@@ -210,7 +193,7 @@ public class ProfileBean implements Serializable {
     public void loadExperience(Long id) {
         if (id != null && id != 0) {
 
-            ExperienceEntity e = experienceService.findById(id);
+            ExperienceEntity e = profileElementaire.findExperienceByID(id);
             if (e != null) {
                 this.experienceId = e.getId();
                 this.title = e.getTitle();
@@ -229,41 +212,42 @@ public class ProfileBean implements Serializable {
     }
 
     public List<ExperienceEntity> getExperiences(String username, int limit) {
-        UserEntity u = userService.findByUsername(username);
+        UserEntity u = userElementaire.findByUsername(username);
         if (u != null) {
             ProfileEntity p = u.getProfile();
-            return profileService.getProfileExperiences(p.getId(), limit);
+            return profileElementaire.findProfileExperiences(p.getId(), limit);
         }
         return null;
 
     }
 
     public List<ExperienceEntity> getExperiences(String username) {
-        UserEntity u = userService.findByUsername(username);
+        UserEntity u = userElementaire.findByUsername(username);
         if (u != null) {
             ProfileEntity p = u.getProfile();
-            return profileService.getProfileExperiences(p.getId());
+            return profileElementaire.findProfileExperiences(p.getId());
         }
         return null;
     }
 
-    public String chooseCoverPicture(String username){
-        return profileService.coverUrl(username);
+    public String chooseCoverPicture(String username) {
+        return profileService.coverUrltmp(username);
     }
-    
+
     public String defineProfilePicture() {
         if (SessionBean.isConnect()) {
-            profileService.defineProfilePicture(file,SessionBean.getUserId(),realPath);
+            profileService.defineProfilePicture(file, SessionBean.getUserId(), realPath);
         }
         return navigationBean.profile(SessionBean.getUsername());
     }
+
     public String defineCoverPicture() {
         if (SessionBean.isConnect()) {
-            profileService.defineCoverPicture(file,SessionBean.getUserId(),realPath);
+            profileService.defineCoverPicture(file, SessionBean.getUserId(), realPath);
         }
         return navigationBean.profile(SessionBean.getUsername());
     }
-    
+
     public boolean canModify(String username) {
         return SessionBean.isConnect() && SessionBean.getUsername().equals(username);
     }
@@ -455,8 +439,5 @@ public class ProfileBean implements Serializable {
     public void setFile(Part file) {
         this.file = file;
     }
-    
-    
 
-    
 }

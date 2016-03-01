@@ -38,17 +38,10 @@ public class PhysicalEntity implements Serializable {
     public PhysicalEntity(){
         
     }
-    
-    /**
-     *
-     * @param p
-     */
-    public void setData(PhysicalEntity p){
-        this.gender = p.getGender();
-        this.height = p.getHeight();
-        this.weight = p.getWeight();
-    }
 
+    
+    
+    
     /**
      *
      * @return

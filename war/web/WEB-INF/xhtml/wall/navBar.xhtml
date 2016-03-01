@@ -7,35 +7,35 @@
         <nav class="navbar navbar-default">
             <div class="container">
                 <div class="navbar-header">
-                    <h:commandLink class="navbar-brand" value="#{buttonView.targetUsername}" action="#{navigationBean.wall()}">
-                        <f:param name="u" value="#{buttonView.targetUsername}"/>
+                    <h:commandLink class="navbar-brand" value="#{paramViewBean.targetUsername}" action="#{navigationBean.wall()}">
+                        <f:param name="u" value="#{paramViewBean.targetUsername}"/>
                     </h:commandLink>
                 </div>
                 <div>
                     <ul class="nav navbar-nav">
-                        <li class="active">
+                        <li class="target-active wall">
                             <h:commandLink value="Wall" action="#{navigationBean.wall()}">
-                                <f:param name="u" value="#{buttonView.targetUsername}"/>
+                                <f:param name="u" value="#{paramViewBean.targetUsername}"/>
                             </h:commandLink>
 
                         </li>
-                        <li>
+                        <li class="target-active recommendation">
                             <h:commandLink value="Recommendation" action="#{navigationBean.recommendation()}">
-                                <f:param name="u" value="#{buttonView.targetUsername}"/>
+                                <f:param name="u" value="#{paramViewBean.targetUsername}"/>
                             </h:commandLink>
                         </li>
-                        <li>
+                        <li class="target-active friends">
                             <h:commandLink value="Friends" action="#{navigationBean.friend()}">
-                                <f:param name="u" value="#{buttonView.targetUsername}"/>
+                                <f:param name="u" value="#{paramViewBean.targetUsername}"/>
                             </h:commandLink>
                         </li>
 
-                        <li>
+                        <li class="target-active medias">
                             <h:commandLink value="Media" action="#{navigationBean.media()}">
                                 <f:param name="u" value="#{param['u']}"/>
                             </h:commandLink>
                         </li>
-                        <li>
+                        <li class="target-active about">
                             <h:commandLink value="About me" action="#{navigationBean.profile()}">
                                 <f:param name="u" value="#{param['u']}"/>
                             </h:commandLink>

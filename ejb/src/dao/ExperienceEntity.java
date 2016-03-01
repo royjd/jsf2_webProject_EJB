@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -22,35 +23,37 @@ import javax.persistence.Temporal;
  * @author zakaridia
  */
 @Entity
-@Table(name="experiences")//TODO ASK ZAK ABOUT THE EXTENDS
+@Table(name = "experiences")//TODO ASK ZAK ABOUT THE EXTENDS
 public class ExperienceEntity implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String title;
-    
+
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date realisationDate;
-    
+
+    @Lob //Force to set the type of the column to clob in java db => TEXT in mysql
     private String description;
-    
+
     @ManyToOne
-    @JoinColumn(name="profile_fk")
+    @JoinColumn(name = "profile_fk")
     private ProfileEntity profile;
-    
+
     @OneToOne
-    @JoinColumn(name="localisation_id")
+    @JoinColumn(name = "localisation_id")
     private LocalisationEntity localisation;
 
     /**
      *
      */
     public ExperienceEntity() {
-    
+
     }
-        
+
     /**
      *
      * @param title the title of the experience
@@ -61,8 +64,8 @@ public class ExperienceEntity implements Serializable {
         this.title = title;
         this.description = description;
         this.realisationDate = realisationDate;
-    } 
-    
+    }
+
     /**
      *
      * @return
@@ -143,7 +146,6 @@ public class ExperienceEntity implements Serializable {
         this.profile = profile;
     }
 
-    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -184,5 +186,5 @@ public class ExperienceEntity implements Serializable {
     public void setLocalisation(LocalisationEntity localisation) {
         this.localisation = localisation;
     }
-    
+
 }

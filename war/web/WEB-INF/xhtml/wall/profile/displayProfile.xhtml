@@ -6,10 +6,10 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <!-- Load profile -->
-    #{profileBean.loadProfil(buttonView.targetUsername)}
+    #{profileBean.loadProfil(paramViewBean.targetUsername)}
 
     <!-- Search all experiences and stocks result in experiences variables  -->
-    <c:set var="experiences" value="#{profileBean.getExperiences(buttonView.targetUsername,3)}" scope="request" />
+    <c:set var="experiences" value="#{profileBean.getExperiences(paramViewBean.targetUsername,3)}" scope="request" />
 
     <div class="col-sm-7">
         <div class="row">
@@ -46,17 +46,17 @@
                     Gender :  
 
                     <small>
-                        <c:choose>
-                            <c:when test="#{profileBean.gender eq 'F'}">
+      
+                            <h:panelGroup rendered="#{profileBean.gender eq 'F'}">
                                 Female
-                            </c:when>
-                            <c:when test="#{profileBean.gender eq 'M'}">
-                                Male
-                            </c:when>
-                            <c:otherwise>
+                            </h:panelGroup>
+                            <h:panelGroup rendered="#{profileBean.gender eq 'M'}">
+                                Male 
+                            </h:panelGroup>
+                            <h:panelGroup rendered="#{!(profileBean.gender eq 'M' or profileBean.gender eq 'F')}">
                                 Not define 
-                            </c:otherwise>
-                        </c:choose>
+                            </h:panelGroup>
+                        
                     </small>   
                 </h3>
 
@@ -96,7 +96,7 @@
             <div class="pull-right">
                 <h:form>
                     <h:commandLink  class="btn btn-info" role="button" value="Edit profile" action="#{navigationBean.editProfile()}">
-                        <f:param name="u" value="#{buttonView.targetUsername}"/>
+                        <f:param name="u" value="#{paramViewBean.targetUsername}"/>
                     </h:commandLink>
                 </h:form>
             </div>
@@ -129,11 +129,11 @@
 
                         <h:form>
                             <h:commandLink  class="btn btn-info" value="Edit" action="#{navigationBean.manageExperience()}">
-                                <f:param name="u" value="#{buttonView.targetUsername}"/>
+                                <f:param name="u" value="#{paramViewBean.targetUsername}"/>
                                 <f:param name="id" value="#{experience.id}"/>
                             </h:commandLink>
                             <h:commandLink  class="btn btn-danger" value="Remove" action="#{profileBean.removeExperience()}">
-                                <f:param name="u" value="#{buttonView.targetUsername}"/>
+                                <f:param name="u" value="#{paramViewBean.targetUsername}"/>
                                 <f:param name="id" value="#{experience.id}"/>
                             </h:commandLink>
                         </h:form>
@@ -148,7 +148,7 @@
             <c:choose>
                 <c:when test="${not empty experiences}">
                     <h:commandLink  value="See more" action="#{navigationBean.experience()}" class="btn btn-info">
-                        <f:param name="u" value="#{buttonView.targetUsername}"/>
+                        <f:param name="u" value="#{paramViewBean.targetUsername}"/>
                     </h:commandLink>
                 </c:when>
                 <c:otherwise>
@@ -159,7 +159,7 @@
             </c:choose>
             <c:if test="${canModify}">
                 <h:commandLink  value="Add experience" action="#{navigationBean.manageExperience()}" class="pull-right btn btn-success">
-                    <f:param name="u" value="#{buttonView.targetUsername}"/>
+                    <f:param name="u" value="#{paramViewBean.targetUsername}"/>
                 </h:commandLink>
             </c:if>
         </h:form>

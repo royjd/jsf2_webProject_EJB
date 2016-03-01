@@ -57,10 +57,10 @@
                         <div class="col-xs-8">
                             <div class="row">
                                 <div class="col-xs-12 "><h3>
-                                        #{post.author.username}  : #{post.body}
+                                        #{post.author.username}  : #{post.body} 
                                     </h3></div> 
-                                <h:panelGroup rendered="#{postsBean.getCanCommentTheTarget(buttonView.targetUsername)}">
-                                    <div class="col-xs-12">
+                                <h:panelGroup rendered="#{postsBean.getCanCommentTheTarget(post.postMain.author.username)}"> 
+                                    <div class="col-xs-12"> 
                                         <button class='pull-left btn btn-xs btn-primary repplyCommentBtn' onclick="$('#replyCom#{post.id}').toggle()">Reply</button>
                                     </div>
                                     <div class="col-xs-12" id="replyCom#{post.id}" style="display:none">
@@ -86,7 +86,7 @@
                                                         </p:commandButton>   
                                                         <p:remoteCommand name="update_current#{post.postMain.id}"
                                                                          update=":philblog#{dataTableID}" 
-                                                                         actionListener="#{evNewsBlogsBean.refresh(dataTableID,post.postMain.id)}" />
+                                                                         actionListener="#{listPostAjaxBean.refresh(dataTableID,post.postMain.id)}" />
                                                      </div>
                                                 </div>
                                             </fieldset>

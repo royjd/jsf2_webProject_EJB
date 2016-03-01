@@ -7,41 +7,56 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:composition>
+        <div class="row">
+            <h:panelGroup class="col-xs-12">
+                <div class = "panel panel-default">
+                    <div class ="panel-heading">
+                        Friend Request 
+                    </div>
+                    <div class="panel-content">
+                        <div class="row sideBarBlock first">
+                            <div class="col-sm-12">
+                                <div class="border-bot">
 
-        <div class="row sideBarBlock first">
-            <div class="col-sm-12">
-                <div class="border-bot">
+                                    <div class="row">    
+                                        <ui:repeat value="#{friendBean.findFriendsToAccept()}" var="friend_to_accept" >
+                                            <div id="friend_request_#{friend_to_accept.id}" class="col-sm-12">
+                                                <h:panelGroup class="pull-left">   
+                                                    <h:form   >
+                                                        <h:commandLink value="@#{friend_to_accept.owner.username}" action="#{navigationBean.wall()}"  >
+                                                            <f:param name="u" value="#{friend_to_accept.owner.username}"/>
+                                                        </h:commandLink>
+                                                    </h:form>
+                                                </h:panelGroup>
+                                                <div class="pull-right">
+                                                    <h:form   >     
+                                                        <p:commandLink  
+                                                            action="#{navigationBean.home()}"
+                                                            actionListener="#{friendBean.acceptFriend(friend_to_accept.owner.id)}" 
+                                                            onclick="$(this).hide()" 
 
-                    <h2>Friend Request</h2>
-                    <div class="row">    
-                        <ui:repeat value="#{friendBean.findFriendsToAccept()}" var="friend_to_accept" >
-                            <div id="friend_request_#{friend_to_accept.id}" class="col-sm-12">
-                                <a href="#{friend_to_accept.owner.username}.htm" class=""> @#{friend_to_accept.owner.username} </a>
-                                <div class="pull-right">
-                                    <h:form   >     
-                                        <p:commandLink  
-                                            action="#{navigationBean.home()}"
-                                            actionListener="#{friendBean.acceptFriend(friend_to_accept.owner.id)}" 
-                                            onclick="$(this).hide()" 
+                                                            class="btn btn-xs btn-success glyphicon glyphicon-ok">
 
-                                            class="btn btn-xs btn-success glyphicon glyphicon-ok">
+                                                        </p:commandLink>    
+                                                        <p:commandLink 
+                                                            action="#{navigationBean.home()}"
+                                                            actionListener="#{friendBean.deniedFriend(friend_to_accept.owner.id)}" 
+                                                            onclick="$('#friend_request_#{friend_to_accept.id}').hide()" 
+                                                            class="btn btn-xs btn-danger glyphicon glyphicon-remove">
 
-                                        </p:commandLink>    
-                                        <p:commandLink 
-                                            action="#{navigationBean.home()}"
-                                            actionListener="#{friendBean.deniedFriend(friend_to_accept.owner.id)}" 
-                                            onclick="$('#friend_request_#{friend_to_accept.id}').hide()" 
-                                            class="btn btn-xs btn-danger glyphicon glyphicon-remove">
+                                                        </p:commandLink>  
 
-                                        </p:commandLink>  
-
-                                    </h:form>
-                                </div> 
-                            </div>
-                        </ui:repeat>  
+                                                    </h:form>
+                                                </div> 
+                                            </div>
+                                        </ui:repeat>  
+                                    </div>
+                                </div>
+                            </div> 
+                        </div>
                     </div>
                 </div>
-            </div> 
+            </h:panelGroup>
         </div>
     </ui:composition>
 </html>

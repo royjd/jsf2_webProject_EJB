@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package servicesSecondaire;
+package servicesTertiaire;
 
 import dao.AlbumEntity;
 import dao.PostEntity;
@@ -31,7 +31,6 @@ public interface PostService2 {
     
     public PostEntity findByID(Long postID);
 
-    public void update(PostEntity postEntity);
 
     public List<PostEntity> getRecentPostFromUsersID(List<Long> l);
 

@@ -9,53 +9,63 @@
     <h:head>
         <ui:insert name="header" >
             <ui:include src="WEB-INF/xhtml/commun/importCss.xhtml" />
-            
+
         </ui:insert>
         <title>Wall</title>
     </h:head>
 
     <h:body style="padding-top: 70px"> 
         <f:metadata>
-            <f:viewAction action="#{buttonView.doSomething(param['p'], param['u'])}"/>
-            <f:viewAction action="#{buttonView.setSousPage(param['sp'])}"/>
-           
+            <f:viewAction action="#{paramViewBean.doSomething(param['p'], param['u'])}"/>
+            <f:viewAction action="#{paramViewBean.setSousPage(param['sp'])}"/>
+
         </f:metadata>
         <div id="header">
             <ui:insert name="header" >
                 <ui:include src="WEB-INF/xhtml/commun/header.xhtml" />
             </ui:insert>
+            <!-- set the active button in the nav -->
+            <script>
+                $(".target-active.wall").addClass("active");
+            </script>
+
         </div>
 
         <ui:insert name="header" >
             <ui:include src="WEB-INF/xhtml/wall/header.xhtml" />
             <ui:include src="WEB-INF/xhtml/wall/navBar.xhtml" />
 
+
             <div class="container"> 
-                <ui:fragment rendered="#{buttonView.page == 'default'}"> 
+                
+                <ui:fragment rendered="#{paramViewBean.page == 'default'}"> 
                     <ui:include src="WEB-INF/xhtml/wall/post.xhtml" >
                         <ui:param name="dataTableID" value="default"/>
-
                         <ui:param name="targetUserName" value="#{param['u']}"/> 
                     </ui:include>
                 </ui:fragment> 
-                <ui:fragment rendered="#{buttonView.page == 'recommendation'}"> 
+                
+                <ui:fragment rendered="#{paramViewBean.page == 'recommendation'}"> 
                     <ui:include src="WEB-INF/xhtml/wall/recommendation/recommendation.xhtml" >
                         <ui:param name="dataTableID" value="recommendation"/>
                         <ui:param name="targetUserName" value="#{param['u']}"/> 
-
                     </ui:include>
                 </ui:fragment> 
-                <ui:fragment rendered="#{buttonView.page == 'friend'}"> 
+                
+                <ui:fragment rendered="#{paramViewBean.page == 'friend'}"> 
                     <ui:include src="WEB-INF/xhtml/wall/friend/friend.xhtml" >
 
                     </ui:include> 
                 </ui:fragment>  
-                <ui:fragment rendered="#{buttonView.page == 'media'}"> 
+                
+                <ui:fragment rendered="#{paramViewBean.page == 'media'}"> 
                     <ui:include src="WEB-INF/xhtml/wall/media/media.xhtml" /> 
                 </ui:fragment>
-                <ui:fragment rendered="#{buttonView.page == 'profile'}"> 
+                
+                <ui:fragment rendered="#{paramViewBean.page == 'profile'}"> 
                     <ui:include src="WEB-INF/xhtml/wall/profile/profile.xhtml" /> 
                 </ui:fragment>
+               
             </div>
         </ui:insert>
 

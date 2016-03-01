@@ -84,11 +84,21 @@ public class MessageUserDAOImpl implements MessageUserDAO {
      * @return
      */
     @Override
-    public List<MessageUserEntity> findNewMessageForUserAndGroupMessage(Long userID, String groupMessage) {
+    public List<MessageUserEntity> findMessageForUserAndGroupMessage(Long userID, String groupMessage) {
         return this.em.createQuery("SELECT t FROM MessageUserEntity t where t.user.id = :value1 AND t.message.groupName = :value2 ORDER BY t.id DESC")
                 .setParameter("value1", userID).setParameter("value2", groupMessage).getResultList();
     }
-
+    /**
+     *
+     * @param userID
+     * @param groupMessage
+     * @return
+     */
+    @Override
+    public List<MessageUserEntity> findNewMessageForUserAndGroupMessage(Long userID, String groupMessage) {
+        return this.em.createQuery("SELECT t FROM MessageUserEntity t where t.user.id = :value1 AND t.message.groupName = :value2 AND t.newMessage = true ORDER BY t.id DESC")
+                .setParameter("value1", userID).setParameter("value2", groupMessage).getResultList();
+    }
     /**
      *
      * @param userID

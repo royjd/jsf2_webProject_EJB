@@ -5,7 +5,6 @@
  */
 package controllers;
 
-import commun.FriendOrNot;
 import dao.UserEntity;
 import java.util.List;
 import javax.ejb.EJB;
@@ -19,6 +18,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
+import servicesSecondaire.UserService2;
 
 /**
  *
@@ -30,11 +30,10 @@ public class SearchBean {
 
     private String param;
 
-    private List<FriendOrNot> results;
-
     @EJB
     UserService userService;
-
+    @EJB
+    UserService2 userElementaire;
     /**
      * Creates a new instance of SearchBean
      */
@@ -58,8 +57,8 @@ public class SearchBean {
     }
 
 
-    public List<FriendOrNot> searchPram(String param) {
-        return userService.search(param, SessionBean.getUserId());
+    public List<UserEntity> searchPram(String param) {
+        return userElementaire.search(param);
     }
 
 }

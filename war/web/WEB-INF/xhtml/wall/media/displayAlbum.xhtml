@@ -10,20 +10,22 @@
 
 
         #{postsBean.setTargetID(param['id'])}
-        <h4>Add photo <button id="addPicture" class="btn btn-primary btn-sm glyphicon glyphicon-plus"></button></h4>
-        <div id="addProfileDiv" style="display:none">
-            <h:form class="form-horizontal" role="form" enctype="multipart/form-data">
-                <div class="form-group">
-                    <div class="col-sm-12">
-                        <p:fileUpload fileUploadListener="#{postsBean.addPhotoToAlbum}" mode="advanced" dragDropSupport="true" multiple="true"
-                                      auto="false" update=":photoDisplay :updatePhotoModal" sizeLimit="10000000" fileLimit="10" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" >
+        <h:panelGroup rendered="#{postsBean.getCanModify(paramViewBean.targetUsername)}">
+            <h4>Add photo <button id="addPicture" class="btn btn-primary btn-sm glyphicon glyphicon-plus"></button></h4>
+            <div id="addProfileDiv" style="display:none">
+                <h:form class="form-horizontal" role="form" enctype="multipart/form-data" >
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <p:fileUpload fileUploadListener="#{postsBean.addPhotoToAlbum}" mode="advanced" dragDropSupport="true" multiple="true"
+                                          auto="false" update=":photoDisplay :updatePhotoModal" sizeLimit="10000000" fileLimit="10" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" >
 
-                        </p:fileUpload>
+                            </p:fileUpload>
 
+                        </div>
                     </div>
-                </div>
-            </h:form>
-        </div>
+                </h:form>
+            </div>
+        </h:panelGroup>
         <!-- Parcours la liste des madias de l'album --> 
         <p:commandButton type="button" value="Show" onclick="PF('dlg').show()" icon="ui-icon-extlink"/>
 

@@ -13,9 +13,9 @@
 
     <ui:component>
         <f:metadata>
-            <f:event type="preRenderView" listener="#{buttonView.setTargetUsername(param['u'])}"/>
+            <f:event type="preRenderView" listener="#{paramViewBean.setTargetUsername(param['u'])}"/>
         </f:metadata>
-        #{profileBean.loadProfil(buttonView.targetUsername)}
+        #{profileBean.loadProfil(paramViewBean.targetUsername)}
         <f:loadBundle basename="bundle.messages" var="msg"/>
 
         <div class="col-sm-7">
@@ -149,7 +149,7 @@
                 
                 <div class="form-group">
                     <div class="col-sm-offset-8 col-sm-4">
-                        <h:commandLink action="#{navigationBean.profile(buttonView.targetUsername)}" value="Cancel" class="btn btn-primary pull-right">
+                        <h:commandLink action="#{navigationBean.profile(paramViewBean.targetUsername)}" value="Cancel" class="btn btn-primary pull-right">
                         </h:commandLink>
                         
 

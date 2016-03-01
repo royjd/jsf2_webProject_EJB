@@ -43,7 +43,7 @@
                         </small>
                     </p>
                 </div>
-                <c:if test="${canModify and not empty experiences}">
+                <h:panelGroup rendered="${canModify and not empty experiences}">
                     <div class="pull-right">
 
                         <h:form>
@@ -51,13 +51,12 @@
                                 <f:param name="u" value="#{param['u']}"/>
                                 <f:param name="id" value="#{experience.id}"/>
                             </h:commandLink>
-                            <h:commandLink  class="btn btn-danger" value="Remove" action="#{profileBean.removeExperience()}">
+                            <h:commandLink  class="btn btn-danger" value="Remove" action="#{profileBean.removeExperience(experience.id)}">
                                 <f:param name="u" value="#{param['u']}"/>
-                                <f:param name="id" value="#{experience.id}"/>
                             </h:commandLink>
                         </h:form>
                     </div>
-                </c:if>
+                </h:panelGroup>
                 <div class="clearfix"></div><br/>
             </div>
             <hr/>

@@ -48,7 +48,7 @@ public interface MessageUserDAO {
      * @param groupMessage
      * @return
      */
-    public List<MessageUserEntity> findNewMessageForUserAndGroupMessage(Long userID, String groupMessage);
+    public List<MessageUserEntity> findMessageForUserAndGroupMessage(Long userID, String groupMessage);
     
     /**
      * return all the messages received by the given user id
@@ -57,6 +57,6 @@ public interface MessageUserDAO {
      * @return
      */
     public List<MessageUserEntity> findAllMessageRByUserID(Long userID);
-    
+    public List<MessageUserEntity> findNewMessageForUserAndGroupMessage(Long userID, String groupMessage);
     
 }

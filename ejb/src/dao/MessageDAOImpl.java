@@ -5,6 +5,7 @@
  */
 package dao;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -100,11 +101,13 @@ public class MessageDAOImpl implements MessageDAO {
     @Override
     public MessageEntity findByMessageGroup(String messageGroup) {
         try {
-            return (MessageEntity) this.em.createQuery("SELECT t FROM MessageEntity t where t.groupName = :value1")
-                    .setParameter("value1", messageGroup).getSingleResult();
+           List<MessageEntity> messageEntity = this.em.createQuery("SELECT t FROM MessageEntity t where t.groupName = :value1")
+                    .setParameter("value1", messageGroup).setMaxResults(1).getResultList();
+           return messageEntity.get(0);
         } catch (NoResultException e) {
             return null;
         }
+         
     }
 
     /**
