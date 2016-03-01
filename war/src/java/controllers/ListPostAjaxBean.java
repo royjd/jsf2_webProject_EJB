@@ -95,8 +95,12 @@ public class ListPostAjaxBean implements java.io.Serializable {
 
         PostEntity tmp = postService2.findByID(postID);
 
-        list = new ArrayList<>();
-        list.add(tmp);
+        if (tmp != null) {
+            list = new ArrayList<>();
+            list.add(tmp); 
+        }else{
+            this.list = null;
+        }
 
         return list;
 
