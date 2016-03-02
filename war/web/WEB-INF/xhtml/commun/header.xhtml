@@ -2,6 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" 
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
@@ -64,7 +65,8 @@
                             <li class="navbar-form pull-right">
                                 <h:inputText  value="#{searchBean.param}"  class="form-control" id="friendSearch"></h:inputText>
 
-                                <h:commandButton action="#{searchBean.search()}" value="Go" class="btn btn-success"></h:commandButton>
+                                <h:commandButton action="#{searchBean.search()}" value="Go" class="btn btn-success" pt:placeholder ="Search ..." ></h:commandButton>
+
                             </li>
                         </ul>
 

@@ -54,6 +54,10 @@ public class NavigationBean implements Serializable {
         return this.page("notification");
     }
 
+    public String search() {
+        return "search.xhtml";
+    }
+
     public String wall() {
         return this.page("wall");
     }
@@ -152,6 +156,10 @@ public class NavigationBean implements Serializable {
 
     public String displayAlbum(String username, Long id) {
         return this.wallSousPage("media", "displayAlbum", username, id);
+    }
+
+    public String photo() {
+        return this.wallSousPage("media", "photo");
     }
 
     public String addPhoto() {

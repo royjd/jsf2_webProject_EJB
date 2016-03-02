@@ -62,13 +62,15 @@ public class UserService2Impl implements UserService2 {
      * @return
      */
     @Override
-    public UserEntity create(UserEntity u) {
-        if (!existUser(u.getEmail(), u.getUsername())) {
+    public UserEntity create(String email, String username, String password, String firstName, String lastName) {
+        if (!existUser(email, username)) {
+            UserEntity u = new UserEntity(email, username, password, firstName, lastName);
             Long userId = userDao.save(u);
             u.setId(userId);
             u = userDao.findByID(u.getId());
             this.createDefaultProfilePhotos(u);
             profileDao.update(u.getProfile());
+            postService2.createDefaultAlbums(u);
             return u;
         }
         return null;

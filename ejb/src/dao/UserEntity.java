@@ -40,7 +40,7 @@ public class UserEntity implements Serializable {
 
     @Column(unique = true)
     @NotNull
-    @Pattern( regexp = "([^.@]+)(\\.[^.@]+)*@([^.@]+\\.)+([^.@]+)", message = "E-mail not valid" )
+    //@Pattern( regexp = "([^.@]+)(\\.[^.@]+)*@([^.@]+\\.)+([^.@]+)", message = "E-mail not valid" )
     private String email;
 
     @Column
@@ -99,9 +99,9 @@ public class UserEntity implements Serializable {
         this.username = username;
         this.password = password;
         this.profile = new ProfileEntity(lastName,firstName);
-        this.postsS.add(new AlbumEntity("DefaultAlbum", "Default album", this));
+        /*this.postsS.add(new AlbumEntity("DefaultAlbum", "Default album", this));
         this.postsS.add(new AlbumEntity("NewsAlbum", "News album", this));
-        this.postsS.add(new AlbumEntity("ProfileAlbum", "Profile album", this));
+        this.postsS.add(new AlbumEntity("ProfileAlbum", "Profile album", this));*/
     }
     /**
      *

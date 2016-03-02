@@ -5,6 +5,7 @@
  */
 package controllers;
 
+import dao.AlbumEntity;
 import dao.PostEntity;
 import java.io.IOException;
 import java.io.InputStream;
@@ -46,7 +47,8 @@ public class PostsBean implements Serializable {
     private Long targetID;
     private boolean canComment;
     private String localisation;
-    private Map<String,InputStream> files;
+    private Map<String, InputStream> files;
+
     private List<PostEntity> photoList;
 
     @EJB
@@ -79,7 +81,6 @@ public class PostsBean implements Serializable {
     public PostsBean() {
 
     }
-
 
     public List<PostEntity> getHomePosts() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -169,7 +170,7 @@ public class PostsBean implements Serializable {
             files.put(uploadedFile.getFileName(), uploadedFile.getInputstream());
         } catch (IOException ex) {
         }
-        
+
     }
 
     public void addPhotoToAlbum(FileUploadEvent event) {
@@ -206,11 +207,23 @@ public class PostsBean implements Serializable {
     }
 
     public List<PostEntity> loadMedias(Long albumId) {
-
         this.photoList = postService2.loadMedias(albumId);
         return this.photoList;
     }
 
+    public List<PostEntity> loadMediasForUser(String username) {
+        return  postService2.loadMedias(username);
+    }
+
+    public String searchDefaultAlbum() {
+        if (SessionBean.isConnect()) {
+            AlbumEntity album = postService2.findAlbum(SessionBean.getUserId(), "DefaultAlbum");
+            if (album != null) {
+                return navigationBean.displayAlbum(SessionBean.getUsername(), album.getId());
+            }
+        }
+        return ""; //Error page
+    }
     /*public String addPhotoToAlbum() {
      if (SessionBean.isConnect()) {
      postService.addPhotoToAlbum(SessionBean.getUsername(), file, realPath, targetID);
@@ -219,6 +232,7 @@ public class PostsBean implements Serializable {
      return ""; // Error page
      }*/
     //TODO LATER WITH A REAL targetID
+
     public void onPostLoad(String targetUsername) {
         String authorUsername = SessionBean.getUsername();
         if (authorUsername == null) {
@@ -323,7 +337,7 @@ public class PostsBean implements Serializable {
         this.postComment = postComment;
     }
 
-    public String getComment() { 
+    public String getComment() {
         return ""; //to reset the input in all the field
     }
 

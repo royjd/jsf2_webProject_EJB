@@ -15,7 +15,7 @@
             <div class="col-xs-12 col-sm-6 col-md-3">
                 <h:form>
                     
-                    <h:commandLink action="#{navigationBean.displayAlbum(param['u'],album.id)}">
+                    <h:commandLink action="#{navigationBean.displayAlbum(paramViewBean.targetUsername,album.id)}">
                      
                         <ui:include src="../../commun/displayAlbum.xhtml" >   
                             <ui:param name="link" value="#{album.cover.mediaType.link}" />

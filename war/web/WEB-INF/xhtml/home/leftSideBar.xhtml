@@ -7,7 +7,7 @@
         <div class="row">
             <div class="col-sm-12">
                 <f:metadata>
-                    <f:event type="preRenderView" listener="#{profileBean.loadProfile(1)}"/>
+                    <f:event type="preRenderView" listener="#{profileBean.loadProfile(id)}"/>
                 </f:metadata>
                 <ui:include src="../commun/sideBar/profileHeader.xhtml" />                
                 <ui:include src="../commun/sideBar/physical.xhtml" />

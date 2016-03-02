@@ -51,6 +51,7 @@ public interface PostDAO {
     public PostEntity findAlbum(Long userId , String type);
     
     public List<PostEntity> loadMedias(Long albumId);
+    public List<PostEntity> loadMedias(String username);
     
     /**
      * return the album matching the given album id
