@@ -5,11 +5,12 @@
  */
 package services;
 
-import servicesSecondaire.PhotoService;
 import dao.AlbumEntity;
 import dao.CommentEntity;
+import dao.FriendEntity;
 import dao.MediaEntity;
 import dao.NewsEntity;
+import dao.NotificationEntity;
 import dao.PhotoEntity;
 import dao.PostEntity;
 import dao.RecomendationEntity;
@@ -27,7 +28,12 @@ import javax.ejb.Stateless;
 import javax.servlet.http.Part;
 import servicesSecondaire.UserService2;
 import java.io.InputStream;
+import java.sql.Date;
+import java.sql.Time;
+import java.util.Calendar;
 import java.util.Map;
+import servicesSecondaire.MessageElementaire;
+import servicesSecondaire.PostService2;
 
 /**
  *
@@ -39,24 +45,40 @@ public class PostServiceImpl implements PostService {
     @EJB
     servicesSecondaire.PhotoService photoService;
 
+    @EJB
+    servicesSecondaire.PostService2 postService2;
 
     @EJB
-    servicesTertiaire.PostService2 postService;
-
-
+    MessageService messageService;
     @EJB
     UserService2 userService2;
 
     @Override
+    public PostEntity createPost(PostEntity p, UserEntity ue, UserEntity target, Boolean display) {
+        Calendar c = Calendar.getInstance();
+        p.setCreatedDate(new Date(c.getTimeInMillis()));
+        p.setCreatedTime(new Time(c.getTimeInMillis()));
+        p.setAuthor(ue);
+        p.setDisplay(display);
+        p.setTarget(target);
+
+        Long id = postService2.save(p);
+        p.setId(id);
+        List<FriendEntity> fe = userService2.findFriendsByUserID(ue.getId());
+        messageService.sendNotifToFriends(fe, p, ue);
+        return p;
+    }
+
+    @Override
     public PostEntity createComment(String message, Long authorID, Long parentID, Long mainID) {
-        PostEntity parent = postService.findByID(parentID);
-        PostEntity main = postService.findByID(mainID);
+        PostEntity parent = postService2.findByID(parentID);
+        PostEntity main = postService2.findByID(mainID);
         UserEntity author = userService2.findByID(authorID);
         CommentEntity comment = new CommentEntity();
         comment.setBody(message);
         comment.setPostParent(parent);
         comment.setPostMain(main);
-        return postService.createPost(comment, author, parent.getAuthor(), false);
+        return this.createPost(comment, author, parent.getAuthor(), false);
 
     }
 
@@ -82,8 +104,11 @@ public class PostServiceImpl implements PostService {
     private PostEntity createNews(String title, String message, Part file, String contextPath, UserEntity author, UserEntity target) {
         NewsEntity news;
         if (file != null && !file.getName().equals("") && contextPath != null) {
-            AlbumEntity album = postService.findAlbum(author.getId(), "NewsAlbum");
-            PostEntity post = photoService.createPhoto(album, author, file, contextPath, false);
+            AlbumEntity album = postService2.findAlbum(author.getId(), "NewsAlbum");
+            PostEntity media = photoService.createPhoto(album, author, file, contextPath);
+            PostEntity post = this.createPost(media, author, author, false);
+            photoService.setAlbumCover(album, (MediaEntity) post);
+
             if (post != null && post.getId() != null) {
                 news = new NewsEntity(title, message, author, target, (MediaEntity) post);
 
@@ -94,7 +119,7 @@ public class PostServiceImpl implements PostService {
         } else {
             news = new NewsEntity(title, message, author, target);
         }
-        return postService.createPost(news, author, target, true);
+        return this.createPost(news, author, target, true);
     }
 
     @Override
@@ -119,7 +144,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public boolean createAlbum(String title, String description, String localisation, Long authorId, Map<String,InputStream> files, String contextPath) {
+    public boolean createAlbum(String title, String description, String localisation, Long authorId, Map<String, InputStream> files, String contextPath) {
 
         UserEntity author = userService2.findByID(authorId);
 
@@ -128,31 +153,39 @@ public class PostServiceImpl implements PostService {
         }
 
         AlbumEntity album = new AlbumEntity(title, description, localisation, author);
-        PostEntity p = postService.createPost(album, author, author, true);
+        PostEntity p = this.createPost(album, author, author, true);
         if (p == null) {
             return false;
         }
         album.setId(p.getId());
+        PostEntity post = null;
+        for (Map.Entry<String, InputStream> entry : files.entrySet()) {
+            String fileName = entry.getKey();
+            InputStream inputStream = entry.getValue();
+            post = photoService.createPhoto(album, author, fileName, inputStream, contextPath);
+            post = this.createPost(post, author, author, false);
 
-        return photoService.createPhoto(album, author, files, contextPath, true) != null;
+        }
+        photoService.setAlbumCover(album, (MediaEntity) post);
 
+        return post != null;
     }
 
-   
     @Override
     public PostEntity addPhotoToAlbum(String username, String fileName, InputStream inputstream, String path, Long albumId) {
         UserEntity author = userService2.findByUsername(username);
         if (author == null) {
             return null;
         }
-        PostEntity post = postService.findByID(albumId);
-        if (post == null) {
+        PostEntity album = postService2.findByID(albumId);
+        if (album == null) {
             return null;
         }
-        return photoService.createPhoto((AlbumEntity) post, author, fileName, inputstream, path, true);
+        MediaEntity media = (MediaEntity) photoService.createPhoto((AlbumEntity) album, author, fileName, inputstream, path);
+        PostEntity post = this.createPost(media, author, author, true);
+        photoService.setAlbumCover((AlbumEntity) album, (MediaEntity) post);
+        return post;
     }
-
-
 
     /**
      *
@@ -166,7 +199,7 @@ public class PostServiceImpl implements PostService {
             l = new ArrayList<>();
         }
         l.add(userID);//we add he friend owner into it
-        return postService.getRecentPostFromUsersID(l);
+        return postService2.getRecentPostFromUsersID(l);
     }
 
     /**
@@ -179,7 +212,7 @@ public class PostServiceImpl implements PostService {
     public List<PostEntity> getNextPostFromFriendAndMe(Long userID, Long postID) {
         List<Long> l = userService2.findUsersIdOfFriends(userID);
         l.add(userID);//we add he friend owner into it
-        return postService.getNextPostFromUsersID(l, postID);
+        return postService2.getNextPostFromUsersID(l, postID);
     }
 
     /**
@@ -192,7 +225,7 @@ public class PostServiceImpl implements PostService {
         UserEntity ue = this.userService2.findByUsername(username);
         List<Long> l = new ArrayList<>();
         l.add(ue.getId());
-        return postService.getRecentPostFromUsersID(l);
+        return postService2.getRecentPostFromUsersID(l);
     }
 
     /**
@@ -206,7 +239,7 @@ public class PostServiceImpl implements PostService {
         UserEntity ue = this.userService2.findByUsername(username);
         List<Long> l = new ArrayList<>();
         l.add(ue.getId());
-        return postService.getNextPostFromUsersID(l, postID);
+        return postService2.getNextPostFromUsersID(l, postID);
     }
 
     /**
@@ -220,7 +253,7 @@ public class PostServiceImpl implements PostService {
         UserEntity ue = this.userService2.findByUsername(username);
         List<Long> l = new ArrayList<>();
         l.add(ue.getId());
-        return postService.getNextRecommendationFromUsersID(l, postID);
+        return postService2.getNextRecommendationFromUsersID(l, postID);
     }
 
     /**
@@ -233,7 +266,7 @@ public class PostServiceImpl implements PostService {
         UserEntity ue = this.userService2.findByUsername(username);
         List<Long> l = new ArrayList<>();
         l.add(ue.getId());
-        return postService.getRecentRecommendationFromUsersID(l);
+        return postService2.getRecentRecommendationFromUsersID(l);
     }
 
     @Override
@@ -250,10 +283,8 @@ public class PostServiceImpl implements PostService {
         }
 
         RecomendationEntity re = new RecomendationEntity(title, message);
-        return postService.createPost(re, author, target, true);
+        return this.createPost(re, author, target, true);
 
     }
-
-   
 
 }

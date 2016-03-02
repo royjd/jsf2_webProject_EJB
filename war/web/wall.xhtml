@@ -79,19 +79,19 @@
         $(document).ready(function () {
             $("#addPicture").click(function () {
                 $("#addProfileDiv").toggle();
-                if ($(this).hasClass("glyphicon-plus")) {
-                    $(this).removeClass("glyphicon-plus btn-primary").addClass("btn-danger glyphicon-remove");
+                if ($(this).hasClass("glyphicon-camera")) {
+                    $(this).removeClass("glyphicon-camera btn-primary").addClass("btn-danger glyphicon-remove");
                 } else {
-                    $(this).removeClass("btn-danger glyphicon-remove").addClass("glyphicon-plus btn-primary");
+                    $(this).removeClass("btn-danger glyphicon-remove").addClass("glyphicon-camera btn-default");
                 }
             });
 
             $("#addCover").click(function () {
                 $("#addCoverDiv").toggle();
-                if ($(this).hasClass("glyphicon-plus")) {
-                    $(this).removeClass("glyphicon-plus btn-primary").addClass("btn-danger glyphicon-remove");
+                if ($(this).hasClass("glyphicon-camera")) {
+                    $(this).removeClass("glyphicon-camera btn-default").addClass("btn-danger glyphicon-remove");
                 } else {
-                    $(this).removeClass("btn-danger glyphicon-remove").addClass("glyphicon-plus btn-primary");
+                    $(this).removeClass("btn-danger glyphicon-remove").addClass("glyphicon-camera btn-default ");
                 }
             });
 

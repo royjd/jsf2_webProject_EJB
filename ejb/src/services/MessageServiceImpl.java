@@ -81,10 +81,10 @@ public class MessageServiceImpl implements MessageService {
      * @return
      */
     @Override
-    public boolean sendNotifToFriends(NotificationEntity me, List<FriendEntity> friends) {
+    public boolean sendNotifToFriends( List<FriendEntity> friends,PostEntity post,UserEntity ue) {
        // NotificationEntity me = (NotificationEntity) mgDao.findNotifByID(m.getId());
         String tmpMessageGroup = "notification";
-
+        NotificationEntity me = messageElementaire.addNotification(post, tmpMessageGroup, ue);
         for (FriendEntity receiver : friends) {
             UserEntity tmpR;
             if (receiver.getFriend().getUsername().equals(me.getSendBy().getUsername())) {

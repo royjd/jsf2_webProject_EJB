@@ -3,61 +3,27 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package servicesTertiaire;
+package servicesSecondaire;
 
-import services.*;
 import dao.AlbumEntity;
 import dao.FriendDAO;
-import dao.FriendEntity;
-import dao.NotificationEntity;
 import dao.PostDAO;
 import dao.PostEntity;
 import dao.UserDAO;
 import dao.UserEntity;
-import java.sql.Date;
-import java.sql.Time;
-import java.util.Calendar;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import servicesSecondaire.MessageElementaire;
-
 /**
  *
  * @author Karl Lauret
  */
 @Stateless
-public class PostService2Impl implements servicesTertiaire.PostService2 {
+public class PostService2Impl implements servicesSecondaire.PostService2 {
 
     @EJB
     PostDAO postDao;
-
-    @EJB
-    FriendDAO friendDAO;
-
-    @EJB
-    MessageElementaire messageElementaire;
-    @EJB
-    MessageService messageService;//TODO COMPISIT HERE WTF
-    @EJB
-    UserDAO userDao;
-
-    @Override
-    public PostEntity createPost(PostEntity p, UserEntity ue, UserEntity target, Boolean display) {
-        Calendar c = Calendar.getInstance();
-        p.setCreatedDate(new Date(c.getTimeInMillis()));
-        p.setCreatedTime(new Time(c.getTimeInMillis()));
-        p.setAuthor(ue);
-        p.setDisplay(display);
-        p.setTarget(target);
-
-        Long id = postDao.save(p);
-        p.setId(id);
-        NotificationEntity not = messageElementaire.addNotification(p, "notification", ue);
-        List<FriendEntity> fe = friendDAO.findFriendsByUserID(ue.getId());
-        messageService.sendNotifToFriends(not, fe);
-        return p;
-    }
+   
 
     /**
      *
@@ -129,6 +95,12 @@ public class PostService2Impl implements servicesTertiaire.PostService2 {
         album = new AlbumEntity("ProfileAlbum", "Profile album", u);
         album.setCover(u.getProfile().getPictureProfile());
         postDao.save(album);
+    }
+
+
+    @Override
+    public Long save(PostEntity p) {
+        return postDao.save(p);
     }
 
 }

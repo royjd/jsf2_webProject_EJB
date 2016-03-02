@@ -28,7 +28,7 @@ import org.primefaces.model.UploadedFile;
 import services.PostService;
 import services.UserService;
 import servicesSecondaire.PhotoService;
-import servicesTertiaire.PostService2;
+import servicesSecondaire.PostService2;
 import services.ProfileService;
 
 /**

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package servicesTertiaire;
+package servicesSecondaire;
 
 import dao.AlbumEntity;
 import dao.PostEntity;
@@ -19,16 +19,6 @@ import javax.ejb.Local;
 @Local
 public interface PostService2 {
 
-    /**
-     * Create a post
-     * @param p
-     * @param ue
-     * @param target
-     * @param display
-     * @return 
-     */
-    public PostEntity createPost(PostEntity p, UserEntity ue, UserEntity target,Boolean display);
-    
     public PostEntity findByID(Long postID);
 
 
@@ -51,6 +41,8 @@ public interface PostService2 {
     public List<PostEntity> findByUsernameAndType(String username, String type);
 
     public void createDefaultAlbums(UserEntity u);
+
+    public Long save(PostEntity p);
 
     
 }

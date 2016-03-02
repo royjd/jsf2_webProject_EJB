@@ -107,7 +107,7 @@
                             <div class="col-sm-12">
                                 <h:inputText id="country" class="form-control" value="#{profileBean.country}" pt:placeholder="Country" validatorMessage="#{msg['edit.country']}">
                                     <f:ajax event="blur" render="countryMessage" />
-                                    <f:validateRegex pattern="^([a-zA-Z]*)$" />
+                                    <f:validateRegex pattern="^(([a-zA-Z][a-zA-Z ]*)*)$" />
                                 </h:inputText>
                                 <h:message for="country"  id="countryMessage" class="control-label text-danger"/>
                             </div>
@@ -118,7 +118,7 @@
                             <div class="col-sm-12">
                                 <h:inputText id="city" class="form-control" value="#{profileBean.city}" pt:placeholder="City" validatorMessage="#{msg['edit.city']}">
                                     <f:ajax event="blur" render="cityMessage" />
-                                    <f:validateRegex pattern="^([a-zA-Z]*)$" />
+                                    <f:validateRegex pattern="^(([a-zA-Z][a-zA-Z ]*)*)$" />
                                 </h:inputText>
                                 <h:message for="city"  id="cityMessage" class="control-label text-danger"/>
                             </div>

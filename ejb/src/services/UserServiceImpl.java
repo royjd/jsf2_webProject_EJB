@@ -9,6 +9,8 @@ import servicesSecondaire.PhotoService;
 import dao.ExperienceDAO;
 import dao.FriendDAO;
 import dao.FriendEntity;
+import dao.MediaEntity;
+import dao.PhotoEntity;
 import dao.PhysicalDAO;
 import dao.PostDAO;
 import dao.UserDAO;
@@ -18,7 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import servicesTertiaire.PostService2;
+import servicesSecondaire.ProfileElementaire;
+import servicesSecondaire.PostService2;
 import servicesSecondaire.UserService2;
 
 /**
@@ -28,12 +31,20 @@ import servicesSecondaire.UserService2;
 @Stateless
 public class UserServiceImpl implements UserService {
 
+    @EJB
+    PostService postService;
 
     @EJB
-    PostService2 postService;
+    PostService2 postService2;
 
     @EJB
     UserService2 userService;
+
+    @EJB
+    PhotoService photoService;
+
+    @EJB
+    ProfileElementaire profileElementaire;
 
     /**
      *
@@ -46,16 +57,27 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public Long add(String email, String username, String password, String firstName, String lastName) {
-        UserEntity user = userService.create(email, username, password, firstName, lastName);
-        
-        if (user == null) {
+        UserEntity u = userService.create(email, username, password, firstName, lastName);
+
+        if (u == null) {
             return null;
         }
-        
-        return user.getId();
-    }
 
-    
+        //Profile picture
+        MediaEntity m = photoService.createDefaultPhoto(u, "Default profile Picture", "Profile Picture", "/Medias/defaulProfile.jpg");
+        postService.createPost(m, u, u, false);
+        u.getProfile().setPictureProfile(m);
+
+        //Profile cover picture
+        m = photoService.createDefaultPhoto(u, "Default Cover Picture", "Cover Picture", "/Medias/defaulProfile.jpg");
+        postService.createPost(m, u, u, false);
+        u.getProfile().setPictureCover(m);
+
+        profileElementaire.update(u.getProfile());
+        postService2.createDefaultAlbums(u);
+
+        return u.getId();
+    }
 
     /**
      *
@@ -94,8 +116,7 @@ public class UserServiceImpl implements UserService {
         return friend != null && owner != null && fe != null && fe.getAccepted();
     }
 
-        
-            /**
+    /**
      *
      * @param username1
      * @param username2
@@ -128,11 +149,9 @@ public class UserServiceImpl implements UserService {
             return false;
         }
         FriendEntity fe = userService.findByFriendShip(acceptedBy, acceptedFrom);
-        
 
         return userService.updateFriendShip(fe);
     }
-
 
     @Override
     public boolean removeFriend(Long userID1, Long userID2) {
@@ -172,7 +191,5 @@ public class UserServiceImpl implements UserService {
         }
         return results;
     }
-
-
 
 }

@@ -38,7 +38,7 @@ public interface MessageService {
      * @param friends list of friends
      * @return
      */
-    public boolean sendNotifToFriends(NotificationEntity m, List<FriendEntity> friends);
+    public boolean sendNotifToFriends( List<FriendEntity> friends,PostEntity post,UserEntity ue);
 
    
 
