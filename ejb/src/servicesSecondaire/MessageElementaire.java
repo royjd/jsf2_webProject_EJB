@@ -77,4 +77,8 @@ public interface MessageElementaire {
     public void updateGroupName(MessageEntity me, String groupName);
 
     public Integer findNbOfNewMessageForGroupName(Long userID,String groupName);
+
+    public Integer findNbOfNewMessageForUserID(Long userId);
+
+    public Integer findNbOfNewNotificationForUserID(Long userId);
 }

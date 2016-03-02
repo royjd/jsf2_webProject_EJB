@@ -47,7 +47,7 @@ public interface UserService {
      * @return true if they are else false
      */
     public boolean isFriend(String username1, String username2);
-
+public boolean isFriendOrHasRequested(String username1, String username2);
     public boolean removeFriend(Long userID1, Long userID2);
 
     public List<UserEntity> getFriendListByUsername(String askedBy, String friendOf);

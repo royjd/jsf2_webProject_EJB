@@ -32,6 +32,8 @@ public class NotificationBean implements Serializable {
 
     private MessageUserEntity selectedNotificatin;
 
+    private Integer nbOfNewNotificationTotal;
+
     @EJB
     MessageService messageService;
 
@@ -64,6 +66,14 @@ public class NotificationBean implements Serializable {
         }
     }
 
+    public Integer getNbOfNewNotification() {
+        if (this.nbOfNewNotificationTotal == null) {
+            this.nbOfNewNotificationTotal = this.messageElementaire.findNbOfNewNotificationForUserID(SessionBean.getUserId());
+        }
+        return this.nbOfNewNotificationTotal;
+
+    }
+
     public MessageUserEntity getSelectedNotificatin() {
 
         return this.selectedNotificatin;
@@ -77,6 +87,10 @@ public class NotificationBean implements Serializable {
         MessageUserEntity tmp = ((MessageUserEntity) event.getObject());
         tmp.setNewMessage(false);
         this.selectedNotificatin = tmp;
+        if (this.nbOfNewNotificationTotal != 0) {
+            this.nbOfNewNotificationTotal = this.messageElementaire.findNbOfNewNotificationForUserID(SessionBean.getUserId());
+
+        }
 
     }
 

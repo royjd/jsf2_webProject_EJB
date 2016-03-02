@@ -30,3 +30,11 @@ body{
 .ui-commandlink.ui-widget.btn.btn-xs.btn-success.glyphicon.glyphicon-ok{
     font-family : 'Glyphicons Halflings';
 }
+
+.navbar-inverse .navbar-nav > li > a.notification{
+    color: red;
+}
+
+.navbar-inverse .navbar-nav > li > a.notification:hover{
+    color: darkred;  
+}

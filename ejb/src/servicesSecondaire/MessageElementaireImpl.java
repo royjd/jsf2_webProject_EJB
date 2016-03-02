@@ -176,4 +176,15 @@ public class MessageElementaireImpl implements MessageElementaire {
 
     }
 
+    @Override
+    public Integer findNbOfNewMessageForUserID(Long userID) {
+        return this.mgUserDao.findNewMessageForUser(userID).size();
+
+    }
+
+    @Override
+    public Integer findNbOfNewNotificationForUserID(Long userID) {
+        return this.mgUserDao.findNewNotificationForUser(userID).size();
+    }
+
 }

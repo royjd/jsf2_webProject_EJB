@@ -28,7 +28,7 @@ import servicesTertiaire.PostService2;
 @ManagedBean
 @ViewScoped
 public class ListPostAjaxBean implements java.io.Serializable {
-
+ 
     @EJB
     PostService postService;
 
@@ -95,8 +95,12 @@ public class ListPostAjaxBean implements java.io.Serializable {
 
         PostEntity tmp = postService2.findByID(postID);
 
-        list = new ArrayList<>();
-        list.add(tmp);
+        if (tmp != null) {
+            list = new ArrayList<>();
+            list.add(tmp); 
+        }else{
+            this.list = null;
+        }
 
         return list;
 
@@ -121,7 +125,7 @@ public class ListPostAjaxBean implements java.io.Serializable {
         this.targetUsername = username;
         System.err.println("loadMore username + " + this.targetUsername);
         System.err.println("loadMore = + " + this.moreData);
-        if (this.list.size() >= 5 && moreData) {
+        if (this.list != null &&  this.list.size() >= 5 && moreData) {
             if (this.targetUsername == null || this.targetUsername.isEmpty()) {
 
                 listtmp = postService.getNextPostFromFriendAndMe(SessionBean.getUserId(), this.list.get(this.list.size() - 1).getId());

@@ -40,6 +40,7 @@ public class NavigationBean implements Serializable {
 
     private String page(String page) {
         String username = this.getUsername();
+        System.err.println("page : "+page +" ,username : "+username);
         if (username != null) {
             return page + "?faces-redirect=true&u=" + username + "&p=default";
         }

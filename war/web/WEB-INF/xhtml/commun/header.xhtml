@@ -4,15 +4,15 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" 
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
 
     <ui:composition>
-
         <h:panelGroup rendered="#{empty username}" >
             <ui:include src="../index/header.xhtml" />
 
         </h:panelGroup> 
-        <h:form rendered="#{not empty username}">
+        <h:form id="formNavBar" rendered="#{not empty username}">
             <nav class="navbar navbar-inverse navbar-fixed-top">
                 <div class="container">
                     <div class="navbar-header">
@@ -21,7 +21,7 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                         <h:commandLink class="navbar-brand" action="#{navigationBean.home()}" value="FanFare"/> 
+                        <h:commandLink class="navbar-brand" action="#{navigationBean.home()}" value="FanFare"/> 
                     </div>
                     <div class="collapse navbar-collapse" id="myNavbar">
 
@@ -34,20 +34,25 @@
                                     <f:param name="u" value="#{username}"/>  
                                 </h:commandLink>
                             </li>
-                            <li class="target-active message">
-                                <h:commandLink class="glyphicon glyphicon-envelope" action="#{navigationBean.message()}">
+                            <li class="target-active message"> 
+                                <h:commandLink id="messageButtonNotif" class="glyphicon glyphicon-envelope #{messageBean.nbOfNewMessage == 0 ? '' : 'notification'}"  action="#{navigationBean.message()}"> 
+                                    <h:outputText rendered="#{messageBean.nbOfNewMessage != 0}" value="#{messageBean.nbOfNewMessage}"> </h:outputText>
                                     <f:param name="u" value="#{username}"/>  
                                 </h:commandLink>
                             </li>
                             <li class="target-active notification">
-                                <h:commandLink class="glyphicon glyphicon-bell" action="#{navigationBean.notification()}">
+                                <!--<h:commandLink class="glyphicon glyphicon-bell" action="#{navigationBean.notification()}">
                                     <f:param name="u" value="#{username}"/>  
+                                </h:commandLink>-->
+                                <h:commandLink id="notificationButtonNotif" class="glyphicon glyphicon-bell #{notificationBean.nbOfNewNotification == 0 ? '' : 'notification'}"  action="#{navigationBean.notification()}"> 
+                                    <h:outputText rendered="#{notificationBean.nbOfNewNotification != 0}"  value="#{notificationBean.nbOfNewNotification}"> </h:outputText>
+                                    <f:param name="u" value="#{username}"/>  <!--class="label label-danger"-->
                                 </h:commandLink>
                             </li>
-                        </ul>
+                        </ul> 
 
                         <ul class="nav navbar-nav pull-right">
-                           
+
                             <li class="dropdown pull-right">
                                 <a class="dropdown-toggle glyphicon glyphicon-user" data-toggle="dropdown" href="#"><span class="caret"></span></a>
                                 <ul class="dropdown-menu">
@@ -61,7 +66,7 @@
                                     </li>
                                 </ul>
                             </li>
-                            
+
                             <li class="navbar-form pull-right">
                                 <h:inputText  value="#{searchBean.param}"  class="form-control" id="friendSearch"></h:inputText>
 

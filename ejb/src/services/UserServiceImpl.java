@@ -94,6 +94,26 @@ public class UserServiceImpl implements UserService {
         return friend != null && owner != null && fe != null && fe.getAccepted();
     }
 
+        
+            /**
+     *
+     * @param username1
+     * @param username2
+     * @return
+     */
+    @Override
+    public boolean isFriendOrHasRequested(String username1, String username2) {
+        if (username1 == null || username1.isEmpty() || username2 == null || username2.isEmpty()) {
+            return false;
+        }
+        if (username1.equals(username2)) {
+            return false;
+        }
+        UserEntity friend = userService.findByUsername(username1);
+        UserEntity owner = userService.findByUsername(username2);
+        FriendEntity fe = userService.findByFriendShip(friend.getId(), owner.getId());//Variables have bad Name the order doesn't matter for the find
+        return friend != null && owner != null && fe != null;
+    }
 
     /**
      *

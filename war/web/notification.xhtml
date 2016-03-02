@@ -43,8 +43,8 @@
                                      rowIndexVar="rowIndex" 
                                      selectionMode="single" selection="#{notificationBean.selectedNotificatin}"
                                      rowKey="#{notif.id}"
-                                     > 
-                            <p:ajax event="rowSelect" listener="#{notificationBean.onRowSelect}"  update=":postDisplay notification" /> 
+                                     >  
+                            <p:ajax event="rowSelect" listener="#{notificationBean.onRowSelect}"  update=":postDisplay notification :formNavBar:notificationButtonNotif" /> 
                             <p:column  headerText="Notifications" width="80%">
                                 <h:panelGroup layout="block" class="row" >
                                     <img  src="#{request.contextPath}/images/#{notif.message.post.author.profile.pictureProfile.mediaType.link}" class="col-xs-2 img-responsive" />

@@ -67,7 +67,8 @@
                                     <p:commandButton id="newsFormSubmit" value="Send" class="btn btn-success pull-right"
                                                      actionListener="#{sendMessageBean.send()}" 
                                                      action="#{navigationBean.message()}" 
-                                                     oncomplete="PF('dlg').hide();">
+                                                     oncomplete="PF('newMessage').hide();"> 
+                                        <f:param name="u" value="#{param['u']}" />
                                     </p:commandButton>
                                 </div> 
                             </div>
@@ -86,8 +87,8 @@
                                      rowIndexVar="rowIndex" 
                                      selectionMode="single" selection="#{messageBean.selectedGroupName}"
                                      rowKey="#{group}"
-                                     > 
-                            <p:ajax event="rowSelect" listener="#{messageBean.onRowSelect}"  update=":messages groupMessage" /> 
+                                     >  
+                            <p:ajax event="rowSelect" listener="#{messageBean.onRowSelect}"  update=":messages groupMessage :formNavBar:messageButtonNotif" /> 
                             <p:column  headerText="Groups">
 
 
