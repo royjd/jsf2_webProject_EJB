@@ -64,9 +64,11 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <div class="col-sm-12">
-                                <h:inputText class="form-control" value="#{profileBean.birthDay}" pt:placeholder="Birth day (yyyy-MM-dd)">  
+                                <h:inputText id = "birthDay" class="form-control" value="#{profileBean.birthDay}" pt:placeholder="Birth day (yyyy-MM-dd)" converterMessage="#{msg['dateFormat']}">  
+                                    <f:ajax event="blur" render="birthDayMessage" />
                                     <f:convertDateTime pattern="yyyy-MM-dd"/>  
                                 </h:inputText>
+                                <h:message id="birthDayMessage" for="birthDay" class="control-label text-danger"/>
                             </div>
                         </div>
                     </div>

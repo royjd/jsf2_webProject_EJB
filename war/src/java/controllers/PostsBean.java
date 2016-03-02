@@ -71,8 +71,8 @@ public class PostsBean implements Serializable {
 
     private PostEntity postComment;
 
-    // private static final String realPath = "/home/SP2MI/zdiawara/Bureau/images";
-    private static final String realPath = "/home/zakaridia/Documents/Depot_Git/File/images";
+    private static final String realPath = "/home/SP2MI/zdiawara/Bureau/images";
+    //private static final String realPath = "/home/zakaridia/Documents/Depot_Git/File/images";
     //private static final String realPath = "C:/Users/Karl Lauret/AppData/Roaming/NetBeans/8.1/config/GF_4.1.1/domain1/applications/images";
 
     /**
