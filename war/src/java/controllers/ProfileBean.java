@@ -71,6 +71,7 @@ public class ProfileBean implements Serializable {
     private static final String realPath = "C:/Users/Karl Lauret/AppData/Roaming/NetBeans/8.1/config/GF_4.1.1/domain1/applications/images";
 
 
+
     @EJB
     ProfileService profileService;
 

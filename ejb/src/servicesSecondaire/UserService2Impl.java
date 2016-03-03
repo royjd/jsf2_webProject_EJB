@@ -5,24 +5,16 @@
  */
 package servicesSecondaire;
 
-import servicesTertiaire.PostService2;
 import dao.ExperienceDAO;
 import dao.FriendDAO;
 import dao.FriendEntity;
-import dao.MediaEntity;
 import dao.PhotoDAO;
-import dao.PhotoEntity;
 import dao.PhysicalDAO;
-import dao.PostDAO;
 import dao.ProfileDAO;
 import dao.UserDAO;
 import dao.UserEntity;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
@@ -35,26 +27,10 @@ public class UserService2Impl implements UserService2 {
 
     
     @EJB
-    PostService2 postService2;
-    @EJB
     UserDAO userDao;
 
     @EJB
-    PostDAO postDao;
-
-
-    @EJB
     FriendDAO friendDao;
-    @EJB
-    PhotoDAO photoDao;
-    @EJB
-    ProfileDAO profileDao;
-
-    @EJB
-    ExperienceDAO experienceDao;
-
-    @EJB
-    PhysicalDAO physicalDao;
 
     /**
      *
@@ -67,34 +43,12 @@ public class UserService2Impl implements UserService2 {
             UserEntity u = new UserEntity(email, username, password, firstName, lastName);
             Long userId = userDao.save(u);
             u.setId(userId);
-            u = userDao.findByID(u.getId());
-            this.createDefaultProfilePhotos(u);
-            profileDao.update(u.getProfile());
-            postService2.createDefaultAlbums(u);
+            //u = userDao.findByID(u.getId());
             return u;
         }
         return null;
     }
  
-    private void createDefaultProfilePhotos(UserEntity u) {
-
-        //Profile picture
-        PhotoEntity photo = new PhotoEntity("Profile Picture", "/Medias/defaulProfile.jpg");
-        this.photoDao.save(photo);
-        MediaEntity m = new MediaEntity("Default Profile Picture", "", u);
-        m.setMediaType(photo);
-        postService2.createPost(m, u, u, false);
-        u.getProfile().setPictureProfile(m);
-
-        //Profile cover picture
-        PhotoEntity photo2 = new PhotoEntity("Cover Picture", "/Medias/defaulProfile.jpg");
-        this.photoDao.save(photo2);
-        MediaEntity m2 = new MediaEntity("Default Cover Picture", "", u);
-        m2.setMediaType(photo2);
-        postService2.createPost(m2, u, u, false);
-        u.getProfile().setPictureCover(m2);
-
-    }
     /**
      *
      * @param id

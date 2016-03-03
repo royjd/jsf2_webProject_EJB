@@ -18,7 +18,7 @@ import org.primefaces.context.RequestContext;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 import services.PostService;
-import servicesTertiaire.PostService2;
+import servicesSecondaire.PostService2;
 
 /**
  *

@@ -6,17 +6,15 @@
 package servicesSecondaire;
 
 import dao.AlbumEntity;
+import dao.MediaEntity;
 import dao.PhotoEntity;
 import dao.PostEntity;
-import dao.ProfileEntity;
 import dao.UserEntity;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import javax.ejb.Local;
 import javax.servlet.http.Part;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -66,11 +64,12 @@ public interface PhotoService{
     public void delete(PhotoEntity photo);
     
  
-    public PostEntity createPhoto(AlbumEntity album, UserEntity author, String fileName, InputStream inputstream, String contextPath, Boolean display);
+    public PostEntity createPhoto(AlbumEntity album, UserEntity author, String fileName, InputStream inputstream, String contextPath);
     
-    public PostEntity createPhoto(AlbumEntity album, UserEntity author, Map<String,InputStream> files,String contextPath,Boolean display);
-
-    public PostEntity createPhoto(AlbumEntity album, UserEntity author, Part file, String contextPath, boolean b);
-
+    public PostEntity createPhoto(AlbumEntity album, UserEntity author, Part file, String contextPath);
+    
+    public void setAlbumCover(AlbumEntity album, MediaEntity m);
+    
+    public MediaEntity createDefaultPhoto(UserEntity u,String mediaName,String photoName,String path);
     
 }

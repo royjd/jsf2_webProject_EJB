@@ -18,7 +18,7 @@ import javax.servlet.http.Part;
 import services.PostService;
 import services.UserService;
 import servicesSecondaire.PhotoService;
-import servicesTertiaire.PostService2;
+import servicesSecondaire.PostService2;
 import javax.faces.bean.RequestScoped;
 import services.ProfileService;
 

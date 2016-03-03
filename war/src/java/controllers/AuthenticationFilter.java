@@ -67,7 +67,7 @@ public class AuthenticationFilter implements Filter {
                 s.equals(pages[1]) ||
                 s.equals(pages[2]) ||
                 (s.equals(pages[3]) && containManagePages(request.getParameter("sp")))){
-            response.sendRedirect(request.getContextPath() + "/faces/index.xhtml");
+            response.sendRedirect(contextPath + "/faces/index.xhtml");
         } 
 
     }

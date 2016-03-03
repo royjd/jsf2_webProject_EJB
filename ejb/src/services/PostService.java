@@ -91,5 +91,5 @@ public interface PostService {
     public PostEntity createRecommendation(String title, String message, Long authorID, String targetUsername);
 
     public PostEntity createNews(String title, String message, Part file, String realPath, String authorUsername, String targetUsername);
-
+ public PostEntity createPost(PostEntity p, UserEntity ue, UserEntity target, Boolean display);
 }

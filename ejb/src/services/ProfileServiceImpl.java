@@ -20,7 +20,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.servlet.http.Part;
 import servicesSecondaire.PhotoService;
-import servicesTertiaire.PostService2;
+import servicesSecondaire.PostService2;
 import servicesSecondaire.ProfileElementaire;
 import servicesSecondaire.UserService2;
 
@@ -36,6 +36,9 @@ public class ProfileServiceImpl implements ProfileService {
 
     @EJB
     PostService2 postService2;
+
+    @EJB
+    PostService postService;
 
     @EJB
     UserService2 userService2;
@@ -62,7 +65,10 @@ public class ProfileServiceImpl implements ProfileService {
         if (album == null) {
             return false;
         }
-        PostEntity post = photoService2.createPhoto(album, u, file, context, false);
+        MediaEntity media = (MediaEntity) photoService2.createPhoto(album, u, file, context);
+        PostEntity post = postService.createPost(media, u, u, false);
+        photoService2.setAlbumCover(album, media);
+
         if (post == null) {
             return false;
         }
@@ -103,7 +109,7 @@ public class ProfileServiceImpl implements ProfileService {
             profile.setCity(city);
             profile.setCountry(country);
             profile.setBirthDay(birthDay);
-            
+
             PhysicalEntity physical = profile.getPhysical();
             physical.setGender(gender);
             physical.setHeight(height);
@@ -127,8 +133,9 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public void editExperience(Long experienceID, Long userID, String title, String description, Date realisationDate, String experienceCity, String experienceCityStat, String experienceCityStreet, Integer experienceCityZipcode) {
         ExperienceEntity e = profileElementaire.findExperienceByID(experienceID);
-        if(e==null)
+        if (e == null) {
             return;
+        }
         e.setTitle(title);
         e.setDescription(description);
         e.setRealisationDate(realisationDate);

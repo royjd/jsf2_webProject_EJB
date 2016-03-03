@@ -5,7 +5,6 @@
  */
 package servicesSecondaire;
 
-import servicesTertiaire.PostService2;
 import dao.AlbumEntity;
 import dao.MediaEntity;
 import dao.PhotoDAO;
@@ -41,9 +40,6 @@ public class PhotoServiceImpl implements PhotoService {
 
     @EJB
     PostDAO postDao;
-
-    @EJB
-    PostService2 postService2;
 
     /**
      *
@@ -87,7 +83,8 @@ public class PhotoServiceImpl implements PhotoService {
      ServletContext servletContext;*/
     /**
      *
-     * @param file
+     * @param fileName
+     * @param inputstream
      * @param username
      * @param album
      * @param contextPath
@@ -163,57 +160,55 @@ public class PhotoServiceImpl implements PhotoService {
     }
 
     @Override
-    public PostEntity createPhoto(AlbumEntity album, UserEntity author, String fileName, InputStream inputstream, String contextPath, Boolean display) {
-        PostEntity post = null;
+    public PostEntity createPhoto(AlbumEntity album, UserEntity author, String fileName, InputStream inputstream, String contextPath) {
+        MediaEntity media = null;
         try {
             PhotoEntity photo = this.upload(fileName, inputstream, author.getUsername(), album, contextPath);
             if (photo != null) {
-                MediaEntity media = new MediaEntity();
+                media = new MediaEntity();
                 if ("DefaulAlbum".equals(album.getTitle())) {
                     media = new MediaEntity(album.getTitle(), album.getBody(), author);
                 }
                 media.setMediaType(photo);
                 media.setAlbum(album);
-                post = postService2.createPost(media, author, author, display);
-                this.setAlbumCover(album, post);
+                return media;
+                //post = postService2.createPost(media, author, author, display);
+                //this.setAlbumCover(album, post);
             }
         } catch (IOException ex) {
             Logger.getLogger(PostServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return post;
+        return media;
     }
 
-    @Override
-    public PostEntity createPhoto(AlbumEntity album, UserEntity author, Map<String, InputStream> files, String contextPath, Boolean display) {
-        if (author == null) {
-            return null;
-        }
-        PostEntity post = null;
-        for (Map.Entry<String, InputStream> entry : files.entrySet()) {
-            String fileName = entry.getKey();
-            InputStream inputStream = entry.getValue();
-            post = this.createPhoto(album, author, fileName,inputStream, contextPath, display);
-        }
-        return post;
-    } 
 
     @Override
-    public PostEntity createPhoto(AlbumEntity album, UserEntity author, Part file, String contextPath, boolean b) {
+    public PostEntity createPhoto(AlbumEntity album, UserEntity author, Part file, String contextPath) {
         try {
-            PostEntity p = this.createPhoto(album, author, this.getFileName(file),file.getInputStream(), contextPath, b);
-            this.setAlbumCover(album, p);
+            PostEntity p = this.createPhoto(album, author, this.getFileName(file),file.getInputStream(), contextPath); 
             return p;
         } catch (IOException ex) {
             return null;
         }
     }
 
-    private void setAlbumCover(AlbumEntity album, PostEntity p) {
-        if (album == null || p == null) {
+    @Override
+    public void setAlbumCover(AlbumEntity album, MediaEntity m) {
+        if (album == null || m == null) {
             return;
         }
-        album.setCover((MediaEntity) p);
+        album.setCover(m);
         postDao.update(album);
+    }
+
+    @Override
+    public MediaEntity createDefaultPhoto(UserEntity u,String mediaName,String photoName, String path) {
+        //Profile picture
+        PhotoEntity photo = new PhotoEntity(photoName, path);
+        this.photoDao.save(photo);
+        MediaEntity m = new MediaEntity(mediaName, "", u);
+        m.setMediaType(photo);
+        return m;
     }
 
 }
