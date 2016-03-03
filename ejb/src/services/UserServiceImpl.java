@@ -13,6 +13,7 @@ import dao.MediaEntity;
 import dao.PhotoEntity;
 import dao.PhysicalDAO;
 import dao.PostDAO;
+import dao.PostEntity;
 import dao.UserDAO;
 import dao.UserEntity;
 import java.util.ArrayList;
@@ -65,13 +66,13 @@ public class UserServiceImpl implements UserService {
 
         //Profile picture
         MediaEntity m = photoService.createDefaultPhoto(u, "Default profile Picture", "Profile Picture", "/Medias/defaulProfile.jpg");
-        postService.createPost(m, u, u, false);
-        u.getProfile().setPictureProfile(m);
+        PostEntity p  = postService.createPost(m, u, u, false);
+        u.getProfile().setPictureProfile((MediaEntity)p); 
 
         //Profile cover picture
         m = photoService.createDefaultPhoto(u, "Default Cover Picture", "Cover Picture", "/Medias/defaulProfile.jpg");
-        postService.createPost(m, u, u, false);
-        u.getProfile().setPictureCover(m);
+        p  = postService.createPost(m, u, u, false);
+        u.getProfile().setPictureCover((MediaEntity)p);
 
         profileElementaire.update(u.getProfile());
         postService2.createDefaultAlbums(u);

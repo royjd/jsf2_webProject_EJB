@@ -42,8 +42,8 @@ public class UserService2Impl implements UserService2 {
         if (!existUser(email, username)) {
             UserEntity u = new UserEntity(email, username, password, firstName, lastName);
             Long userId = userDao.save(u);
-            u.setId(userId);
-            //u = userDao.findByID(u.getId());
+            u.setId(userId); 
+            u = userDao.findByID(u.getId());
             return u;
         }
         return null;

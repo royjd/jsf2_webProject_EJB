@@ -71,8 +71,8 @@
                                             <h:form rendered="#{friendBean.isFriendOrHasRequest(user.username) == false &amp;&amp; user.id != id &amp;&amp; not empty id}" >      
                                                 <p:commandLink value="Send Request" action="#{friendBean.addFriend(user.id)}" 
                                                                onclick="$(this).hide()" 
-
-                                                               class="btn btn-success submitComment pull-right">
+ 
+                                                               class="btn btn-success submitComment btn-xs pull-right">
 
                                                 </p:commandLink>   
 

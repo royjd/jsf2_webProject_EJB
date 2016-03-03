@@ -10,19 +10,12 @@ import dao.CommentEntity;
 import dao.FriendEntity;
 import dao.MediaEntity;
 import dao.NewsEntity;
-import dao.NotificationEntity;
-import dao.PhotoEntity;
 import dao.PostEntity;
 import dao.RecomendationEntity;
-import dao.UserDAO;
 import dao.UserEntity;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.servlet.http.Part;
@@ -32,8 +25,6 @@ import java.sql.Date;
 import java.sql.Time;
 import java.util.Calendar;
 import java.util.Map;
-import servicesSecondaire.MessageElementaire;
-import servicesSecondaire.PostService2;
 
 /**
  *
