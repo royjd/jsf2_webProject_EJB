@@ -27,7 +27,7 @@ public class NavigationBean implements Serializable {
     }
 
     public String index() {
-        return "index";
+        return "index?faces-redirect=true";      
     }
 
     public String index(boolean redirect) {
